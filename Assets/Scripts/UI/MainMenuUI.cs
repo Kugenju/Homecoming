@@ -9,11 +9,12 @@ public class MainMenuUI : MonoBehaviour
     [Header("主菜单面板")]
     public GameObject mainMenuPanel;          // 主菜单面板
 
-    [Header("设置面板")]
-    public GameObject settingsPanel;         // 设置面板
-    public Slider volumeSlider;              // 音量滑动条（可对接 AudioManager）
+    [Header("Settings Prefab")]
+    public GameObject settingsPrefab;     // SettingsPanel.prefab
+    public Transform settingsContainer;             // 音量滑动条（可对接 AudioManager）
 
     // 所有按钮在 Awake 中自动绑定事件（更简洁）
+    private GameObject currentSettingsPanel; // 当前实例化的设置面板
     private Button startButton;
     private Button settingsButton;
     private Button backButton;
@@ -53,16 +54,15 @@ public class MainMenuUI : MonoBehaviour
             Debug.LogError("主菜单面板未分配或为空！");
         }
 
-        // 设置面板按钮
-        Transform settings = settingsPanel?.transform;
-        if (settings != null)
+        if (currentSettingsPanel == null)
         {
-            volumeSlider = settings.Find("VolumeSlider")?.GetComponent<Slider>();
-            backButton = settings.Find("BackButton")?.GetComponent<Button>();
+            currentSettingsPanel = Instantiate(settingsPrefab, settingsContainer);
+            currentSettingsPanel.name = "SettingsPanel_Runtime";
+            backButton = currentSettingsPanel.transform.Find("BackButton")?.GetComponent<Button>();
         }
         else
         {
-            Debug.LogWarning("设置面板未分配，将无法打开设置。");
+            currentSettingsPanel.SetActive(true);
         }
     }
 
@@ -85,11 +85,6 @@ public class MainMenuUI : MonoBehaviour
             quitButton.onClick.AddListener(OnQuitGame);
 
         // 音量滑动条（示例）
-        if (volumeSlider != null)
-        {
-            volumeSlider.value = 0.7f; // 默认音量
-            volumeSlider.onValueChanged.AddListener(OnVolumeChanged);
-        }
     }
     // ------------------------------
     // 按钮响应方法
@@ -109,7 +104,18 @@ public class MainMenuUI : MonoBehaviour
     private void OnOpenSettings()
     {
         mainMenuPanel.SetActive(false);
-        settingsPanel.SetActive(true);
+
+        // 复用同一逻辑
+        if (currentSettingsPanel == null)
+        {
+            currentSettingsPanel = Instantiate(settingsPrefab, settingsContainer);
+            currentSettingsPanel.name = "SettingsPanel_Runtime";
+            currentSettingsPanel.SetActive(true);
+        }
+        else
+        {
+            currentSettingsPanel.SetActive(true);
+        }
     }
 
     /// <summary>
@@ -117,7 +123,7 @@ public class MainMenuUI : MonoBehaviour
     /// </summary>
     private void OnCloseSettings()
     {
-        settingsPanel.SetActive(false);
+        currentSettingsPanel.SetActive(false);
         mainMenuPanel.SetActive(true);
     }
 
@@ -149,7 +155,7 @@ public class MainMenuUI : MonoBehaviour
     public void ShowMainMenu()
     {
         mainMenuPanel?.SetActive(true);
-        settingsPanel?.SetActive(false);
+        currentSettingsPanel?.SetActive(false);
     }
 
     /// <summary>
@@ -158,6 +164,6 @@ public class MainMenuUI : MonoBehaviour
     public void ShowSettings()
     {
         mainMenuPanel?.SetActive(false);
-        settingsPanel?.SetActive(true);
+        currentSettingsPanel?.SetActive(true);
     }
 }
