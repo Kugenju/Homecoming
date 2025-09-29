@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 /// 游戏核心管理器：负责场景切换、游戏状态、时间管理等全局控制
 /// </summary>
 
-public class GameManage : Singleton<GameManage>
+public class GameManager : Singleton<GameManager>
 {
     //  游戏状态枚举
     public enum GameState
@@ -34,8 +34,10 @@ public class GameManage : Singleton<GameManage>
     protected override void Awake()
     {
         base.Awake();
+        Debug.Log("GameManager 初始化");
         // 初始化代码
         DontDestroyOnLoad(this.gameObject); // 保持 GameManager 不被销毁
+        Debug.Log(GameManager.Instance);
     }
 
     // Start is called before the first frame update
