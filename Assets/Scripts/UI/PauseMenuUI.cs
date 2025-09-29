@@ -108,6 +108,7 @@ public class PauseMenuUI : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            Debug.Log("╟╢обак Esc ╪Э");
             if (currentSettingsPanel != null && currentSettingsPanel.activeSelf)
             {
                 CloseSettings();
