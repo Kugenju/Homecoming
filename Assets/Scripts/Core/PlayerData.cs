@@ -68,6 +68,7 @@ public class PlayerData : MonoBehaviour
     {
         string json = JsonUtility.ToJson(playerStats, true);
         File.WriteAllText(Application.persistentDataPath + SaveFilePath, json);
+        Debug.Log($"Money: {playerStats.money}, Stamina: {playerStats.stamina}, LastStaminaRecoveryTime: {playerStats.lastStaminaRecoveryTime}");
     }
 
     private void TryRecoverStamina()
@@ -107,7 +108,11 @@ public class PlayerData : MonoBehaviour
             SaveData();
             return true;
         }
-        return false;
+        else {
+            playerStats.money = 0;
+            SaveData();
+            return false;
+        }
     }
 
     // 修改体力的方法
