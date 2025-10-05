@@ -11,9 +11,9 @@ public class MainMenuUI : MonoBehaviour
 
     [Header("Settings Prefab")]
     public GameObject settingsPrefab;     // SettingsPanel.prefab
-    public Transform settingsContainer;             // 音量滑动条（可对接 AudioManager）
+    public Transform settingsContainer;             // 音量滑动条
 
-    // 所有按钮在 Awake 中自动绑定事件（更简洁）
+    // 所有按钮在 Awake 中自动绑定事件
     private GameObject currentSettingsPanel; // 当前实例化的设置面板
     private Button startButton;
     private Button settingsButton;
