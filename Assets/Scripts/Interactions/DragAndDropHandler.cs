@@ -21,19 +21,27 @@ public class DragAndDropHandler : MonoBehaviour
     public bool useSmoothMovement = true;
     public float smoothSpeed = 8f;
 
+    [Header("代理拖拽")]
+    [Tooltip("是否启用代理拖拽功能")]
+    public bool enableProxyDragging = true;
+
     // 当前拖拽状态
     private ClickableItem _currentDragItem;
+    private ProxyDragTag _currentProxyTag;
+    private GameObject _currentDragProxy;
     private Vector3 _offset;
     private bool _isDragging = false;
-    private Transform _originalParent; // 记录原始父对象（用于返回）
+    private Transform _originalParent;
     private Vector3 _originalPosition;
 
     // 回调事件（可用于外部监听）
-    [Serializable]
-    public class DragEvent : UnityEvent<ClickableItem> { }
+    [System.Serializable] public class DragEvent : UnityEngine.Events.UnityEvent<ClickableItem> { }
+    [System.Serializable] public class ProxyDragEvent : UnityEngine.Events.UnityEvent<ClickableItem, GameObject> { }
 
     public DragEvent OnDragStart;
     public DragEvent OnDragEnd;
+    public ProxyDragEvent OnProxyDragStart;
+    public ProxyDragEvent OnProxyDragEnd;
     public UnityEvent<ClickableItem, DroppableZone> OnItemDropped;
 
     // ------------------------------
@@ -71,65 +79,8 @@ public class DragAndDropHandler : MonoBehaviour
     /// 这是为了解决UnityEvent参数匹配问题而添加的方法
     /// </summary>
     /// <param name="eventData">指针事件数据</param>
-    public void StartDragForUI()
-    {
-        Debug.Log("StartDragForUI called");
+ 
 
-        // 检查事件系统是否存在
-        if (EventSystem.current == null)
-        {
-            Debug.LogWarning("EventSystem not found in scene!");
-            return;
-        }
-
-        // 通过当前事件系统获取点击信息
-        PointerEventData currentEventData = new PointerEventData(EventSystem.current);
-        currentEventData.position = Input.mousePosition;
-
-        List<RaycastResult> results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(currentEventData, results);
-
-        Debug.Log($"Raycast found {results.Count} results");
-
-        if (results.Count > 0)
-        {
-            for (int i = 0; i < results.Count; i++)
-            {
-                Debug.Log($"Result {i}: {results[i].gameObject.name}");
-            }
-
-            GameObject clickedObject = results[0].gameObject;
-            Debug.Log($"Clicked object: {clickedObject.name}");
-
-            ClickableItem item = clickedObject.GetComponent<ClickableItem>();
-            if (item != null)
-            {
-                Debug.Log($"Found ClickableItem: {item.name}, Draggable: {item.isDraggable}, Usable: {item.isUsable}");
-
-                if (item.isDraggable && item.isUsable)
-                {
-                    Vector3 worldPos = eventCamera.ScreenToWorldPoint(Input.mousePosition);
-                    worldPos.z = dragOffsetZ;
-                    Debug.Log($"Starting drag at position: {worldPos}");
-                    StartDrag(item, worldPos);
-                }
-            }
-            else
-            {
-                Debug.Log("No ClickableItem component found on clicked object");
-            }
-        }
-        else
-        {
-            Debug.Log("No raycast results - check colliders and layers");
-        }
-    }
-
-    /// <summary>
-    /// 开始拖拽（由 ClickableItem 调用）
-    /// </summary>
-    /// <param name="item">被拖拽的物体</param>
-    /// <param name="clickPointInWorld">鼠标点击时的世界坐标</param>
     public void StartDrag(ClickableItem item, Vector3 clickPointInWorld)
     {
         if (item == null || !item.isDraggable || !item.isUsable) return;
@@ -138,61 +89,104 @@ public class DragAndDropHandler : MonoBehaviour
         _originalParent = item.transform.parent;
         _originalPosition = item.transform.position;
 
-        // 设置拖拽状态
+        // 检查代理拖拽
+        if (enableProxyDragging)
+        {
+            _currentProxyTag = item.GetComponent<ProxyDragTag>();
+            if (_currentProxyTag != null && _currentProxyTag.proxyPrefab != null)
+            {
+                StartProxyDrag(clickPointInWorld);
+                return;
+            }
+        }
+
+        // 正常拖拽
+        StartNormalDrag(clickPointInWorld);
+    }
+
+    private void StartProxyDrag(Vector3 clickPointInWorld)
+    {
+        _currentDragProxy = _currentProxyTag.CreateProxy(clickPointInWorld);
+
+        if (_currentDragProxy != null)
+        {
+            // 设置代理的层级
+            SetProxyRenderOrder(_currentDragProxy);
+
+            // 计算偏移量（基于代理）
+            Vector3 worldPos = GetMouseWorldPosition();
+            _offset = _currentDragProxy.transform.position - worldPos;
+            _offset.z = dragOffsetZ;
+
+            _isDragging = true;
+            OnProxyDragStart?.Invoke(_currentDragItem, _currentDragProxy);
+            OnDragStart?.Invoke(_currentDragItem);
+
+            // 禁用原物体的碰撞器
+            _currentDragItem.SetUsable(false);
+        }
+        else
+        {
+            // 代理创建失败，回退到正常拖拽
+            StartNormalDrag(clickPointInWorld);
+        }
+    }
+
+    private void StartNormalDrag(Vector3 clickPointInWorld)
+    {
         _isDragging = true;
 
-        // 计算拖拽偏移量
+        // 计算偏移量
         Vector3 worldPos = GetMouseWorldPosition();
         _offset = _currentDragItem.GetPosition() - worldPos;
-        _offset.z = dragOffsetZ; // 保持一致的Z轴偏移
+        _offset.z = dragOffsetZ;
 
-        // 提升渲染层级（针对UI元素）
+        // 设置渲染顺序
         if (_currentDragItem.transform is RectTransform rectTransform)
         {
             rectTransform.SetAsLastSibling();
         }
-        else
-        {
-            // 为2D物体添加轻微旋转效果，增强拖拽感
-            _currentDragItem.transform.SetPositionAndRotation(
-                _currentDragItem.transform.position,
-                Quaternion.Euler(0, 0, UnityEngine.Random.Range(-5f, 5f))
-            );
-        }
 
-        // 触发开始拖拽事件
         OnDragStart?.Invoke(_currentDragItem);
-
-        // 将原物品设为不可用状态
-        _currentDragItem.SetUsable(false);
     }
+
+
 
     /// <summary>
     /// 结束拖拽（通常由松开鼠标或碰撞触发）
+    /// </summary>
+    /// <summary>
+    /// 结束拖拽
     /// </summary>
     public void EndDrag()
     {
         if (!_isDragging) return;
 
-        // 查找有效的放置区域
+        bool dropSuccessful = false;
         DroppableZone validZone = FindValidDropZone();
 
-        if (validZone != null)
+        if (validZone != null && validZone.CanAcceptItem(_currentDragItem))
         {
-            // 放置成功：执行放置逻辑
+            dropSuccessful = true;
             validZone.OnItemDrop(_currentDragItem);
             OnItemDropped?.Invoke(_currentDragItem, validZone);
         }
-        else
+
+        // 处理代理拖拽结束
+        if (_currentProxyTag != null)
         {
-            // 放置失败：返回原位置
+            Vector3 dropPosition = GetMouseWorldPosition();
+            _currentProxyTag.HandleDragEnd(dropSuccessful, dropPosition);
+            OnProxyDragEnd?.Invoke(_currentDragItem, _currentDragProxy);
+        }
+        else if (!dropSuccessful)
+        {
+            // 正常拖拽且失败时返回原位置
             ReturnToOriginalPosition();
         }
 
-        // 重置状态
-        OnDragEnd?.Invoke(_currentDragItem);
-        _isDragging = false;
-        _currentDragItem = null;
+        // 清理状态
+        CleanupDragState(dropSuccessful);
     }
 
     /// <summary>
@@ -214,18 +208,67 @@ public class DragAndDropHandler : MonoBehaviour
     {
         Vector3 targetPosition = GetMouseWorldPosition() + _offset;
 
-        if (useSmoothMovement)
+        if (_currentProxyTag != null && _currentDragProxy != null)
         {
-            _currentDragItem.transform.position = Vector3.Lerp(
-                _currentDragItem.transform.position,
-                targetPosition,
-                Time.deltaTime * smoothSpeed
-            );
+            // 代理拖拽运动
+            if (useSmoothMovement)
+            {
+                _currentDragProxy.transform.position = Vector3.Lerp(
+                    _currentDragProxy.transform.position,
+                    targetPosition,
+                    Time.deltaTime * smoothSpeed
+                );
+            }
+            else
+            {
+                _currentDragProxy.transform.position = targetPosition;
+            }
         }
-        else
+        else if (_currentDragItem != null)
         {
-            _currentDragItem.transform.position = targetPosition;
+            // 正常拖拽运动
+            if (useSmoothMovement)
+            {
+                _currentDragItem.transform.position = Vector3.Lerp(
+                    _currentDragItem.transform.position,
+                    targetPosition,
+                    Time.deltaTime * smoothSpeed
+                );
+            }
+            else
+            {
+                _currentDragItem.transform.position = targetPosition;
+            }
         }
+    }
+
+    private void SetProxyRenderOrder(GameObject proxy)
+    {
+        // 确保代理显示在最前面
+        SpriteRenderer proxyRenderer = proxy.GetComponent<SpriteRenderer>();
+        if (proxyRenderer != null)
+        {
+            proxyRenderer.sortingOrder = 1000;
+        }
+    }
+
+    private void CleanupDragState(bool dropSuccessful)
+    {
+        if (!dropSuccessful && _currentProxyTag == null)
+        {
+            // 只有正常拖拽且失败时才恢复可用状态
+            _currentDragItem.SetUsable(true);
+        }
+        else if (_currentProxyTag == null && dropSuccessful)
+        {
+            // 正常拖拽成功，物品已经被放置区域处理
+        }
+
+        OnDragEnd?.Invoke(_currentDragItem);
+        _isDragging = false;
+        _currentDragItem = null;
+        _currentProxyTag = null;
+        _currentDragProxy = null;
     }
 
     /// <summary>
