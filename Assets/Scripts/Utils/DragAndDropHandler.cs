@@ -1,6 +1,8 @@
 using UnityEngine;
 using System;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using System.Collections.Generic;
 /// <summary>
 /// 通用拖拽系统
 /// 支持任意带有 ClickableItem 的物体进行拖拽
@@ -65,6 +67,65 @@ public class DragAndDropHandler : MonoBehaviour
     // ------------------------------
 
     /// <summary>
+    /// 开始拖拽 - 适配器方法（用于UnityEvent，只需要一个参数）
+    /// 这是为了解决UnityEvent参数匹配问题而添加的方法
+    /// </summary>
+    /// <param name="eventData">指针事件数据</param>
+    public void StartDragForUI()
+    {
+        Debug.Log("StartDragForUI called");
+
+        // 检查事件系统是否存在
+        if (EventSystem.current == null)
+        {
+            Debug.LogWarning("EventSystem not found in scene!");
+            return;
+        }
+
+        // 通过当前事件系统获取点击信息
+        PointerEventData currentEventData = new PointerEventData(EventSystem.current);
+        currentEventData.position = Input.mousePosition;
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(currentEventData, results);
+
+        Debug.Log($"Raycast found {results.Count} results");
+
+        if (results.Count > 0)
+        {
+            for (int i = 0; i < results.Count; i++)
+            {
+                Debug.Log($"Result {i}: {results[i].gameObject.name}");
+            }
+
+            GameObject clickedObject = results[0].gameObject;
+            Debug.Log($"Clicked object: {clickedObject.name}");
+
+            ClickableItem item = clickedObject.GetComponent<ClickableItem>();
+            if (item != null)
+            {
+                Debug.Log($"Found ClickableItem: {item.name}, Draggable: {item.isDraggable}, Usable: {item.isUsable}");
+
+                if (item.isDraggable && item.isUsable)
+                {
+                    Vector3 worldPos = eventCamera.ScreenToWorldPoint(Input.mousePosition);
+                    worldPos.z = dragOffsetZ;
+                    Debug.Log($"Starting drag at position: {worldPos}");
+                    StartDrag(item, worldPos);
+                }
+            }
+            else
+            {
+                Debug.Log("No ClickableItem component found on clicked object");
+            }
+        }
+        else
+        {
+            Debug.Log("No raycast results - check colliders and layers");
+        }
+    }
+
+    /// <summary>
     /// 开始拖拽（由 ClickableItem 调用）
     /// </summary>
     /// <param name="item">被拖拽的物体</param>
@@ -77,31 +138,32 @@ public class DragAndDropHandler : MonoBehaviour
         _originalParent = item.transform.parent;
         _originalPosition = item.transform.position;
 
-        // 进入拖拽状态
+        // 设置拖拽状态
         _isDragging = true;
 
-        // 计算拖拽偏移量（保持鼠标相对位置）
+        // 计算拖拽偏移量
         Vector3 worldPos = GetMouseWorldPosition();
         _offset = _currentDragItem.GetPosition() - worldPos;
-        _offset.z = dragOffsetZ; // 稍微提起来一点
+        _offset.z = dragOffsetZ; // 保持一致的Z轴偏移
 
-        // 提升层级（可选：移动到Canvas顶层或临时父对象）
+        // 提升渲染层级（针对UI元素）
         if (_currentDragItem.transform is RectTransform rectTransform)
         {
             rectTransform.SetAsLastSibling();
         }
         else
         {
+            // 为2D物体添加轻微旋转效果，增强拖拽感
             _currentDragItem.transform.SetPositionAndRotation(
                 _currentDragItem.transform.position,
-                Quaternion.Euler(0, 0, UnityEngine.Random.Range(-5f, 5f)) // 轻微旋转增加真实感
+                Quaternion.Euler(0, 0, UnityEngine.Random.Range(-5f, 5f))
             );
         }
 
-        // 触发开始事件
+        // 触发开始拖拽事件
         OnDragStart?.Invoke(_currentDragItem);
 
-        // 禁用原点击行为
+        // 将原物品设为不可用状态
         _currentDragItem.SetUsable(false);
     }
 
@@ -112,26 +174,37 @@ public class DragAndDropHandler : MonoBehaviour
     {
         if (!_isDragging) return;
 
-        // 尝试投放到某个区域
+        // 查找有效的放置区域
         DroppableZone validZone = FindValidDropZone();
 
         if (validZone != null)
         {
-            // 投放成功：执行投放逻辑
+            // 放置成功：执行放置逻辑
             validZone.OnItemDrop(_currentDragItem);
             OnItemDropped?.Invoke(_currentDragItem, validZone);
         }
         else
         {
-            // 投放失败：返回原位
+            // 放置失败：返回原位置
             ReturnToOriginalPosition();
         }
 
-        // 清理状态
+        // 重置状态
         OnDragEnd?.Invoke(_currentDragItem);
         _isDragging = false;
         _currentDragItem = null;
     }
+
+    /// <summary>
+    /// 结束拖拽 - 适配器方法（用于UnityEvent）
+    /// </summary>
+    /// <param name="eventData">指针事件数据（可选）</param>
+    public void EndDragWithEventData(BaseEventData eventData = null)
+    {
+        EndDrag();
+    }
+
+
 
     // ------------------------------
     // 内部逻辑
@@ -191,6 +264,11 @@ public class DragAndDropHandler : MonoBehaviour
 
         _currentDragItem.transform.position = _originalPosition;
         _currentDragItem.transform.SetParent(_originalParent);
+        _currentDragItem.transform.SetPositionAndRotation(
+                       _currentDragItem.transform.position,
+                                 Quaternion.identity
+                                         );
+        _currentDragItem.SetUsable(true);
     }
 
     // ------------------------------

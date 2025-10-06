@@ -1,49 +1,59 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using System.Collections; // 添加 Coroutine 支持
+
 /// <summary>
-/// 可点击物体基类
-/// 用于食材、碗、蒸笼、顾客等交互对象
-/// 支持点击、双击、拖拽（需配合 DragAndDropHandler）
+/// 可点击物品组件
+/// 支持鼠标悬停、点击、双击和拖拽交互
+/// 需要与 DragAndDropHandler 配合使用
 /// </summary>
-public class ClickableItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+public class ClickableItem : MonoBehaviour,
+    IPointerEnterHandler,
+    IPointerExitHandler,
+    IPointerDownHandler,
+    IPointerUpHandler,
+    IBeginDragHandler,    // 添加拖拽开始接口
+    IDragHandler,         // 添加拖拽中接口
+    IEndDragHandler       // 添加拖拽结束接口
 {
     [Header("基础设置")]
     public bool isDraggable = false;       // 是否可拖拽
-    public bool isUsable = true;           // 是否可交互（可动态关闭）
-    public float clickCooldown = 0.3f;     // 防误触：点击后冷却时间
+    public bool isUsable = true;           // 是否可用（影响所有交互状态）
+    public float clickCooldown = 0.3f;     // 点击冷却时间
 
-    [Header("视觉反馈")]
+    [Header("视觉效果")]
     public bool showHighlightOnHover = true;
-    public Color hoverColor = new Color(1f, 1f, 1f, 0.2f); // 高亮颜色(后期调整）
+    public Color hoverColor = new Color(1f, 1f, 1f, 0.2f); // 悬停颜色(透明叠加)
     private Material originalMaterial;
     private Color originalColor;
 
-    [Header("事件回调")]
+    [Header("事件配置")]
     public UnityEvent OnClicked;           // 单击事件
-    public UnityEvent OnDoubleClicked;     // 双击事件（可选）
-    public UnityEvent OnHoverEnter;        // 鼠标进入
-    public UnityEvent OnHoverExit;         // 鼠标离开
+    public UnityEvent OnDoubleClicked;     // 双击事件（可选配置）
+    public UnityEvent OnHoverEnter;        // 悬停进入
+    public UnityEvent OnHoverExit;         // 悬停退出
+    public UnityEvent OnDragStart;         // 拖拽开始事件
+    public UnityEvent OnDragEnd;           // 拖拽结束事件
 
-    // 状态控制
+    // 状态变量
     private bool canClick = true;
     private bool isHovering = false;
     private float lastClickTime = 0f;
-    private const float DoubleClickThreshold = 0.3f; // 双击判定时间窗口
+    private const float DoubleClickThreshold = 0.3f; // 双击判断时间阈值
 
-    // 组件缓存
+    // 组件引用
     private Collider2D _collider2D;
-    private Renderer _renderer; // 通用 Renderer，兼容 SpriteRenderer / MeshRenderer
+    private Renderer _renderer; // 通用 Renderer (支持 SpriteRenderer / MeshRenderer)
     private CanvasGroup _canvasGroup;
 
     // ------------------------------
-    // Unity 生命周期函数
+    // Unity 生命周期方法
     // ------------------------------
 
     protected virtual void Awake()
     {
-        //Debug.Log($"ClickableItem Awake on {gameObject.name}");
-        // 缓存常用组件
+        // 获取必要组件
         _collider2D = GetComponent<Collider2D>();
         _renderer = GetComponent<Renderer>();
         _canvasGroup = GetComponent<CanvasGroup>();
@@ -53,12 +63,13 @@ public class ClickableItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHan
             originalMaterial = _renderer.material; // 保存原始材质
             originalColor = _renderer.material.color;
         }
+
         Debug.Log($"{gameObject.name} 组件状态: Collider2D={_collider2D != null}, Renderer={_renderer != null}");
     }
 
     protected virtual void Update()
     {
-        // 双击检测
+        // 双击检测冷却
         if (!canClick && Time.time - lastClickTime > DoubleClickThreshold)
         {
             canClick = true;
@@ -66,32 +77,128 @@ public class ClickableItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHan
     }
 
     // ------------------------------
-    // 鼠标交互方法（通过 EventSystem 或射线调用）
+    // 指针事件接口实现（Unity EventSystem 自动调用）
     // ------------------------------
 
     /// <summary>
-    /// 鼠标进入
+    /// 鼠标进入物体区域
     /// </summary>
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log($"OnPointerEnter 被调用 on {gameObject.name}");
+        Debug.Log($"OnPointerEnter 触发在 {gameObject.name}");
         if (!isUsable)
         {
-            Debug.Log("但 isUsable = false，被忽略");
+            Debug.Log("物品不可用 isUsable = false");
             return;
         }
 
         isHovering = true;
         OnHoverEnter?.Invoke();
 
+        ApplyHoverVisuals();
+    }
+
+    /// <summary>
+    /// 鼠标离开物体区域
+    /// </summary>
+    public virtual void OnPointerExit(PointerEventData eventData)
+    {
+        Debug.Log($"OnPointerExit 触发在 {gameObject.name}");
+        isHovering = false;
+        OnHoverExit?.Invoke();
+
+        RemoveHoverVisuals();
+    }
+
+    /// <summary>
+    /// 鼠标按下
+    /// </summary>
+    public virtual void OnPointerDown(PointerEventData eventData)
+    {
+        Debug.Log($"OnPointerDown 触发在 {gameObject.name}");
+        if (!isUsable || !canClick) return;
+
+        if (isDraggable)
+        {
+            // 可拖拽物品的按下事件由拖拽系统处理
+            return;
+        }
+
+        HandleClick();
+    }
+
+    /// <summary>
+    /// 鼠标释放
+    /// </summary>
+    public virtual void OnPointerUp(PointerEventData eventData)
+    {
+        Debug.Log($"OnPointerUp 触发在 {gameObject.name}");
+        if (!isUsable || !canClick) return;
+
+        if (!isDraggable)
+        {
+            HandleClick();
+        }
+    }
+
+    /// <summary>
+    /// 开始拖拽（Unity EventSystem 接口）
+    /// </summary>
+    public virtual void OnBeginDrag(PointerEventData eventData)
+    {
+        if (!isUsable || !isDraggable) return;
+
+        Debug.Log($"OnBeginDrag 触发在 {gameObject.name}");
+        OnDragStart?.Invoke();
+
+        // 通知拖拽管理器开始拖拽
+        if (DragAndDropHandler.Instance != null)
+        {
+            Vector3 worldPos = GetWorldPositionFromEventData(eventData);
+            DragAndDropHandler.Instance.StartDrag(this, worldPos);
+        }
+    }
+
+    /// <summary>
+    /// 拖拽中（Unity EventSystem 接口）
+    /// </summary>
+    public virtual void OnDrag(PointerEventData eventdata)
+    {
+        if (!isDraggable) return;
+
+        // 拖拽中的处理由 draganddrophandler 负责
+    }
+
+    /// <summary>
+    /// 结束拖拽（Unity EventSystem 接口）
+    /// </summary>
+    public virtual void OnEndDrag(PointerEventData eventData)
+    {
+        if (!isDraggable) return;
+
+        Debug.Log($"OnEndDrag 触发在 {gameObject.name}");
+        OnDragEnd?.Invoke();
+
+        // 通知拖拽管理器结束拖拽
+        if (DragAndDropHandler.Instance != null)
+        {
+            DragAndDropHandler.Instance.EndDrag();
+        }
+    }
+
+    // ------------------------------
+    // 视觉效果方法
+    // ------------------------------
+
+    private void ApplyHoverVisuals()
+    {
         if (showHighlightOnHover && _renderer != null)
         {
-            // 创建新的材质实例避免影响其他物体
+            // 创建材质实例以避免影响其他物体
             _renderer.material = new Material(_renderer.material);
             Color targetColor = originalColor + hoverColor;
             targetColor.a = Mathf.Min(1f, targetColor.a);
             _renderer.material.color = targetColor;
-            Debug.Log($"高亮颜色应用: {targetColor}");
         }
 
         if (_canvasGroup != null)
@@ -100,12 +207,8 @@ public class ClickableItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHan
         }
     }
 
-    public virtual void OnPointerExit(PointerEventData eventData)
+    private void RemoveHoverVisuals()
     {
-        Debug.Log($"OnPointerExit 被调用 on {gameObject.name}");
-        isHovering = false;
-        OnHoverExit?.Invoke();
-
         if (showHighlightOnHover && _renderer != null && originalMaterial != null)
         {
             _renderer.material.color = originalColor;
@@ -119,98 +222,58 @@ public class ClickableItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHan
         }
     }
 
-    public virtual void OnPointerDown(PointerEventData eventData)
-    {
-        Debug.Log($"OnPointerDown 被调用 on {gameObject.name}");
-        if (!isUsable || !canClick) return;
-
-        if (isDraggable)
-        {
-            return;
-        }
-
-        HandleClick();
-    }
-
-    public virtual void OnPointerUp(PointerEventData eventData)
-    {
-        Debug.Log($"OnPointerUp 被调用 on {gameObject.name}");
-        if (!isUsable || !canClick) return;
-
-        if (!isDraggable)
-        {
-            HandleClick();
-        }
-    }
-    /// <summary>
-    /// 鼠标进入（供外部调用）
-    /// </summary>
-    public virtual void OnPointerEnter()
-    {
-        // 这个方法可以保留供外部代码调用，但内部事件处理使用接口版本
-        OnPointerEnter(null);
-    }
-
-    /// <summary>
-    /// 鼠标离开（供外部调用）
-    /// </summary>
-    public virtual void OnPointerExit()
-    {
-        OnPointerExit(null);
-    }
-
-    /// <summary>
-    /// 鼠标按下（供外部调用）
-    /// </summary>
-    public virtual void OnPointerDown()
-    {
-        OnPointerDown(null);
-    }
-
-    /// <summary>
-    /// 鼠标抬起（供外部调用）
-    /// </summary>
-    public virtual void OnPointerUp()
-    {
-        OnPointerUp(null);
-    }
-
     // ------------------------------
-    // 核心点击逻辑
+    // 点击处理逻辑
     // ------------------------------
 
     private void HandleClick()
     {
         float timeSinceLastClick = Time.time - lastClickTime;
 
-        // 判定双击
+        // 检测双击
         if (timeSinceLastClick <= DoubleClickThreshold)
         {
+            Debug.Log("双击检测成功");
             OnDoubleClicked?.Invoke();
             canClick = false;
             lastClickTime = 0f;
-            Invoke(nameof(ResetClickState), clickCooldown);
+            StartCoroutine(ResetClickStateAfterDelay(clickCooldown));
             return;
         }
 
-        // 单击
+        // 单机处理
+        Debug.Log("单击处理");
         OnClicked?.Invoke();
         lastClickTime = Time.time;
         canClick = false;
-        Invoke(nameof(ResetClickState), clickCooldown);
+        StartCoroutine(ResetClickStateAfterDelay(clickCooldown));
     }
 
-    private void ResetClickState()
+    private IEnumerator ResetClickStateAfterDelay(float delay)
     {
+        yield return new WaitForSeconds(delay);
         canClick = true;
     }
 
     // ------------------------------
-    // 公共方法（供外部调用）
+    // 工具方法
+    // ------------------------------
+
+    private Vector3 GetWorldPositionFromEventData(PointerEventData eventData)
+    {
+        if (eventData == null) return Vector3.zero;
+
+        Vector3 screenPos = eventData.position;
+        screenPos.z = 10f; // 默认Z轴偏移
+        return Camera.main.ScreenToWorldPoint(screenPos);
+    }
+
+    // ------------------------------
+    // 外部调用接口
     // ------------------------------
 
     /// <summary>
-    /// 强制触发点击事件（调试或自动流程使用）
+    /// 强制触发点击事件（可用于程序控制）
     /// </summary>
     public virtual void ForceClick()
     {
@@ -221,7 +284,7 @@ public class ClickableItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHan
     }
 
     /// <summary>
-    /// 启用/禁用交互
+    /// 设置物品可用状态
     /// </summary>
     public virtual void SetUsable(bool usable)
     {
@@ -232,20 +295,33 @@ public class ClickableItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHan
         }
         if (!usable && isHovering)
         {
-            OnPointerExit(); // 清理悬停状态
+            OnPointerExit(null); // 清理悬停状态
         }
     }
 
     /// <summary>
-    /// 获取当前是否在鼠标悬停状态
+    /// 获取当前是否处于悬停状态
     /// </summary>
     public bool IsHovering() => isHovering;
 
     /// <summary>
-    /// 获取对象的世界坐标位置（用于移动或定位）
+    /// 获取物品位置（世界坐标）
     /// </summary>
-    public Vector3 GetPosition()
+    public Vector3 GetPosition() => transform.position;
+
+    /// <summary>
+    /// 手动触发悬停进入（用于程序控制）
+    /// </summary>
+    public virtual void ManualPointerEnter()
     {
-        return transform.position;
+        OnPointerEnter(null);
+    }
+
+    /// <summary>
+    /// 手动触发悬停退出（用于程序控制）
+    /// </summary>
+    public virtual void ManualPointerExit()
+    {
+        OnPointerExit(null);
     }
 }

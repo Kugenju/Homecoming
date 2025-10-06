@@ -170,6 +170,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7585313491468346981, guid: f57321785c4a8c5489a0507dd975648d, type: 3}
+      propertyPath: eventCamera
+      value: 
+      objectReference: {fileID: 519420031}
     - target: {fileID: 8491258238802108430, guid: f57321785c4a8c5489a0507dd975648d, type: 3}
       propertyPath: m_Name
       value: GameManager
@@ -179,6 +183,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f57321785c4a8c5489a0507dd975648d, type: 3}
+--- !u!114 &21510671 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7585313491468346981, guid: f57321785c4a8c5489a0507dd975648d, type: 3}
+  m_PrefabInstance: {fileID: 21510668}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96ac32261eb030f4ea69a0667efdb243, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &105233209
 GameObject:
   m_ObjectHideFlags: 0
@@ -1038,7 +1053,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
+  m_FirstSelected: {fileID: 1703649357}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
 --- !u!4 &1258248161
@@ -1525,6 +1540,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1489716044}
   m_CullTransparentMesh: 1
+--- !u!1 &1703649357 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4140664779418151898, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
+  m_PrefabInstance: {fileID: 2684789008412745332}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1761424344
 GameObject:
   m_ObjectHideFlags: 0
@@ -1801,6 +1821,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1248141627070700765, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
+      propertyPath: isDraggable
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3007983959628575673, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1920
@@ -1845,33 +1869,77 @@ PrefabInstance:
       propertyPath: m_Name
       value: breakfast_spot
       objectReference: {fileID: 0}
+    - target: {fileID: 4446913463170884628, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
+      propertyPath: isDraggable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5549761607255421773, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
+      propertyPath: isDraggable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5965196057257321578, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
+      propertyPath: isDraggable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6078620318474985880, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
+      propertyPath: isDraggable
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6101039023604915663, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
       propertyPath: OnClicked.m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6101039023604915663, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
       propertyPath: OnClicked.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 5
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101039023604915663, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
+      propertyPath: OnClicked.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6101039023604915663, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
       propertyPath: OnClicked.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 11500000, guid: 96ac32261eb030f4ea69a0667efdb243, type: 3}
+      objectReference: {fileID: 21510671}
+    - target: {fileID: 6101039023604915663, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
+      propertyPath: OnClicked.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 21510671}
     - target: {fileID: 6101039023604915663, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
       propertyPath: OnClicked.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6101039023604915663, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
+      propertyPath: OnClicked.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101039023604915663, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
       propertyPath: OnClicked.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: set_name
+      value: StartDragForUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101039023604915663, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
+      propertyPath: OnClicked.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: StartDragForUI
       objectReference: {fileID: 0}
     - target: {fileID: 6101039023604915663, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
       propertyPath: OnClicked.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
+      value: DragAndDropHandler, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101039023604915663, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
+      propertyPath: OnClicked.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: DragAndDropHandler, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6101039023604915663, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
       propertyPath: OnClicked.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101039023604915663, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
+      propertyPath: OnClicked.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8763636507261702141, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
+      propertyPath: isDraggable
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
