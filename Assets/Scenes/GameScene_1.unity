@@ -1003,6 +1003,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1110385290}
   m_CullTransparentMesh: 1
+--- !u!1 &1214768978 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3814454505821532507, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
+  m_PrefabInstance: {fileID: 2684789008412745332}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1214768983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1214768978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc4e26997ef425428e37fa764407547, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  proxyPrefab: {fileID: 0}
+  successDropBehavior: 3
+  cancelDropBehavior: 1
+  hideOriginalDuringDrag: 1
+  proxyScale: {x: 1, y: 1, z: 1}
+  proxyAlpha: 0.8
+  copySpriteProperties: 1
+  enableRotationEffect: 1
+  maxRotationAngle: 15
 --- !u!1 &1258248158
 GameObject:
   m_ObjectHideFlags: 0
@@ -2074,7 +2100,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3814454505821532507, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1214768983}
   m_SourcePrefab: {fileID: 100100000, guid: ac087fcacbd66fa43bb5d1f2e735a056, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
