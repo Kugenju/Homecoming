@@ -1,12 +1,12 @@
 using UnityEngine;
 using UnityEngine.Events;
-
+using UnityEngine.EventSystems;
 /// <summary>
 /// 可点击物体基类
 /// 用于食材、碗、蒸笼、顾客等交互对象
 /// 支持点击、双击、拖拽（需配合 DragAndDropHandler）
 /// </summary>
-public class ClickableItem : MonoBehaviour
+public class ClickableItem : MonoBehaviour,IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     [Header("基础设置")]
     public bool isDraggable = false;       // 是否可拖拽
@@ -42,6 +42,7 @@ public class ClickableItem : MonoBehaviour
 
     protected virtual void Awake()
     {
+        //Debug.Log($"ClickableItem Awake on {gameObject.name}");
         // 缓存常用组件
         _collider2D = GetComponent<Collider2D>();
         _renderer = GetComponent<Renderer>();
@@ -49,8 +50,10 @@ public class ClickableItem : MonoBehaviour
 
         if (_renderer != null)
         {
+            originalMaterial = _renderer.material; // 保存原始材质
             originalColor = _renderer.material.color;
         }
+        Debug.Log($"{gameObject.name} 组件状态: Collider2D={_collider2D != null}, Renderer={_renderer != null}");
     }
 
     protected virtual void Update()
@@ -69,39 +72,45 @@ public class ClickableItem : MonoBehaviour
     /// <summary>
     /// 鼠标进入
     /// </summary>
-    public virtual void OnPointerEnter()
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log($"Pointer Enter on {gameObject.name}");
-        if (!isUsable) return;
+        Debug.Log($"OnPointerEnter 被调用 on {gameObject.name}");
+        if (!isUsable)
+        {
+            Debug.Log("但 isUsable = false，被忽略");
+            return;
+        }
 
         isHovering = true;
         OnHoverEnter?.Invoke();
 
         if (showHighlightOnHover && _renderer != null)
         {
+            // 创建新的材质实例避免影响其他物体
+            _renderer.material = new Material(_renderer.material);
             Color targetColor = originalColor + hoverColor;
             targetColor.a = Mathf.Min(1f, targetColor.a);
             _renderer.material.color = targetColor;
+            Debug.Log($"高亮颜色应用: {targetColor}");
         }
 
-        // 如果是UI元素，也可修改 CanvasGroup.alpha
         if (_canvasGroup != null)
         {
             _canvasGroup.alpha = 0.9f;
         }
     }
 
-    /// <summary>
-    /// 鼠标离开
-    /// </summary>
-    public virtual void OnPointerExit()
+    public virtual void OnPointerExit(PointerEventData eventData)
     {
+        Debug.Log($"OnPointerExit 被调用 on {gameObject.name}");
         isHovering = false;
         OnHoverExit?.Invoke();
 
-        if (showHighlightOnHover && _renderer != null)
+        if (showHighlightOnHover && _renderer != null && originalMaterial != null)
         {
             _renderer.material.color = originalColor;
+            // 恢复原始材质
+            _renderer.material = originalMaterial;
         }
 
         if (_canvasGroup != null)
@@ -110,35 +119,60 @@ public class ClickableItem : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 鼠标按下（开始点击或拖拽）
-    /// </summary>
-    public virtual void OnPointerDown()
+    public virtual void OnPointerDown(PointerEventData eventData)
     {
+        Debug.Log($"OnPointerDown 被调用 on {gameObject.name}");
         if (!isUsable || !canClick) return;
 
-        // 如果可拖拽，交由 DragAndDropHandler 处理
         if (isDraggable)
         {
-            return; // 不在此处处理点击逻辑
+            return;
         }
 
-        // 否则视为立即点击
         HandleClick();
     }
 
-    /// <summary>
-    /// 鼠标抬起（完成点击）
-    /// </summary>
-    public virtual void OnPointerUp()
+    public virtual void OnPointerUp(PointerEventData eventData)
     {
+        Debug.Log($"OnPointerUp 被调用 on {gameObject.name}");
         if (!isUsable || !canClick) return;
 
-        // 如果是可拖拽对象，在 DragHandler 中处理释放
         if (!isDraggable)
         {
             HandleClick();
         }
+    }
+    /// <summary>
+    /// 鼠标进入（供外部调用）
+    /// </summary>
+    public virtual void OnPointerEnter()
+    {
+        // 这个方法可以保留供外部代码调用，但内部事件处理使用接口版本
+        OnPointerEnter(null);
+    }
+
+    /// <summary>
+    /// 鼠标离开（供外部调用）
+    /// </summary>
+    public virtual void OnPointerExit()
+    {
+        OnPointerExit(null);
+    }
+
+    /// <summary>
+    /// 鼠标按下（供外部调用）
+    /// </summary>
+    public virtual void OnPointerDown()
+    {
+        OnPointerDown(null);
+    }
+
+    /// <summary>
+    /// 鼠标抬起（供外部调用）
+    /// </summary>
+    public virtual void OnPointerUp()
+    {
+        OnPointerUp(null);
     }
 
     // ------------------------------

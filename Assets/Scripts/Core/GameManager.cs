@@ -81,7 +81,15 @@ public class GameManager : Singleton<GameManager>
     // Start is called before the first frame update
     void Start()
     {
-        currentState = GameState.MainMenu;
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        if (currentSceneName == mainMenuScene)
+        {
+            currentState = GameState.MainMenu;
+        }
+        else if (currentSceneName == gameScene_1)
+        {
+            currentState = GameState.Playing;
+        }
         Cursor.visible = true; // 确保鼠标可见
     }
 
