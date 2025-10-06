@@ -71,6 +71,7 @@ public class ClickableItem : MonoBehaviour
     /// </summary>
     public virtual void OnPointerEnter()
     {
+        Debug.Log($"Pointer Enter on {gameObject.name}");
         if (!isUsable) return;
 
         isHovering = true;
