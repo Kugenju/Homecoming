@@ -7,8 +7,10 @@ using UnityEngine.UI;
 /// </summary>
 public class PauseMenuUI : MonoBehaviour
 {
+
     [Header("UI Elements")]
     public GameObject pausePanel;          // 暂停主面板
+    public GameObject pauseMenu;        // 暂停菜单整体对象（包含背景和按钮）
     public Button settingsButton;
     public Button resumeButton;
     public Button mainMenuButton;
@@ -27,6 +29,10 @@ public class PauseMenuUI : MonoBehaviour
             Debug.LogError("GameManager 未找到！请确保场景中有 GameManager 对象。");
             return;
         }
+
+        // 向GameManager注册自己
+        GameManager.Instance.RegisterPauseMenuUI(this);
+
         SetupButtons();
         Hide();
     }
@@ -44,7 +50,7 @@ public class PauseMenuUI : MonoBehaviour
         pausePanel.SetActive(true);
         Time.timeScale = 0f;
         GameManager.Instance.currentState = GameManager.GameState.Paused;
-        Cursor.visible = true;
+        //Cursor.visible = true;
     }
 
     public void Hide()
@@ -52,7 +58,7 @@ public class PauseMenuUI : MonoBehaviour
         pausePanel.SetActive(false);
         Time.timeScale = 1f;
         GameManager.Instance.currentState = GameManager.GameState.Playing;
-        Cursor.visible = false;
+        //Cursor.visible = false;
     }
 
     public void Toggle()
@@ -63,6 +69,14 @@ public class PauseMenuUI : MonoBehaviour
             Show();
     }
 
+    /// <summary>
+    /// 检查设置面板是否激活
+    /// </summary>
+    public bool IsSettingsPanelActive()
+    {
+        return currentSettingsPanel != null && currentSettingsPanel.activeSelf;
+    }
+
     private void ResumeGame()
     {
         Hide();
@@ -71,13 +85,14 @@ public class PauseMenuUI : MonoBehaviour
     private void ShowSettings()
     {
         // 隐藏主面板
-        pausePanel.SetActive(false);
+        pauseMenu.SetActive(false);
 
         // 动态加载设置面板
         if (currentSettingsPanel == null)
         {
             currentSettingsPanel = Instantiate(settingsPrefab, settingsContainer);
             currentSettingsPanel.name = "SettingsPanel_Runtime";
+            currentSettingsPanel.SetActive(true);
         }
         else
         {
@@ -91,7 +106,7 @@ public class PauseMenuUI : MonoBehaviour
         {
             currentSettingsPanel.SetActive(false);
         }
-        pausePanel.SetActive(true); // 返回暂停菜单
+        pauseMenu.SetActive(true); // 返回暂停菜单
     }
 
     private void ReturnToMainMenu()
@@ -104,19 +119,4 @@ public class PauseMenuUI : MonoBehaviour
         GameManager.Instance.QuitGame();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Debug.Log("按下了 Esc 键");
-            if (currentSettingsPanel != null && currentSettingsPanel.activeSelf)
-            {
-                CloseSettings();
-            }
-            else
-            {
-                Toggle();
-            }
-        }
-    }
 }
