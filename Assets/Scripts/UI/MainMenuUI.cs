@@ -17,7 +17,7 @@ public class MainMenuUI : MonoBehaviour
     private GameObject currentSettingsPanel; // 当前实例化的设置面板
     private Button startButton;
     private Button settingsButton;
-    private Button backButton;
+    //private Button backButton;
     private Button quitButton;
 
     private void Awake()
@@ -58,7 +58,7 @@ public class MainMenuUI : MonoBehaviour
         {
             currentSettingsPanel = Instantiate(settingsPrefab, settingsContainer);
             currentSettingsPanel.name = "SettingsPanel_Runtime";
-            backButton = currentSettingsPanel.transform.Find("BackButton")?.GetComponent<Button>();
+            //backButton = currentSettingsPanel.transform.Find("BackButton")?.GetComponent<Button>();
         }
         else
         {
@@ -78,8 +78,8 @@ public class MainMenuUI : MonoBehaviour
         if (settingsButton != null)
             settingsButton.onClick.AddListener(OnOpenSettings);
 
-        if (backButton != null)
-            backButton.onClick.AddListener(OnCloseSettings);
+        //if (backButton != null)
+        //    backButton.onClick.AddListener(OnCloseSettings);
 
         if (quitButton != null)
             quitButton.onClick.AddListener(OnQuitGame);
@@ -165,5 +165,10 @@ public class MainMenuUI : MonoBehaviour
     {
         mainMenuPanel?.SetActive(false);
         currentSettingsPanel?.SetActive(true);
+    }
+
+    public void MainSetActive()
+    {
+        mainMenuPanel.SetActive(true);
     }
 }

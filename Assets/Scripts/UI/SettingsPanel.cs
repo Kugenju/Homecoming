@@ -9,6 +9,7 @@ public class SettingsPanel : MonoBehaviour
     // Start is called before the first frame update
     public Slider volumeSlider;
     public Dropdown qualityDropdown;
+    public Button backButton;
 
     private void Awake()
     {
@@ -29,6 +30,7 @@ public class SettingsPanel : MonoBehaviour
     {
         volumeSlider.onValueChanged.AddListener(OnVolumeChanged);
         qualityDropdown.onValueChanged.AddListener(OnQualityChanged);
+        backButton.onClick.AddListener(OnBackButtonClicked);
     }
 
     private void SetupQualityDropdown()
@@ -58,6 +60,26 @@ public class SettingsPanel : MonoBehaviour
             volumeSlider.onValueChanged.RemoveListener(OnVolumeChanged);
         if (qualityDropdown != null)
             qualityDropdown.onValueChanged.RemoveListener(OnQualityChanged);
+    }
+
+    private void OnBackButtonClicked()
+    {
+        // 关闭设置面板
+
+        // 打开主菜单面板
+        MainMenuUI mainMenu = FindObjectOfType<MainMenuUI>();
+
+        if (mainMenu != null)
+        {
+            Debug.Log("返回主菜单");
+            gameObject.SetActive(false);
+            mainMenu.MainSetActive();
+        }
+        else
+        {
+            gameObject.SetActive(false);
+            GameManager.Instance.LoadMainMenu();
+        }
     }
 
 }

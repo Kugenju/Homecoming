@@ -1074,6 +1074,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   volumeSlider: {fileID: 366770370667754839}
   qualityDropdown: {fileID: 7856847262745561897}
+  backButton: {fileID: 3935869378478262854}
 --- !u!1 &5823074728920806003
 GameObject:
   m_ObjectHideFlags: 0

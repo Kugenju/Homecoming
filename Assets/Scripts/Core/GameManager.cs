@@ -30,6 +30,8 @@ public class GameManager : Singleton<GameManager>
     // private float gameStartTime = 8.0f; // 游戏开始时间
     // private float gameEndTime = 18.0f; // 游戏结束时间
 
+    // 添加对PauseMenuUI的引用
+    private PauseMenuUI pauseMenuUI;
 
     protected override void Awake()
     {
@@ -37,8 +39,44 @@ public class GameManager : Singleton<GameManager>
         Debug.Log("GameManager 初始化");
         // 初始化代码
         DontDestroyOnLoad(this.gameObject); // 保持 GameManager 不被销毁
+
+        // 获取当前场景名称并设置对应状态
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        if (currentSceneName == mainMenuScene)
+        {
+            currentState = GameState.MainMenu;
+            Debug.Log("当前状态设置为：主菜单");
+        }
+        else if (currentSceneName == gameScene_1)
+        {
+            currentState = GameState.Playing;
+            Debug.Log("当前状态设置为：游戏中");
+        }
+        else
+        {
+            Debug.LogWarning($"未知场景：{currentSceneName}，保持默认状态");
+        }
+
         Debug.Log(GameManager.Instance);
+
     }
+
+    //private void onsceneloaded(scene scene, loadscenemode mode)
+    //{
+    //    // 在游戏场景中查找pausemenuui
+    //    if (currentstate == gamestate.playing)
+    //    {
+    //        pausemenuui = findobjectoftype<pausemenuui>();
+    //        if (pausemenuui != null)
+    //        {
+    //            debug.log("找到pausemenuui");
+    //        }
+    //    }
+    //    else
+    //    {
+    //        pausemenuui = null;
+    //    }
+    //}
 
     // Start is called before the first frame update
     void Start()
@@ -50,9 +88,10 @@ public class GameManager : Singleton<GameManager>
     // Update is called once per frame
     void Update()
     {
-        if (currentState == GameState.Playing && Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            TogglePause();
+            //Debug.Log("检测到 ESC 键按下");
+            HandleEscapeKey();
         }
     }
 
@@ -167,6 +206,59 @@ public class GameManager : Singleton<GameManager>
         #endif
     }
 
+    /// <summary>
+    /// 统一处理ESC键按下事件
+    /// </summary>
+    private void HandleEscapeKey()
+    {
+        Debug.Log("处理 ESC 键事件，当前状态: " + currentState);
+        switch (currentState)
+        {
+            case GameState.Playing:
+                // 游戏中按下ESC，尝试获取或创建暂停菜单
+                if (pauseMenuUI == null)
+                {
+                    pauseMenuUI = FindObjectOfType<PauseMenuUI>();
+                    Debug.Log("尝试查找PauseMenuUI" + pauseMenuUI);
+                }
+
+                if (pauseMenuUI != null)
+                {
+                    pauseMenuUI.Show();
+                    currentState = GameState.Paused;
+                }
+                else
+                {
+                    // 如果没有找到暂停菜单，使用GameManager的默认暂停逻辑
+                    TogglePause();
+                }
+                break;
+
+            case GameState.Paused:
+                // 暂停状态下按下ESC，如果有设置面板先关闭设置面板
+                if (pauseMenuUI != null)
+                {
+                    // 检查是否有活动的设置面板
+                    if (pauseMenuUI.IsSettingsPanelActive())
+                    {
+                        pauseMenuUI.CloseSettings();
+                    }
+                    else
+                    {
+                        pauseMenuUI.Hide();
+                        currentState = GameState.Playing;
+                    }
+                }
+                else
+                {
+                    // 如果没有暂停菜单，使用GameManager的默认恢复逻辑
+                    TogglePause();
+                }
+                break;
+        }
+    }
+
+
     // ------------------------------
     // 外部可调用的获取方法
     // ------------------------------
@@ -174,4 +266,13 @@ public class GameManager : Singleton<GameManager>
     public bool IsGamePlaying() => currentState == GameState.Playing;
     public bool IsPaused() => currentState == GameState.Paused;
     public bool IsInMainMenu() => currentState == GameState.MainMenu;
+
+    /// <summary>
+    /// 设置PauseMenuUI引用（供PauseMenuUI自身调用）
+    /// </summary>
+    public void RegisterPauseMenuUI(PauseMenuUI ui)
+    {
+        pauseMenuUI = ui;
+        //Debug.Log("注册PauseMenuUI引用" + pauseMenuUI);
+    }
 }
