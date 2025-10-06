@@ -27,8 +27,8 @@ public class GameManager : Singleton<GameManager>
     private bool isChangingScene = false; // 是否正在切换场景
 
     // 游戏内时间（TimeSystem调用）
-    private float gameStartTime = 8.0f; // 游戏开始时间
-    private float gameEndTime = 18.0f; // 游戏结束时间
+    // private float gameStartTime = 8.0f; // 游戏开始时间
+    // private float gameEndTime = 18.0f; // 游戏结束时间
 
 
     protected override void Awake()
