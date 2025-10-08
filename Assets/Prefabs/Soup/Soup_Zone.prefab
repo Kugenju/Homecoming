@@ -113,6 +113,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c0acac79188315143951b68586a26735, type: 2}
   - {fileID: 11400000, guid: 787d39e1671785d44b712dc646773af7, type: 2}
   - {fileID: 11400000, guid: b3c0476c9debfd040abdb766af336a84, type: 2}
+  - {fileID: 11400000, guid: 61bdde431c543f748aee4ecdcffbdcb0, type: 2}
   currentIngredients: []
   targetScale: {x: 100, y: 100, z: 100}
   addToppingSound: {fileID: 0}
@@ -126,7 +127,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2144434198169958985, guid: b253f8687a4886d4394d76afcf782997, type: 3}
       propertyPath: m_Name
-      value: "\u7EAF\u7C89\u4E1D"
+      value: Bowl Container
       objectReference: {fileID: 0}
     - target: {fileID: 6310302166531117293, guid: b253f8687a4886d4394d76afcf782997, type: 3}
       propertyPath: m_LocalPosition.x
