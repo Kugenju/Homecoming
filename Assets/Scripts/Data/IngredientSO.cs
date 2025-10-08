@@ -7,6 +7,4 @@ public class IngredientSO : ScriptableObject
 {
     public string ingredientName;
     public Sprite icon;
-    public int maxStack = 99;
-    public int currentStock = 50; // ≥ı ºø‚¥Ê
 }
