@@ -62,6 +62,7 @@ public class ProxyDragTag : MonoBehaviour
 
     public GameObject CreateProxy(Vector3 position)
     {
+        //Debug.Log("触发创建代理");
         if (proxyPrefab == null)
         {
             Debug.LogWarning($"ProxyPrefab is null on {gameObject.name}");
@@ -88,6 +89,7 @@ public class ProxyDragTag : MonoBehaviour
         }
 
         _isProxyActive = true;
+        //Debug.Log($"Created proxy for {gameObject.name} at {position}, _isProxyActive={_isProxyActive}, _currentProxy.name: {_currentProxy}");
         return _currentProxy;
     }
 
@@ -134,10 +136,11 @@ public class ProxyDragTag : MonoBehaviour
     /// </summary>
     public void HandleDragEnd(bool dropSuccessful, Vector3 dropPosition)
     {
+        Debug.Log($"HandleDragEnd called on {gameObject.name}, successful={dropSuccessful},_isProxyActive={_isProxyActive}, _currentProxy={_currentProxy}");
         if (!_isProxyActive || _currentProxy == null) return;
 
         DropBehavior behavior = GetFinalDropBehavior(dropSuccessful);
-
+        Debug.Log($"Drag ended on {gameObject.name}, successful={dropSuccessful}, behavior={behavior}");
         switch (behavior)
         {
             case DropBehavior.ReturnToOriginal:
@@ -156,6 +159,8 @@ public class ProxyDragTag : MonoBehaviour
                 HandleCustomBehavior(dropSuccessful, dropPosition);
                 break;
         }
+
+     
 
         // 恢复原物体
         if (hideOriginalDuringDrag)

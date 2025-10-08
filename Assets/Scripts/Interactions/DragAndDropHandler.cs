@@ -165,6 +165,8 @@ public class DragAndDropHandler : MonoBehaviour
         bool dropSuccessful = false;
         DroppableZone validZone = FindValidDropZone();
 
+        Debug.Log($"尝试投放 {_currentDragItem.name} 到区域 {(validZone != null ? validZone.name : "无效区域")}, 代理情况{_currentProxyTag}");
+
         if (validZone != null && validZone.CanAcceptItem(_currentDragItem))
         {
             dropSuccessful = true;
@@ -175,6 +177,7 @@ public class DragAndDropHandler : MonoBehaviour
         // 处理代理拖拽结束
         if (_currentProxyTag != null)
         {
+            Debug.Log("触发代理逻辑");
             Vector3 dropPosition = GetMouseWorldPosition();
             _currentProxyTag.HandleDragEnd(dropSuccessful, dropPosition);
             OnProxyDragEnd?.Invoke(_currentDragItem, _currentDragProxy);
@@ -254,15 +257,17 @@ public class DragAndDropHandler : MonoBehaviour
 
     private void CleanupDragState(bool dropSuccessful)
     {
-        if (!dropSuccessful && _currentProxyTag == null)
-        {
-            // 只有正常拖拽且失败时才恢复可用状态
-            _currentDragItem.SetUsable(true);
-        }
-        else if (_currentProxyTag == null && dropSuccessful)
-        {
-            // 正常拖拽成功，物品已经被放置区域处理
-        }
+        //if (!dropSuccessful && _currentProxyTag == null)
+        //{
+        //    // 只有正常拖拽且失败时才恢复可用状态
+        //    _currentDragItem.SetUsable(true);
+        //}
+        //else if (_currentProxyTag == null && dropSuccessful)
+        //{
+        //    // 正常拖拽成功，物品已经被放置区域处理
+        //}
+
+        _currentDragItem.SetUsable(true);
 
         OnDragEnd?.Invoke(_currentDragItem);
         _isDragging = false;

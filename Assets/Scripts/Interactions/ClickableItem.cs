@@ -85,7 +85,7 @@ public class ClickableItem : MonoBehaviour,
     /// </summary>
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log($"OnPointerEnter 触发在 {gameObject.name}");
+        //Debug.Log($"OnPointerEnter 触发在 {gameObject.name}");
         if (!isUsable)
         {
             Debug.Log("物品不可用 isUsable = false");
@@ -103,7 +103,7 @@ public class ClickableItem : MonoBehaviour,
     /// </summary>
     public virtual void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log($"OnPointerExit 触发在 {gameObject.name}");
+        //Debug.Log($"OnPointerExit 触发在 {gameObject.name}");
         isHovering = false;
         OnHoverExit?.Invoke();
 
@@ -115,7 +115,7 @@ public class ClickableItem : MonoBehaviour,
     /// </summary>
     public virtual void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log($"OnPointerDown 触发在 {gameObject.name}");
+        //Debug.Log($"OnPointerDown 触发在 {gameObject.name}");
         if (!isUsable || !canClick) return;
 
         if (isDraggable)
@@ -132,7 +132,7 @@ public class ClickableItem : MonoBehaviour,
     /// </summary>
     public virtual void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log($"OnPointerUp 触发在 {gameObject.name}");
+        //Debug.Log($"OnPointerUp 触发在 {gameObject.name}");
         if (!isUsable || !canClick) return;
 
         if (!isDraggable)
@@ -148,7 +148,7 @@ public class ClickableItem : MonoBehaviour,
     {
         if (!isUsable || !isDraggable) return;
 
-        Debug.Log($"OnBeginDrag 触发在 {gameObject.name}");
+        //Debug.Log($"OnBeginDrag 触发在 {gameObject.name}");
         OnDragStart?.Invoke();
 
         // 通知拖拽管理器开始拖拽
