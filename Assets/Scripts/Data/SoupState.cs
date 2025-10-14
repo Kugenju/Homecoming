@@ -2,13 +2,13 @@ using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// ÌÀµÄ×´Ì¬£º¶ÔÓ¦Ò»ÖÖÔ¤ÖÆÌåºÍÒ»×éËùĞè²ÄÁÏ
+/// æ±¤çš„çŠ¶æ€ï¼šå¯¹åº”ä¸€ç§é¢„åˆ¶ä½“å’Œä¸€ç»„æ‰€éœ€ææ–™
 /// </summary>
 [CreateAssetMenu(fileName = "New Ingredient", menuName = "Cooking/SoupState")]
 public class SoupState : ScriptableObject
 {
-    public string displayName = "Î´ÃüÃû×éºÏ";
-    public List<IngredientSO> requiredIngredients; // ±ØĞëÍêÈ«Æ¥ÅäµÄ²ÄÁÏ
-    public GameObject visualPrefab; // ¶ÔÓ¦µÄÔ¤ÖÆÌå
-    public int price = 2; // ´Ë×éºÏÊÛ¼Û
+    public string displayName = "æœªå‘½åç»„åˆ";
+    public List<IngredientSO> requiredIngredients; // å¿…é¡»å®Œå…¨åŒ¹é…çš„ææ–™
+    public GameObject visualPrefab; // å¯¹åº”çš„é¢„åˆ¶ä½“
+    public int price = 2; // æ­¤ç»„åˆå”®ä»·
 }
