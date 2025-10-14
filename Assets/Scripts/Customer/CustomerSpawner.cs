@@ -1,118 +1,105 @@
 using UnityEngine;
+using System.Collections.Generic;
 
+/// <summary>
+/// 客户生成管理器，负责控制客户生成逻辑和间隔
+/// </summary>
 public class CustomerSpawner : MonoBehaviour
 {
-  // Customer预制体
-  public GameObject customerPrefab;
+    [Header("预制体配置")]
+    public List<GameObject> customerPrefabs; // 使用列表管理多个预制体
+    public List<Dish> dishes; // 菜品列表
+    
+    [Header("生成设置")]
+    public float initialSpawnInterval = 5f;  // 初始生成间隔
+    public float minSpawnInterval = 0.5f;      // 最小生成间隔
+    public float intervalDecreaseRate = 0.1f;  // 间隔减少速率
 
-  // 生成位置
-  public Vector3 spawnPoint = new Vector3(0, 0, 0);
+    private RandomParameterGenerator paramGenerator;  // 随机参数生成器
+    private float currentSpawnInterval;  // 当前生成间隔
+    private float spawnTimer;            // 生成计时器
+    private int currentCustomerCount = 0; // 当前客户数量
+    private const int MaxCustomers = 4;   // 最大客户数量
 
-  // 菜单系统（包含所有菜品）
-  public MenuSystem menuSystem;
-
-  // 初始生成间隔
-  public float initialSpawnInterval = 5f;
-
-  // 最小生成间隔
-  public float minSpawnInterval = 1f;
-
-  // 间隔减少速率
-  public float intervalDecreaseRate = 0.01f;
-
-  // 当前生成间隔
-  private float currentSpawnInterval;
-
-  // 计时器
-  private float spawnTimer;
-
-  // 当前场景中的Customer数量
-  private int currentCustomerCount = 0;
-
-  // 最大Customer数量
-  private const int MaxCustomers = 5;
-
-  private void Start()
-  {
-    currentSpawnInterval = initialSpawnInterval;
-    spawnTimer = currentSpawnInterval;
-
-    // 确保菜单系统已初始化
-    if (menuSystem == null)
+    /// <summary>
+    /// 初始化生成器和管理器
+    /// </summary>
+    private void Start()
     {
-      menuSystem = ScriptableObject.CreateInstance<MenuSystem>();
-      menuSystem.InitializeDefaultMenu();
-    }
-  }
+        currentSpawnInterval = initialSpawnInterval;
+        spawnTimer = currentSpawnInterval;
+        // // 菜单系统初始化
+        // if (menuSystem == null)
+        // {
+        //     menuSystem = ScriptableObject.CreateInstance<MenuSystem>();
+        //     menuSystem.InitializeDefaultMenu();
+        // }
 
-  private void Update()
-  {
-    if (currentCustomerCount >= MaxCustomers)
-    {
-      return;
+        paramGenerator = new RandomParameterGenerator(dishes, customerPrefabs);
     }
 
-    spawnTimer -= Time.deltaTime;
-
-    if (spawnTimer <= 0)
+    /// <summary>
+    /// 每帧更新，处理生成逻辑
+    /// </summary>
+    private void Update()
     {
-      SpawnCustomer();
-      spawnTimer = currentSpawnInterval;
-      currentSpawnInterval = Mathf.Max(minSpawnInterval, currentSpawnInterval - intervalDecreaseRate);
-    }
-  }
-
-  private void SpawnCustomer()
-  {
-    // if (customerPrefab == null || spawnPoint == null || menuSystem == null)
-    // {
-    //     Debug.LogError("Customer prefab, spawn point or menu system not assigned!");
-    //     return;
-    // }
-
-    // 随机获取一道菜
-    MenuSystem.Dish randomDish = GetRandomDish();
-    if (randomDish == null)
-    {
-      Debug.LogError("No dishes available in the menu system!");
-      return;
+        // 达到最大客户数时停止生成
+        if (currentCustomerCount >= MaxCustomers) return;
+        
+        // 倒计时生成间隔
+        spawnTimer -= Time.deltaTime;
+        if (spawnTimer <= 0)
+        {
+            SpawnCustomer();
+            spawnTimer = currentSpawnInterval;
+            // 动态调整生成间隔
+            currentSpawnInterval = Mathf.Max(minSpawnInterval, 
+                                          currentSpawnInterval - intervalDecreaseRate);
+        }
     }
 
-    // 实例化Customer
-    GameObject customerObj = Instantiate(customerPrefab, new Vector3(0, 2, 0), Quaternion.identity);
-    Customer customer = customerObj.GetComponent<Customer>();
-
-    if (customer != null)
+    /// <summary>
+    /// 生成单个客户实例
+    /// </summary>
+    private void SpawnCustomer()
     {
-      // 设置Customer需要的菜品
-      customer.RequiredDish = randomDish;
-      currentCustomerCount++;
-      Debug.Log("Spawned customer with dish: " + randomDish.dishName);
-      customer.isUpdate = true;
+        var randomParams = paramGenerator.GenerateRandomParameters(minSpawnInterval / currentSpawnInterval - 0.05);
+        if (randomParams.requiredDish == null) return;
+        // 如果没有可用预制体则跳过生成
+        if (randomParams.prefab == null) {
+            Debug.LogWarning("No available prefabs for spawn");
+            spawnTimer = currentSpawnInterval;
+            return;
+        }
+        if (randomParams.position.x < 0) {
+            paramGenerator.ReleasePrefab(randomParams.prefab);
+            return;
+        }
+        // Debug.Log(randomParams.position);
+        GameObject customerObj = Instantiate(
+            randomParams.prefab,
+            randomParams.position,
+            Quaternion.identity
+        );
+        Customer customer = customerObj.GetComponent<Customer>();
+        
+        if (customer != null) {
+            customer.RequiredDish = randomParams.requiredDish;
+            customer.UsedPrefab = randomParams.prefab;
+            currentCustomerCount++;
+            customer.isUpdate = true;
+        }
     }
-    else
+    public void OnCustomerDestroyed(GameObject usedPrefab)
     {
-      Debug.Log("Customer prefab does not have Customer component!");
+        currentCustomerCount = Mathf.Max(0, currentCustomerCount - 1);
+        paramGenerator.ReleasePrefab(usedPrefab); // 释放预制体
     }
-  }
+}
 
-  /// <summary>
-  /// 从菜单系统中随机获取一道菜（均等概率）
-  /// </summary>
-  private MenuSystem.Dish GetRandomDish()
-  {
-    if (menuSystem == null || menuSystem.menuItems == null || menuSystem.menuItems.Count == 0)
-    {
-      return null;
-    }
-
-    // 使用随机索引确保均等概率
-    int randomIndex = Random.Range(0, menuSystem.menuItems.Count);
-    return menuSystem.menuItems[randomIndex];
-  }
-
-  public void OnCustomerDestroyed()
-  {
-    currentCustomerCount = Mathf.Max(0, currentCustomerCount - 1);
-  }
+[System.Serializable]
+public class Dish{
+    public int price;
+    public string dishName;
+    public GameObject prefab;
 }
