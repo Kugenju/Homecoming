@@ -6,41 +6,41 @@ using System;
 [CreateAssetMenu(fileName = "New Order Config", menuName = "Cooking/Order Configuration")]
 public class OrderConfigSO : ScriptableObject
 {
-    [Header("»ù´¡ĞÅÏ¢")]
-    public string displayName = "Ä¬ÈÏ²ËÆ·";
-    public Sprite icon; // ²ËÆ·Í¼±ê£¨¿ÉÓÃÓÚUIÏÔÊ¾£©
+    [Header("åŸºç¡€ä¿¡æ¯")]
+    public string displayName = "é»˜è®¤èœå“";
+    public Sprite icon; // èœå“å›¾æ ‡ï¼ˆå¯ç”¨äºUIæ˜¾ç¤ºï¼‰
 
-    [Header("Í¨ÓÃÉèÖÃ")]
-    public bool isComboAllowed = false; // ÊÇ·ñÔÊĞí¶àÖÖ²ÄÁÏ×éºÏ
-    public int baseQuantity = 1;        // Ä¬ÈÏÊıÁ¿
+    [Header("é€šç”¨è®¾ç½®")]
+    public bool isComboAllowed = false; // æ˜¯å¦å…è®¸å¤šç§ææ–™ç»„åˆ
+    public int baseQuantity = 1;        // é»˜è®¤æ•°é‡
 
     [Space]
-    [Tooltip("×îĞ¡ºÍ×î´ó¿ÉÊÛÊıÁ¿£¬ÓÃÓÚËæ»ú¶©µ¥Éú³É")]
-    public Vector2Int quantityRange = new Vector2Int(1, 2); // ¹ğ»¨¸â¿ÉÒª1~2¿é
+    [Tooltip("æœ€å°å’Œæœ€å¤§å¯å”®æ•°é‡ï¼Œç”¨äºéšæœºè®¢å•ç”Ÿæˆ")]
+    public Vector2Int quantityRange = new Vector2Int(1, 2); // æ¡‚èŠ±ç³•å¯è¦1~2å—
     [ConditionalShow("isComboAllowed")]
-    [Header("¡¾×éºÏÀà×¨ÓÃ¡¿×éºÏ¹æÔò")]
+    [Header("ã€ç»„åˆç±»ä¸“ç”¨ã€‘ç»„åˆè§„åˆ™")]
     public List<ComboRule> comboRules;
 
     /// <summary>
-    /// ×éºÏ¹æÔò£º¶¨ÒåÒ»×é²ÄÁÏ¼°Æä¶ÔÓ¦µÄ¼Û¸ñºÍ³öÏÖÈ¨ÖØ
+    /// ç»„åˆè§„åˆ™ï¼šå®šä¹‰ä¸€ç»„ææ–™åŠå…¶å¯¹åº”çš„ä»·æ ¼å’Œå‡ºç°æƒé‡
     /// </summary>
     [Serializable]
     public class ComboRule
     {
-        [Tooltip("´Ë×éºÏµÄÃû³Æ£¨½öÓÃÓÚ±à¼­Æ÷²é¿´£©")]
-        public string ruleName = "Î´ÃüÃû×éºÏ";
+        [Tooltip("æ­¤ç»„åˆçš„åç§°ï¼ˆä»…ç”¨äºç¼–è¾‘å™¨æŸ¥çœ‹ï¼‰")]
+        public string ruleName = "æœªå‘½åç»„åˆ";
 
-        [Tooltip("ĞèÒªÌí¼ÓµÄÊ³²Ä£¨ÈçÑ¼Ñª¡¢Ñ¼Èâ£©")]
+        [Tooltip("éœ€è¦æ·»åŠ çš„é£Ÿæï¼ˆå¦‚é¸­è¡€ã€é¸­è‚‰ï¼‰")]
         public List<IngredientSO> ingredients;
 
-        [Tooltip("¸Ã×éºÏµÄÊÛ¼Û£¨Ôª£©")]
+        [Tooltip("è¯¥ç»„åˆçš„å”®ä»·ï¼ˆå…ƒï¼‰")]
         public int price = 2;
 
-        [Tooltip("¸Ã×éºÏÔÚËæ»úÉú³ÉÊ±µÄÈ¨ÖØ£¨ÊıÖµÔ½¸ßÔ½³£¼û£©")]
+        [Tooltip("è¯¥ç»„åˆåœ¨éšæœºç”Ÿæˆæ—¶çš„æƒé‡ï¼ˆæ•°å€¼è¶Šé«˜è¶Šå¸¸è§ï¼‰")]
         public int weight = 1;
 
         /// <summary>
-        /// ÅĞ¶ÏÁ½¸ö×éºÏÊÇ·ñ°üº¬ÏàÍ¬µÄÊ³²Ä£¨ÎŞÊÓË³Ğò£©
+        /// åˆ¤æ–­ä¸¤ä¸ªç»„åˆæ˜¯å¦åŒ…å«ç›¸åŒçš„é£Ÿæï¼ˆæ— è§†é¡ºåºï¼‰
         /// </summary>
         
         public bool Matches(List<IngredientSO> otherIngredients)
@@ -55,17 +55,17 @@ public class OrderConfigSO : ScriptableObject
 
         public override string ToString()
         {
-            string names = string.Join(" + ", ingredients.ConvertAll(i => i?.ingredientName ?? "¿Õ"));
-            return $"{names} ({price}Ôª)";
+            string names = string.Join(" + ", ingredients.ConvertAll(i => i?.ingredientName ?? "ç©º"));
+            return $"{names} ({price}å…ƒ)";
         }
     }
 
     // ================================
-    // ¹«¹²·½·¨£º¹© OrderManager µ÷ÓÃ
+    // å…¬å…±æ–¹æ³•ï¼šä¾› OrderManager è°ƒç”¨
     // ================================
 
     /// <summary>
-    /// »ñÈ¡Ëæ»úÉú³ÉµÄ¶©µ¥ÊıÁ¿£¨ÔÚ quantityRange ·¶Î§ÄÚ£©
+    /// è·å–éšæœºç”Ÿæˆçš„è®¢å•æ•°é‡ï¼ˆåœ¨ quantityRange èŒƒå›´å†…ï¼‰
     /// </summary>
     public int GetRandomQuantity()
     {
@@ -73,7 +73,7 @@ public class OrderConfigSO : ScriptableObject
     }
 
     /// <summary>
-    /// £¨×éºÏÀà²ËÆ·£©¸ù¾İÈ¨ÖØËæ»úÑ¡ÔñÒ»¸ö×éºÏ¹æÔò
+    /// ï¼ˆç»„åˆç±»èœå“ï¼‰æ ¹æ®æƒé‡éšæœºé€‰æ‹©ä¸€ä¸ªç»„åˆè§„åˆ™
     /// </summary>
     public ComboRule GetRandomComboRule()
     {
@@ -97,11 +97,11 @@ public class OrderConfigSO : ScriptableObject
             }
         }
 
-        return comboRules[0]; // ·ÀÖ¹¼«¶ËÇé¿ö
+        return comboRules[0]; // é˜²æ­¢æç«¯æƒ…å†µ
     }
 
     /// <summary>
-    /// ¸ù¾İÒÑÑ¡²ÄÁÏ²éÕÒÆ¥ÅäµÄ×éºÏ¹æÔò£¨ÓÃÓÚ½áËã£©
+    /// æ ¹æ®å·²é€‰ææ–™æŸ¥æ‰¾åŒ¹é…çš„ç»„åˆè§„åˆ™ï¼ˆç”¨äºç»“ç®—ï¼‰
     /// </summary>
     public ComboRule FindMatchingRule(List<IngredientSO> selectedIngredients)
     {
@@ -116,11 +116,11 @@ public class OrderConfigSO : ScriptableObject
     }
 
     /// <summary>
-    /// »ñÈ¡ËùÓĞ×éºÏÖĞ×î¸ß¼Û¸ñ£¨ÓÃÓÚUIÌáÊ¾»ò³É¾Í£©
+    /// è·å–æ‰€æœ‰ç»„åˆä¸­æœ€é«˜ä»·æ ¼ï¼ˆç”¨äºUIæç¤ºæˆ–æˆå°±ï¼‰
     /// </summary>
     public int GetMaxPrice()
     {
-        int max = baseQuantity * 2; // »ù´¡¼Û¶µµ×
+        int max = baseQuantity * 2; // åŸºç¡€ä»·å…œåº•
         if (isComboAllowed)
         {
             foreach (var rule in comboRules)
