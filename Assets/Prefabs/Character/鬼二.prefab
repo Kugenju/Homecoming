@@ -75,5 +75,31 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: 9a9b89b191a9de4408ccaad560189b6e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -2179426077285622118}
   m_SourcePrefab: {fileID: 4843985084834002234, guid: 9a9b89b191a9de4408ccaad560189b6e, type: 3}
+--- !u!1 &348052487527618476 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -8653719598885068355, guid: 9a9b89b191a9de4408ccaad560189b6e, type: 3}
+  m_PrefabInstance: {fileID: 230607426193782289}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-2179426077285622118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348052487527618476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 009bde566eabdf34ab48940d0e2211d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waitTime: 8
+  isUpdate: 0
+  dialogBox: {fileID: 160267596670569356, guid: fbd48c9b745d7bf4da6dd3528e89a706, type: 3}
+  flame: {fileID: 8822344363708364768, guid: 36b039a4a5d0dfc42b36a83e1cfb8ec0, type: 3}
+  candle: {fileID: 4322198335401827691, guid: 71a23bcb05e161d4fa1028cb329d084e, type: 3}
+  fadeDuration: 1

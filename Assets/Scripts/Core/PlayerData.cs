@@ -16,6 +16,9 @@ public class PlayerData : MonoBehaviour
     private const int MaxStamina = 10; // 体力最大值
     private const float StaminaRecoveryInterval = 300f; // 5分钟 = 300秒
 
+    public int testMoney;
+    public bool isTest;
+
     public static PlayerData Instance { get; private set; }
 
     private void Awake()
@@ -33,6 +36,7 @@ public class PlayerData : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        if (isTest) playerStats.money = testMoney;
     }
 
     private void Update()
