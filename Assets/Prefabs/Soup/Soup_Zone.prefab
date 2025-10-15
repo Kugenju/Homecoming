@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1411103944762923633}
   - component: {fileID: 6652660915327931688}
   - component: {fileID: 6335480862586491481}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Soup_Zone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,8 +30,7 @@ Transform:
   m_LocalPosition: {x: 872, y: 446, z: -7.8933315}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2945038199102637447}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &6652660915327931688
@@ -63,7 +62,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -9.7682495, y: 184.3765}
@@ -96,6 +95,9 @@ MonoBehaviour:
   specificItem: {fileID: 0}
   showHighlight: 1
   highlightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  dropZoneLayer: DropZones
+  draggableItemLayer: DraggableItems
+  autoSetupLayers: 1
   soupStates:
   - {fileID: 11400000, guid: 13e3b8b1fe81f7942abd65dd664cec46, type: 2}
   - {fileID: 11400000, guid: 13e3b8b1fe81f7942abd65dd664cec46, type: 2}
@@ -114,68 +116,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 787d39e1671785d44b712dc646773af7, type: 2}
   - {fileID: 11400000, guid: b3c0476c9debfd040abdb766af336a84, type: 2}
   - {fileID: 11400000, guid: 61bdde431c543f748aee4ecdcffbdcb0, type: 2}
+  baseBowlPrefab: {fileID: 5340403741102863160, guid: 79adbbb9f6ed7dd48b041042865e931f, type: 3}
+  bowlSpawnPoint: {fileID: 0}
   currentIngredients: []
+  enableBowlDelivery: 1
+  bowlReturnSpeed: 5
   targetScale: {x: 100, y: 100, z: 100}
   addToppingSound: {fileID: 0}
---- !u!1001 &9172797527480538474
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1411103944762923633}
-    m_Modifications:
-    - target: {fileID: 2144434198169958985, guid: b253f8687a4886d4394d76afcf782997, type: 3}
-      propertyPath: m_Name
-      value: Bowl Container
-      objectReference: {fileID: 0}
-    - target: {fileID: 6310302166531117293, guid: b253f8687a4886d4394d76afcf782997, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6310302166531117293, guid: b253f8687a4886d4394d76afcf782997, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6310302166531117293, guid: b253f8687a4886d4394d76afcf782997, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6310302166531117293, guid: b253f8687a4886d4394d76afcf782997, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6310302166531117293, guid: b253f8687a4886d4394d76afcf782997, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6310302166531117293, guid: b253f8687a4886d4394d76afcf782997, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6310302166531117293, guid: b253f8687a4886d4394d76afcf782997, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6310302166531117293, guid: b253f8687a4886d4394d76afcf782997, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6310302166531117293, guid: b253f8687a4886d4394d76afcf782997, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6310302166531117293, guid: b253f8687a4886d4394d76afcf782997, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: b253f8687a4886d4394d76afcf782997, type: 3}
---- !u!4 &2945038199102637447 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6310302166531117293, guid: b253f8687a4886d4394d76afcf782997, type: 3}
-  m_PrefabInstance: {fileID: 9172797527480538474}
-  m_PrefabAsset: {fileID: 0}
+  bowlPickupSound: {fileID: 0}
+  bowlReturnSound: {fileID: 0}

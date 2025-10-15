@@ -1,64 +1,413 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
+
+//public class SoupBowlZone : DroppableZone
+//{
+//    [Header("预制体配置")]
+//    public List<SoupState> soupStates = new List<SoupState>();
+//    public GameObject Boup_Container;
+
+//    [Header("运行时状态")]
+//    [SerializeField] private List<IngredientSO> currentIngredients = new List<IngredientSO>();
+//    private GameObject currentVisual; // 当前显示的汤
+//    private Transform bowlContainer; // 显示汤的容器
+//    private GameObject baseSoupObject;
+
+//    [Header("显示配置")]
+//    [Tooltip("所有动态生成的汤品预制体将应用此缩放")]
+//    public Vector3 targetScale = new Vector3(1f, 1f, 1f);
+
+
+//    [Header("音频反馈")]
+//    public AudioClip addToppingSound;
+
+//    private AudioSource audioSource;
+
+//    protected override void Awake()
+//    {
+//        base.Awake();
+
+
+//        Transform baseTransform = transform.Find("Bowl Container");
+//        if (baseTransform != null)
+//        {
+//            bowlContainer = baseTransform;
+//            baseSoupObject = baseTransform.gameObject;
+//            SetupDraggableObject(baseSoupObject, true);
+//        }
+//        else
+//        {
+//            Debug.LogWarning("未找到名为 'Soup_Base' 的子对象，将使用动态容器。");
+//        }
+
+//        // 设置容器（用于放置动态预制体）
+//        bowlContainer = baseTransform ? baseTransform.parent : transform;
+
+//        // 初始化音频
+//        audioSource = GetComponent<AudioSource>();
+//        if (audioSource == null)
+//            audioSource = gameObject.AddComponent<AudioSource>();
+//    }
+
+//    public override bool CanAcceptItem(ClickableItem item)
+//    {
+//        if (item == null) return false;
+
+//        var ingredientComp = item.GetComponent<IngredientComponent>();
+//        if (ingredientComp == null) return false;
+
+//        // 防止重复添加
+//        if (currentIngredients.Contains(ingredientComp.ingredientData))
+//            return false;
+
+//        return item.CompareTag("Ingredient");
+//    }
+
+//    public override void OnItemDrop(ClickableItem item)
+//    {
+//        base.OnItemDrop(item);
+
+//        var ingredientComp = item.GetComponent<IngredientComponent>();
+//        if (ingredientComp == null) return;
+
+//        IngredientSO ing = ingredientComp.ingredientData;
+
+//        // 如果是汤底，重置
+//        if (ing.ingredientName == "粉丝汤底")
+//        {
+//            ResetBowl();
+//            AddIngredient(ing);
+//            PlayFeedback();
+//            return;
+//        }
+
+//        AddIngredient(ing);
+
+//        if (addToppingSound != null)
+//            audioSource.PlayOneShot(addToppingSound);
+
+//        UpdateVisualState();
+//    }
+
+//    private void AddIngredient(IngredientSO ingredient)
+//    {
+//        if (!currentIngredients.Contains(ingredient))
+//            currentIngredients.Add(ingredient);
+//    }
+
+//    private void UpdateVisualState()
+//    {
+//        Debug.Log("更新汤的外观");
+//        currentIngredients.Sort((a, b) => a.name.CompareTo(b.name));
+
+//        for (int i = 0; i < soupStates.Count; i++)
+//        {
+//            var state = soupStates[i];
+//            if (IsMatch(currentIngredients, state.requiredIngredients))
+//            {
+//                SwitchToState(i);
+//                return;
+//            }
+//        }
+
+//        // 默认保持当前状态（不切换）
+//    }
+
+//    private bool IsMatch(List<IngredientSO> current, List<IngredientSO> required)
+//    {
+//        if (current.Count != required.Count) return false;
+//        return required.All(current.Contains);
+//    }
+
+//    private void SwitchToState(int index)
+//    {
+//        if (index < 0 || index >= soupStates.Count) return;
+
+//        var state = soupStates[index];
+
+//        // 记录位置（使用容器的位置）
+//        Vector3 spawnPos = bowlContainer.position;
+//        Quaternion spawnRot = bowlContainer.rotation;
+
+//        // 销毁当前视觉对象（除了默认的 Soup_Base）
+//        if (currentVisual != null && currentVisual.name != "Soup_Base")
+//        {
+//            Destroy(currentVisual);
+//        }
+
+//        if (baseSoupObject != null)
+//        {
+//            baseSoupObject.SetActive(false);
+
+//        }
+
+//        // 实例化新预制体
+//        GameObject newVisual = Instantiate(state.visualPrefab, spawnPos, spawnRot, bowlContainer);
+//        newVisual.name = state.visualPrefab.name;
+
+//        Debug.Log($"切换到汤状态: {state.visualPrefab.name}, 状态名称{state.displayName}");
+//        newVisual.transform.localPosition = Vector3.zero;
+//        newVisual.transform.localRotation = Quaternion.identity;
+//        newVisual.transform.localScale = targetScale; // 👈 应用自定义缩放
+
+//        SetupDraggableObject(newVisual, true);
+
+//        currentVisual = newVisual;
+//    }
+
+//    public void ResetBowl()
+//    {
+//        currentIngredients.Clear();
+
+//        if (baseSoupObject != null)
+//        {
+//            baseSoupObject.SetActive(true);
+//        }
+//        // 回到默认状态：保持 Soup_Base
+//        if (currentVisual != null && currentVisual.name != "Soup_Base")
+//        {
+//            Destroy(currentVisual);
+//            currentVisual = transform.Find("Soup_Base")?.gameObject;
+//        }
+//    }
+
+//    public List<IngredientSO> GetCurrentIngredients() => new List<IngredientSO>(currentIngredients);
+//    public bool IsReadyToServe() => currentIngredients.Count > 1;
+
+
+
+//}
 
 public class SoupBowlZone : DroppableZone
 {
     [Header("预制体配置")]
     public List<SoupState> soupStates = new List<SoupState>();
 
+    [Header("汤碗预制体")]
+    public GameObject baseBowlPrefab;
+    public Transform bowlSpawnPoint;
+
     [Header("运行时状态")]
     [SerializeField] private List<IngredientSO> currentIngredients = new List<IngredientSO>();
-    private GameObject currentVisual; // 当前显示的汤
-    private Transform bowlContainer; // 显示汤的容器
-    private GameObject baseSoupObject;
+    private GameObject currentSoupBowl;
+
+    [Header("拖拽交付配置")]
+    public bool enableBowlDelivery = true;
+    public float bowlReturnSpeed = 5f;
 
     [Header("显示配置")]
-    [Tooltip("所有动态生成的汤品预制体将应用此缩放")]
     public Vector3 targetScale = new Vector3(1f, 1f, 1f);
-
 
     [Header("音频反馈")]
     public AudioClip addToppingSound;
-
+    public AudioClip bowlPickupSound;
+    public AudioClip bowlReturnSound;
     private AudioSource audioSource;
+
+    // 拖拽状态
+    private bool isBowlBeingDragged = false;
+    private Vector3 originalBowlPosition;
+    private Coroutine returnCoroutine;
 
     protected override void Awake()
     {
         base.Awake();
 
-        // 查找默认的 Soup_Base（必须是子对象且名为 "Soup_Base"）
-        Transform baseTransform = transform.Find("Bowl Container");
-        if (baseTransform != null)
+        if (bowlSpawnPoint == null)
         {
-            baseSoupObject = baseTransform.gameObject;
-        }
-        else
-        {
-            Debug.LogWarning("未找到名为 'Soup_Base' 的子对象，将使用动态容器。");
+            bowlSpawnPoint = transform;
         }
 
-        // 设置容器（用于放置动态预制体）
-        bowlContainer = baseTransform ? baseTransform.parent : transform;
-
-        // 初始化音频
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
             audioSource = gameObject.AddComponent<AudioSource>();
+
+        CreateBaseBowl();
     }
 
-    public override bool CanAcceptItem(ClickableItem item)
+    private void CreateBaseBowl()
     {
-        if (item == null) return false;
+        if (baseBowlPrefab == null)
+        {
+            Debug.LogError("基础汤碗预制体未指定！");
+            return;
+        }
 
-        var ingredientComp = item.GetComponent<IngredientComponent>();
-        if (ingredientComp == null) return false;
+        GameObject baseBowl = Instantiate(baseBowlPrefab, bowlSpawnPoint.position, bowlSpawnPoint.rotation, transform);
+        baseBowl.transform.localScale = targetScale;
+        baseBowl.name = "BaseSoupBowl";
+        SetupBowlForDragging(baseBowl, false);
+        currentSoupBowl = baseBowl;
+    }
 
-        // 防止重复添加
-        if (currentIngredients.Contains(ingredientComp.ingredientData))
-            return false;
+    private void SetupBowlForDragging(GameObject bowlObject, bool makeDraggable = true)
+    {
+        if (bowlObject == null || !enableBowlDelivery) return;
 
-        return item.CompareTag("Ingredient");
+        EnsureProperCollider(bowlObject);
+
+        ClickableItem clickableItem = bowlObject.GetComponent<ClickableItem>();
+        if (clickableItem == null)
+        {
+            clickableItem = bowlObject.AddComponent<ClickableItem>();
+        }
+        
+        if(makeDraggable == true)
+        {
+            clickableItem.isDraggable = makeDraggable;
+            clickableItem.isUsable = makeDraggable;
+            clickableItem.showHighlightOnHover = makeDraggable;
+        }
+        else
+        {
+            clickableItem.isDraggable = false;
+        }
+        Debug.Log($"clickableItem.isDraggable: {clickableItem.isDraggable}");
+
+        if (makeDraggable)
+        {
+            clickableItem.OnDragStart.AddListener(OnBowlDragStart);
+            clickableItem.OnDragEnd.AddListener(OnBowlDragEnd);
+            //clickableItem.OnClicked.AddListener(OnBowlClicked);
+        }
+    }
+
+    private void EnsureProperCollider(GameObject bowlObject)
+    {
+        Collider2D[] oldColliders = bowlObject.GetComponents<Collider2D>();
+        foreach (var collider in oldColliders)
+        {
+            DestroyImmediate(collider);
+        }
+
+        if (baseBowlPrefab != null)
+        {
+            Collider2D prefabCollider = baseBowlPrefab.GetComponent<Collider2D>();
+            if (prefabCollider != null)
+            {
+                if (prefabCollider is BoxCollider2D boxCollider)
+                {
+                    BoxCollider2D newCollider = bowlObject.AddComponent<BoxCollider2D>();
+                    newCollider.offset = boxCollider.offset;
+                    newCollider.size = boxCollider.size;
+                    newCollider.isTrigger = true;
+                }
+                else if (prefabCollider is PolygonCollider2D polyCollider)
+                {
+                    PolygonCollider2D newCollider = bowlObject.AddComponent<PolygonCollider2D>();
+                    newCollider.points = polyCollider.points;
+                    newCollider.isTrigger = true;
+                }
+            }
+            else
+            {
+                BoxCollider2D defaultCollider = bowlObject.AddComponent<BoxCollider2D>();
+                defaultCollider.isTrigger = true;
+            }
+        }
+    }
+
+    private void OnBowlDragStart()
+    {
+        if (!enableBowlDelivery || !IsReadyToServe() || isBowlBeingDragged) return;
+
+        isBowlBeingDragged = true;
+        originalBowlPosition = currentSoupBowl.transform.position;
+        //CreateDragProxy();
+
+        if (bowlPickupSound != null)
+            audioSource.PlayOneShot(bowlPickupSound);
+    }
+
+    private void CreateDragProxy()
+    {
+        ProxyDragTag proxyTag = currentSoupBowl.GetComponent<ProxyDragTag>();
+        if (proxyTag == null)
+        {
+            proxyTag = currentSoupBowl.AddComponent<ProxyDragTag>();
+        }
+
+        GameObject proxyPrefab = CreateProxyPrefab();
+        proxyTag.proxyPrefab = proxyPrefab;
+        proxyTag.hideOriginalDuringDrag = true;
+        proxyTag.successDropBehavior = ProxyDragTag.DropBehavior.DestroyProxy;
+        proxyTag.cancelDropBehavior = ProxyDragTag.DropBehavior.ReturnToOriginal;
+
+        currentSoupBowl.SetActive(false);
+    }
+
+    private GameObject CreateProxyPrefab()
+    {
+        GameObject proxy = new GameObject("BowlProxy");
+        SpriteRenderer renderer = proxy.AddComponent<SpriteRenderer>();
+        renderer.sprite = currentSoupBowl.GetComponent<SpriteRenderer>().sprite;
+        renderer.color = new Color(1, 1, 1, 0.8f);
+
+        Collider2D originalCollider = currentSoupBowl.GetComponent<Collider2D>();
+        if (originalCollider is BoxCollider2D boxCollider)
+        {
+            BoxCollider2D newCollider = proxy.AddComponent<BoxCollider2D>();
+            newCollider.size = boxCollider.size;
+            newCollider.isTrigger = true;
+        }
+
+        return proxy;
+    }
+
+    private void OnBowlDragEnd()
+    {
+        if (!isBowlBeingDragged) return;
+
+        isBowlBeingDragged = false;
+        bool deliverySuccess = CheckDeliveryToCustomer();
+
+        if (deliverySuccess)
+        {
+            HandleSuccessfulDelivery();
+        }
+        else
+        {
+            HandleFailedDelivery();
+        }
+    }
+
+    private IEnumerator ReturnBowlToOriginalPosition()
+    {
+        GameObject bowlToReturn = currentSoupBowl;
+        if (bowlToReturn == null) yield break;
+
+        Vector3 startPosition = bowlToReturn.transform.position;
+        float journey = 0f;
+
+        while (journey <= 1f)
+        {
+            journey += Time.deltaTime * bowlReturnSpeed;
+            bowlToReturn.transform.position = Vector3.Lerp(startPosition, originalBowlPosition, journey);
+            yield return null;
+        }
+
+        bowlToReturn.transform.position = originalBowlPosition;
+        returnCoroutine = null;
+    }
+
+    private void SwitchToState(int index)
+    {
+        if (index < 0 || index >= soupStates.Count) return;
+
+        var state = soupStates[index];
+
+        if (currentSoupBowl != null)
+        {
+            Destroy(currentSoupBowl);
+        }
+
+        GameObject newBowl = Instantiate(state.visualPrefab, bowlSpawnPoint.position, bowlSpawnPoint.rotation, transform);
+        newBowl.name = "StateSoupBowl_" + state.visualPrefab.name;
+        newBowl.transform.localScale = targetScale;
+        SetupBowlForDragging(newBowl, true);
+        currentSoupBowl = newBowl;
     }
 
     public override void OnItemDrop(ClickableItem item)
@@ -70,21 +419,18 @@ public class SoupBowlZone : DroppableZone
 
         IngredientSO ing = ingredientComp.ingredientData;
 
-        // 如果是汤底，重置
         if (ing.ingredientName == "粉丝汤底")
         {
             ResetBowl();
             AddIngredient(ing);
-            PlayFeedback();
             return;
         }
 
         AddIngredient(ing);
+        UpdateVisualState();
 
         if (addToppingSound != null)
             audioSource.PlayOneShot(addToppingSound);
-
-        UpdateVisualState();
     }
 
     private void AddIngredient(IngredientSO ingredient)
@@ -95,7 +441,6 @@ public class SoupBowlZone : DroppableZone
 
     private void UpdateVisualState()
     {
-        Debug.Log("更新汤的外观");
         currentIngredients.Sort((a, b) => a.name.CompareTo(b.name));
 
         for (int i = 0; i < soupStates.Count; i++)
@@ -107,8 +452,6 @@ public class SoupBowlZone : DroppableZone
                 return;
             }
         }
-
-        // 默认保持当前状态（不切换）
     }
 
     private bool IsMatch(List<IngredientSO> current, List<IngredientSO> required)
@@ -117,56 +460,46 @@ public class SoupBowlZone : DroppableZone
         return required.All(current.Contains);
     }
 
-    private void SwitchToState(int index)
-    {
-        if (index < 0 || index >= soupStates.Count) return;
-
-        var state = soupStates[index];
-
-        // 记录位置（使用容器的位置）
-        Vector3 spawnPos = bowlContainer.position;
-        Quaternion spawnRot = bowlContainer.rotation;
-
-        // 销毁当前视觉对象（除了默认的 Soup_Base）
-        if (currentVisual != null && currentVisual.name != "Soup_Base")
-        {
-            Destroy(currentVisual);
-        }
-
-        if (baseSoupObject != null)
-        {
-            baseSoupObject.SetActive(false);
-
-        }
-
-        // 实例化新预制体
-        GameObject newVisual = Instantiate(state.visualPrefab, spawnPos, spawnRot, bowlContainer);
-        newVisual.name = state.visualPrefab.name;
-
-        Debug.Log($"切换到汤状态: {state.visualPrefab.name}, 状态名称{state.displayName}");
-        newVisual.transform.localPosition = Vector3.zero;
-        newVisual.transform.localRotation = Quaternion.identity;
-        newVisual.transform.localScale = targetScale; // 👈 应用自定义缩放
-
-        currentVisual = newVisual;
-    }
-
     public void ResetBowl()
     {
         currentIngredients.Clear();
 
-        if (baseSoupObject != null)
+        if (currentSoupBowl != null)
         {
-            baseSoupObject.SetActive(true);
+            Destroy(currentSoupBowl);
         }
-        // 回到默认状态：保持 Soup_Base
-        if (currentVisual != null && currentVisual.name != "Soup_Base")
-        {
-            Destroy(currentVisual);
-            currentVisual = transform.Find("Soup_Base")?.gameObject;
-        }
+
+        CreateBaseBowl();
     }
 
     public List<IngredientSO> GetCurrentIngredients() => new List<IngredientSO>(currentIngredients);
     public bool IsReadyToServe() => currentIngredients.Count > 1;
+
+    private bool CheckDeliveryToCustomer()
+    {
+        if (DragAndDropHandler.Instance != null)
+        {
+            DroppableZone dropZone = DragAndDropHandler.Instance.FindValidDropZone();
+            return dropZone != null && dropZone is CustomerZone;
+        }
+        return false;
+    }
+
+    private void HandleSuccessfulDelivery()
+    {
+        Debug.Log("汤碗成功交付给客户！");
+        ResetBowl();
+    }
+
+    private void HandleFailedDelivery()
+    {
+        if (currentSoupBowl != null)
+        {
+            currentSoupBowl.SetActive(true);
+            returnCoroutine = StartCoroutine(ReturnBowlToOriginalPosition());
+        }
+
+        if (bowlReturnSound != null)
+            audioSource.PlayOneShot(bowlReturnSound);
+    }
 }

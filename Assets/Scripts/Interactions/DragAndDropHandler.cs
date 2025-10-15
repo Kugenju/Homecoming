@@ -25,6 +25,13 @@ public class DragAndDropHandler : MonoBehaviour
     [Tooltip("是否启用代理拖拽功能")]
     public bool enableProxyDragging = true;
 
+    [Header("层级过滤")]
+    [Tooltip("可投放区域的层级掩码")]
+    public LayerMask dropZoneLayerMask = 1 << 8; // 默认对应 DropZones 层
+
+    [Tooltip("检测半径")]
+    public float dropDetectionRadius = 0.5f;
+
     // 当前拖拽状态
     private ClickableItem _currentDragItem;
     private ProxyDragTag _currentProxyTag;
@@ -289,9 +296,17 @@ public class DragAndDropHandler : MonoBehaviour
     /// <summary>
     /// 查找当前是否悬停在一个有效的投放区
     /// </summary>
-    private DroppableZone FindValidDropZone()
+    public DroppableZone FindValidDropZone()
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(GetMouseWorldPosition(), 0.5f);
+        Vector2 mouseWorldPos = GetMouseWorldPosition();
+
+        // 使用层级掩码过滤，只检测指定的投放区域层
+        Collider2D[] hits = Physics2D.OverlapCircleAll(
+            mouseWorldPos,
+            dropDetectionRadius,
+            dropZoneLayerMask
+        );
+
         foreach (var hit in hits)
         {
             DroppableZone zone = hit.GetComponent<DroppableZone>();
