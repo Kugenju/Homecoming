@@ -93,6 +93,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6503039471619490509}
+  - component: {fileID: 588878246332654021}
+  - component: {fileID: -3427979956782630371}
   m_Layer: 0
   m_Name: "\u76AE"
   m_TagString: Ingredient
@@ -110,9 +112,71 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1899, y: 557, z: 0}
-  m_LocalScale: {x: 50, y: 50, z: 50}
+  m_LocalScale: {x: 40, y: 40, z: 40}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5905298303518820957}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &588878246332654021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6647506513543744265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ba1cfd88dd16e646b371f4d9dbdae50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  acceptTag: MeatFilling
+  onlyAcceptSpecificItems: 0
+  specificItem: {fileID: 0}
+  showHighlight: 1
+  highlightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  dropZoneLayer: DropZones
+  draggableItemLayer: DraggableItems
+  autoSetupLayers: 1
+  requiredFillingTag: MeatFilling
+  fillingOffset: {x: 0, y: 0, z: 0}
+  packDelay: 0.5
+  doughBoardZone: {fileID: 0}
+  packAnimation: {fileID: 0}
+  packedBunPrefab: {fileID: 974021347460333707, guid: 3be0471b65b9ea845a837caa0c47a80c, type: 3}
+  packSound: {fileID: 0}
+--- !u!58 &-3427979956782630371
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6647506513543744265}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.030310059, y: 1.8716859}
+  serializedVersion: 2
+  m_Radius: 1.9473358

@@ -65,6 +65,12 @@ public class ClickableItem : MonoBehaviour,
         }
 
         Debug.Log($"{gameObject.name} ×é¼þ×´Ì¬: Collider2D={_collider2D != null}, Renderer={_renderer != null}");
+
+        if (OnDragStart == null)
+            OnDragStart = new UnityEngine.Events.UnityEvent();
+
+        if (OnDragEnd == null)
+            OnDragEnd = new UnityEngine.Events.UnityEvent();
     }
 
     protected virtual void Update()
