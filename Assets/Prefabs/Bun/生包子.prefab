@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 5175796294628078618}
   - component: {fileID: 3841716942448386440}
   - component: {fileID: -5500204564290484305}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: "\u751F\u5305\u5B50"
-  m_TagString: Untagged
+  m_TagString: RawBun
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -114,7 +114,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1389090851693894291}
   - component: {fileID: 4055082137930810552}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: 0006
   m_TagString: Untagged
   m_Icon: {fileID: 0}
