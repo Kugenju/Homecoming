@@ -48,7 +48,7 @@ public class RandomParameterGenerator
             return (Vector3.zero, null, null);
         }
         List<Dish> requiredDish = new List<Dish> { dish };
-        Debug.Log(probability);
+        // Debug.Log(probability);
 
         if (Random.Range(0.0f, 1.0f) < probability) {
             dish = GetRandomDish();
@@ -69,7 +69,7 @@ public class RandomParameterGenerator
             selectedPrefab = usablePrefabs[Random.Range(0, usablePrefabs.Count)];
             usedPrefabs.Add(selectedPrefab);
         }
-        Debug.Log(requiredDish.Count);
+        // Debug.Log(requiredDish.Count);
         return (GenerateConstrainedPosition(), requiredDish, selectedPrefab);
     }
 

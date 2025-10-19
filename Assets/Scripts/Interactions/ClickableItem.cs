@@ -1,70 +1,70 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using System.Collections; // Ìí¼Ó Coroutine Ö§³Ö
+using System.Collections; // æ·»åŠ  Coroutine æ”¯æŒ
 
 /// <summary>
-/// ¿Éµã»÷ÎïÆ·×é¼ş
-/// Ö§³ÖÊó±êĞüÍ£¡¢µã»÷¡¢Ë«»÷ºÍÍÏ×§½»»¥
-/// ĞèÒªÓë DragAndDropHandler ÅäºÏÊ¹ÓÃ
+/// å¯ç‚¹å‡»ç‰©å“ç»„ä»¶
+/// æ”¯æŒé¼ æ ‡æ‚¬åœã€ç‚¹å‡»ã€åŒå‡»å’Œæ‹–æ‹½äº¤äº’
+/// éœ€è¦ä¸ DragAndDropHandler é…åˆä½¿ç”¨
 /// </summary>
 public class ClickableItem : MonoBehaviour,
     IPointerEnterHandler,
     IPointerExitHandler,
     IPointerDownHandler,
     IPointerUpHandler,
-    IBeginDragHandler,    // Ìí¼ÓÍÏ×§¿ªÊ¼½Ó¿Ú
-    IDragHandler,         // Ìí¼ÓÍÏ×§ÖĞ½Ó¿Ú
-    IEndDragHandler       // Ìí¼ÓÍÏ×§½áÊø½Ó¿Ú
+    IBeginDragHandler,    // æ·»åŠ æ‹–æ‹½å¼€å§‹æ¥å£
+    IDragHandler,         // æ·»åŠ æ‹–æ‹½ä¸­æ¥å£
+    IEndDragHandler       // æ·»åŠ æ‹–æ‹½ç»“æŸæ¥å£
 {
-    [Header("»ù´¡ÉèÖÃ")]
-    public bool isDraggable = false;       // ÊÇ·ñ¿ÉÍÏ×§
-    public bool isUsable = true;           // ÊÇ·ñ¿ÉÓÃ£¨Ó°ÏìËùÓĞ½»»¥×´Ì¬£©
-    public float clickCooldown = 0.3f;     // µã»÷ÀäÈ´Ê±¼ä
+    [Header("åŸºç¡€è®¾ç½®")]
+    public bool isDraggable = false;       // æ˜¯å¦å¯æ‹–æ‹½
+    public bool isUsable = true;           // æ˜¯å¦å¯ç”¨ï¼ˆå½±å“æ‰€æœ‰äº¤äº’çŠ¶æ€ï¼‰
+    public float clickCooldown = 0.3f;     // ç‚¹å‡»å†·å´æ—¶é—´
 
-    [Header("ÊÓ¾õĞ§¹û")]
+    [Header("è§†è§‰æ•ˆæœ")]
     public bool showHighlightOnHover = true;
-    public Color hoverColor = new Color(1f, 1f, 1f, 0.2f); // ĞüÍ£ÑÕÉ«(Í¸Ã÷µş¼Ó)
+    public Color hoverColor = new Color(1f, 1f, 1f, 0.2f); // æ‚¬åœé¢œè‰²(é€æ˜å åŠ )
     private Material originalMaterial;
     private Color originalColor;
 
-    [Header("ÊÂ¼şÅäÖÃ")]
-    public UnityEvent OnClicked;           // µ¥»÷ÊÂ¼ş
-    public UnityEvent OnDoubleClicked;     // Ë«»÷ÊÂ¼ş£¨¿ÉÑ¡ÅäÖÃ£©
-    public UnityEvent OnHoverEnter;        // ĞüÍ£½øÈë
-    public UnityEvent OnHoverExit;         // ĞüÍ£ÍË³ö
-    public UnityEvent OnDragStart;         // ÍÏ×§¿ªÊ¼ÊÂ¼ş
-    public UnityEvent OnDragEnd;           // ÍÏ×§½áÊøÊÂ¼ş
+    [Header("äº‹ä»¶é…ç½®")]
+    public UnityEvent OnClicked;           // å•å‡»äº‹ä»¶
+    public UnityEvent OnDoubleClicked;     // åŒå‡»äº‹ä»¶ï¼ˆå¯é€‰é…ç½®ï¼‰
+    public UnityEvent OnHoverEnter;        // æ‚¬åœè¿›å…¥
+    public UnityEvent OnHoverExit;         // æ‚¬åœé€€å‡º
+    public UnityEvent OnDragStart;         // æ‹–æ‹½å¼€å§‹äº‹ä»¶
+    public UnityEvent OnDragEnd;           // æ‹–æ‹½ç»“æŸäº‹ä»¶
 
-    // ×´Ì¬±äÁ¿
+    // çŠ¶æ€å˜é‡
     private bool canClick = true;
     private bool isHovering = false;
     private float lastClickTime = 0f;
-    private const float DoubleClickThreshold = 0.3f; // Ë«»÷ÅĞ¶ÏÊ±¼äãĞÖµ
+    private const float DoubleClickThreshold = 0.3f; // åŒå‡»åˆ¤æ–­æ—¶é—´é˜ˆå€¼
 
-    // ×é¼şÒıÓÃ
+    // ç»„ä»¶å¼•ç”¨
     private Collider2D _collider2D;
-    private Renderer _renderer; // Í¨ÓÃ Renderer (Ö§³Ö SpriteRenderer / MeshRenderer)
+    private Renderer _renderer; // é€šç”¨ Renderer (æ”¯æŒ SpriteRenderer / MeshRenderer)
     private CanvasGroup _canvasGroup;
 
     // ------------------------------
-    // Unity ÉúÃüÖÜÆÚ·½·¨
+    // Unity ç”Ÿå‘½å‘¨æœŸæ–¹æ³•
     // ------------------------------
 
     protected virtual void Awake()
     {
-        // »ñÈ¡±ØÒª×é¼ş
+        // è·å–å¿…è¦ç»„ä»¶
         _collider2D = GetComponent<Collider2D>();
         _renderer = GetComponent<Renderer>();
         _canvasGroup = GetComponent<CanvasGroup>();
 
         if (_renderer != null)
         {
-            originalMaterial = _renderer.material; // ±£´æÔ­Ê¼²ÄÖÊ
+            originalMaterial = _renderer.material; // ä¿å­˜åŸå§‹æè´¨
             originalColor = _renderer.material.color;
         }
 
-        Debug.Log($"{gameObject.name} ×é¼ş×´Ì¬: Collider2D={_collider2D != null}, Renderer={_renderer != null}");
+        Debug.Log($"{gameObject.name} ç»„ä»¶çŠ¶æ€: Collider2D={_collider2D != null}, Renderer={_renderer != null}");
 
         if (OnDragStart == null)
             OnDragStart = new UnityEngine.Events.UnityEvent();
@@ -75,7 +75,7 @@ public class ClickableItem : MonoBehaviour,
 
     protected virtual void Update()
     {
-        // Ë«»÷¼ì²âÀäÈ´
+        // åŒå‡»æ£€æµ‹å†·å´
         if (!canClick && Time.time - lastClickTime > DoubleClickThreshold)
         {
             canClick = true;
@@ -83,18 +83,18 @@ public class ClickableItem : MonoBehaviour,
     }
 
     // ------------------------------
-    // Ö¸ÕëÊÂ¼ş½Ó¿ÚÊµÏÖ£¨Unity EventSystem ×Ô¶¯µ÷ÓÃ£©
+    // æŒ‡é’ˆäº‹ä»¶æ¥å£å®ç°ï¼ˆUnity EventSystem è‡ªåŠ¨è°ƒç”¨ï¼‰
     // ------------------------------
 
     /// <summary>
-    /// Êó±ê½øÈëÎïÌåÇøÓò
+    /// é¼ æ ‡è¿›å…¥ç‰©ä½“åŒºåŸŸ
     /// </summary>
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
-        //Debug.Log($"OnPointerEnter ´¥·¢ÔÚ {gameObject.name}");
+        //Debug.Log($"OnPointerEnter è§¦å‘åœ¨ {gameObject.name}");
         if (!isUsable)
         {
-            Debug.Log($"ÎïÆ·²»¿ÉÓÃ isUsable = false,´¥·¢ÔÚ {gameObject.name}");
+            Debug.Log($"ç‰©å“ä¸å¯ç”¨ isUsable = false,è§¦å‘åœ¨ {gameObject.name}");
             return;
         }
 
@@ -105,11 +105,11 @@ public class ClickableItem : MonoBehaviour,
     }
 
     /// <summary>
-    /// Êó±êÀë¿ªÎïÌåÇøÓò
+    /// é¼ æ ‡ç¦»å¼€ç‰©ä½“åŒºåŸŸ
     /// </summary>
     public virtual void OnPointerExit(PointerEventData eventData)
     {
-        //Debug.Log($"OnPointerExit ´¥·¢ÔÚ {gameObject.name}");
+        //Debug.Log($"OnPointerExit è§¦å‘åœ¨ {gameObject.name}");
         isHovering = false;
         OnHoverExit?.Invoke();
 
@@ -117,16 +117,16 @@ public class ClickableItem : MonoBehaviour,
     }
 
     /// <summary>
-    /// Êó±ê°´ÏÂ
+    /// é¼ æ ‡æŒ‰ä¸‹
     /// </summary>
     public virtual void OnPointerDown(PointerEventData eventData)
     {
-        //Debug.Log($"OnPointerDown ´¥·¢ÔÚ {gameObject.name}");
+        //Debug.Log($"OnPointerDown è§¦å‘åœ¨ {gameObject.name}");
         if (!isUsable || !canClick) return;
 
         if (isDraggable)
         {
-            // ¿ÉÍÏ×§ÎïÆ·µÄ°´ÏÂÊÂ¼şÓÉÍÏ×§ÏµÍ³´¦Àí
+            // å¯æ‹–æ‹½ç‰©å“çš„æŒ‰ä¸‹äº‹ä»¶ç”±æ‹–æ‹½ç³»ç»Ÿå¤„ç†
             return;
         }
 
@@ -134,11 +134,11 @@ public class ClickableItem : MonoBehaviour,
     }
 
     /// <summary>
-    /// Êó±êÊÍ·Å
+    /// é¼ æ ‡é‡Šæ”¾
     /// </summary>
     public virtual void OnPointerUp(PointerEventData eventData)
     {
-        //Debug.Log($"OnPointerUp ´¥·¢ÔÚ {gameObject.name}");
+        //Debug.Log($"OnPointerUp è§¦å‘åœ¨ {gameObject.name}");
         if (!isUsable || !canClick) return;
 
         if (!isDraggable)
@@ -148,16 +148,16 @@ public class ClickableItem : MonoBehaviour,
     }
 
     /// <summary>
-    /// ¿ªÊ¼ÍÏ×§£¨Unity EventSystem ½Ó¿Ú£©
+    /// å¼€å§‹æ‹–æ‹½ï¼ˆUnity EventSystem æ¥å£ï¼‰
     /// </summary>
     public virtual void OnBeginDrag(PointerEventData eventData)
     {
         if (!isUsable || !isDraggable) return;
 
-        //Debug.Log($"OnBeginDrag ´¥·¢ÔÚ {gameObject.name}");
+        //Debug.Log($"OnBeginDrag è§¦å‘åœ¨ {gameObject.name}");
         OnDragStart?.Invoke();
 
-        // Í¨ÖªÍÏ×§¹ÜÀíÆ÷¿ªÊ¼ÍÏ×§
+        // é€šçŸ¥æ‹–æ‹½ç®¡ç†å™¨å¼€å§‹æ‹–æ‹½
         if (DragAndDropHandler.Instance != null)
         {
             Vector3 worldPos = GetWorldPositionFromEventData(eventData);
@@ -166,26 +166,26 @@ public class ClickableItem : MonoBehaviour,
     }
 
     /// <summary>
-    /// ÍÏ×§ÖĞ£¨Unity EventSystem ½Ó¿Ú£©
+    /// æ‹–æ‹½ä¸­ï¼ˆUnity EventSystem æ¥å£ï¼‰
     /// </summary>
     public virtual void OnDrag(PointerEventData eventdata)
     {
         if (!isDraggable) return;
 
-        // ÍÏ×§ÖĞµÄ´¦ÀíÓÉ draganddrophandler ¸ºÔğ
+        // æ‹–æ‹½ä¸­çš„å¤„ç†ç”± draganddrophandler è´Ÿè´£
     }
 
     /// <summary>
-    /// ½áÊøÍÏ×§£¨Unity EventSystem ½Ó¿Ú£©
+    /// ç»“æŸæ‹–æ‹½ï¼ˆUnity EventSystem æ¥å£ï¼‰
     /// </summary>
     public virtual void OnEndDrag(PointerEventData eventData)
     {
         if (!isDraggable) return;
 
-        Debug.Log($"OnEndDrag ´¥·¢ÔÚ {gameObject.name}");
+        Debug.Log($"OnEndDrag è§¦å‘åœ¨ {gameObject.name}");
         OnDragEnd?.Invoke();
 
-        // Í¨ÖªÍÏ×§¹ÜÀíÆ÷½áÊøÍÏ×§
+        // é€šçŸ¥æ‹–æ‹½ç®¡ç†å™¨ç»“æŸæ‹–æ‹½
         if (DragAndDropHandler.Instance != null)
         {
             DragAndDropHandler.Instance.EndDrag();
@@ -193,14 +193,14 @@ public class ClickableItem : MonoBehaviour,
     }
 
     // ------------------------------
-    // ÊÓ¾õĞ§¹û·½·¨
+    // è§†è§‰æ•ˆæœæ–¹æ³•
     // ------------------------------
 
     private void ApplyHoverVisuals()
     {
         if (showHighlightOnHover && _renderer != null)
         {
-            // ´´½¨²ÄÖÊÊµÀıÒÔ±ÜÃâÓ°ÏìÆäËûÎïÌå
+            // åˆ›å»ºæè´¨å®ä¾‹ä»¥é¿å…å½±å“å…¶ä»–ç‰©ä½“
             _renderer.material = new Material(_renderer.material);
             Color targetColor = originalColor + hoverColor;
             targetColor.a = Mathf.Min(1f, targetColor.a);
@@ -218,7 +218,7 @@ public class ClickableItem : MonoBehaviour,
         if (showHighlightOnHover && _renderer != null && originalMaterial != null)
         {
             _renderer.material.color = originalColor;
-            // »Ö¸´Ô­Ê¼²ÄÖÊ
+            // æ¢å¤åŸå§‹æè´¨
             _renderer.material = originalMaterial;
         }
 
@@ -229,17 +229,17 @@ public class ClickableItem : MonoBehaviour,
     }
 
     // ------------------------------
-    // µã»÷´¦ÀíÂß¼­
+    // ç‚¹å‡»å¤„ç†é€»è¾‘
     // ------------------------------
 
     private void HandleClick()
     {
         float timeSinceLastClick = Time.time - lastClickTime;
 
-        // ¼ì²âË«»÷
+        // æ£€æµ‹åŒå‡»
         if (timeSinceLastClick <= DoubleClickThreshold)
         {
-            Debug.Log("Ë«»÷¼ì²â³É¹¦");
+            Debug.Log("åŒå‡»æ£€æµ‹æˆåŠŸ");
             OnDoubleClicked?.Invoke();
             canClick = false;
             lastClickTime = 0f;
@@ -247,8 +247,8 @@ public class ClickableItem : MonoBehaviour,
             return;
         }
 
-        // µ¥»ú´¦Àí
-        Debug.Log("µ¥»÷´¦Àí");
+        // å•æœºå¤„ç†
+        Debug.Log("å•å‡»å¤„ç†");
         OnClicked?.Invoke();
         lastClickTime = Time.time;
         canClick = false;
@@ -262,7 +262,7 @@ public class ClickableItem : MonoBehaviour,
     }
 
     // ------------------------------
-    // ¹¤¾ß·½·¨
+    // å·¥å…·æ–¹æ³•
     // ------------------------------
 
     private Vector3 GetWorldPositionFromEventData(PointerEventData eventData)
@@ -270,16 +270,16 @@ public class ClickableItem : MonoBehaviour,
         if (eventData == null) return Vector3.zero;
 
         Vector3 screenPos = eventData.position;
-        screenPos.z = 10f; // Ä¬ÈÏZÖáÆ«ÒÆ
+        screenPos.z = 10f; // é»˜è®¤Zè½´åç§»
         return Camera.main.ScreenToWorldPoint(screenPos);
     }
 
     // ------------------------------
-    // Íâ²¿µ÷ÓÃ½Ó¿Ú
+    // å¤–éƒ¨è°ƒç”¨æ¥å£
     // ------------------------------
 
     /// <summary>
-    /// Ç¿ÖÆ´¥·¢µã»÷ÊÂ¼ş£¨¿ÉÓÃÓÚ³ÌĞò¿ØÖÆ£©
+    /// å¼ºåˆ¶è§¦å‘ç‚¹å‡»äº‹ä»¶ï¼ˆå¯ç”¨äºç¨‹åºæ§åˆ¶ï¼‰
     /// </summary>
     public virtual void ForceClick()
     {
@@ -290,7 +290,7 @@ public class ClickableItem : MonoBehaviour,
     }
 
     /// <summary>
-    /// ÉèÖÃÎïÆ·¿ÉÓÃ×´Ì¬
+    /// è®¾ç½®ç‰©å“å¯ç”¨çŠ¶æ€
     /// </summary>
     public virtual void SetUsable(bool usable)
     {
@@ -301,22 +301,22 @@ public class ClickableItem : MonoBehaviour,
         }
         if (!usable && isHovering)
         {
-            OnPointerExit(null); // ÇåÀíĞüÍ£×´Ì¬
+            OnPointerExit(null); // æ¸…ç†æ‚¬åœçŠ¶æ€
         }
     }
 
     /// <summary>
-    /// »ñÈ¡µ±Ç°ÊÇ·ñ´¦ÓÚĞüÍ£×´Ì¬
+    /// è·å–å½“å‰æ˜¯å¦å¤„äºæ‚¬åœçŠ¶æ€
     /// </summary>
     public bool IsHovering() => isHovering;
 
     /// <summary>
-    /// »ñÈ¡ÎïÆ·Î»ÖÃ£¨ÊÀ½ç×ø±ê£©
+    /// è·å–ç‰©å“ä½ç½®ï¼ˆä¸–ç•Œåæ ‡ï¼‰
     /// </summary>
     public Vector3 GetPosition() => transform.position;
 
     /// <summary>
-    /// ÊÖ¶¯´¥·¢ĞüÍ£½øÈë£¨ÓÃÓÚ³ÌĞò¿ØÖÆ£©
+    /// æ‰‹åŠ¨è§¦å‘æ‚¬åœè¿›å…¥ï¼ˆç”¨äºç¨‹åºæ§åˆ¶ï¼‰
     /// </summary>
     public virtual void ManualPointerEnter()
     {
@@ -324,7 +324,7 @@ public class ClickableItem : MonoBehaviour,
     }
 
     /// <summary>
-    /// ÊÖ¶¯´¥·¢ĞüÍ£ÍË³ö£¨ÓÃÓÚ³ÌĞò¿ØÖÆ£©
+    /// æ‰‹åŠ¨è§¦å‘æ‚¬åœé€€å‡ºï¼ˆç”¨äºç¨‹åºæ§åˆ¶ï¼‰
     /// </summary>
     public virtual void ManualPointerExit()
     {
