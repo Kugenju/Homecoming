@@ -98,7 +98,7 @@ public class SoupBowlZone : DroppableZone
         {
             clickableItem.OnDragStart.AddListener(OnBowlDragStart);
             clickableItem.OnDragEnd.AddListener(OnBowlDragEnd);
-            //clickableItem.OnClicked.AddListener(OnBowlClicked);
+            clickableItem.OnClicked.AddListener(OnBowlClicked);
         }
     }
 
