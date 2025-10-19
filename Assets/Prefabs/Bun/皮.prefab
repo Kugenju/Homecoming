@@ -57,7 +57,7 @@ Transform:
   m_GameObject: {fileID: 4314288403690712192}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.8, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 6503039471619490509}
   - component: {fileID: 588878246332654021}
   - component: {fileID: -3427979956782630371}
+  - component: {fileID: 3845730226983213390}
   m_Layer: 0
   m_Name: "\u76AE"
   m_TagString: Ingredient
@@ -172,10 +173,11 @@ MonoBehaviour:
   autoSetupLayers: 1
   requiredFillingTag: MeatFilling
   fillingOffset: {x: 0, y: 0, z: 0}
-  packDelay: 0.5
-  packAnimation: {fileID: 0}
-  packedBunPrefab: {fileID: 974021347460333707, guid: 3be0471b65b9ea845a837caa0c47a80c, type: 3}
+  packDelay: 0
+  packAnimator: {fileID: 3845730226983213390}
+  packedBunPrefab: {fileID: 5645136761856503587, guid: 46549e0eed2885d4aa09d30c719fbed8, type: 3}
   packSound: {fileID: 0}
+  packingBoolParameter: IsPacking
 --- !u!58 &-3427979956782630371
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -208,6 +210,27 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.07580681, y: 1.7721264}
+  m_Offset: {x: -0.024454689, y: -0.07268906}
   serializedVersion: 2
-  m_Radius: 2.4898872
+  m_Radius: 2.5099394
+--- !u!95 &3845730226983213390
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6647506513543744265}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 814f5b54889a8c14389875d57dd1a76a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
