@@ -2055,6 +2055,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 730197302670547442, guid: 02413c3112ee8fc438265f6cd7c03054, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 1450959980110805155, guid: 02413c3112ee8fc438265f6cd7c03054, type: 3}
       propertyPath: m_Name
       value: DoughBoardZone
@@ -2107,6 +2111,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -0.25
       objectReference: {fileID: 0}
+    - target: {fileID: 5869974368132672671, guid: 02413c3112ee8fc438265f6cd7c03054, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6869852086373975986, guid: 02413c3112ee8fc438265f6cd7c03054, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 7881484661453210856, guid: 02413c3112ee8fc438265f6cd7c03054, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.25
@@ -2124,6 +2136,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 10565882686694943, guid: a875d9a1deca16c4ab3cea064b8f810e, type: 3}
+      propertyPath: rawBunPrefab
+      value: 
+      objectReference: {fileID: 5645136761856503587, guid: 46549e0eed2885d4aa09d30c719fbed8, type: 3}
+    - target: {fileID: 2488007641483175222, guid: a875d9a1deca16c4ab3cea064b8f810e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 2488007641483175222, guid: a875d9a1deca16c4ab3cea064b8f810e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.53
+      objectReference: {fileID: 0}
+    - target: {fileID: 3251476280785499827, guid: a875d9a1deca16c4ab3cea064b8f810e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 3251476280785499827, guid: a875d9a1deca16c4ab3cea064b8f810e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 4717563944175544219, guid: a875d9a1deca16c4ab3cea064b8f810e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4717563944175544219, guid: a875d9a1deca16c4ab3cea064b8f810e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.6
+      objectReference: {fileID: 0}
     - target: {fileID: 5449032301016649080, guid: a875d9a1deca16c4ab3cea064b8f810e, type: 3}
       propertyPath: m_Name
       value: Bun_Steamer
