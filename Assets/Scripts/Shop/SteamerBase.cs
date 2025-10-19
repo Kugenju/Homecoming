@@ -73,7 +73,9 @@ public abstract class SteamerBase : DroppableZone
 
     protected void PlayCloseAnimation()
     {
+        Debug.Log($"播放关盖动画Base, lidAnimator{lidAnimator}");
         if (lidAnimator == null) return;
+        Debug.Log("触发逻辑Base");
         lidAnimator.SetBool(OpenHash, false);
         lidAnimator.SetBool(CloseHash, true);
         currentState = State.Closing;

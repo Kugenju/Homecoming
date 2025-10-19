@@ -94,7 +94,7 @@ public class ClickableItem : MonoBehaviour,
         //Debug.Log($"OnPointerEnter 触发在 {gameObject.name}");
         if (!isUsable)
         {
-            Debug.Log("物品不可用 isUsable = false");
+            Debug.Log($"物品不可用 isUsable = false,触发在 {gameObject.name}");
             return;
         }
 
