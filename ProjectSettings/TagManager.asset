@@ -8,6 +8,7 @@ TagManager:
   - Steamer_Ingredient
   - Dough
   - MeatFilling
+  - RawBun
   layers:
   - Default
   - TransparentFX

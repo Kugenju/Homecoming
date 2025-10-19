@@ -6,26 +6,26 @@ using System.Collections;
 
 /// <summary>
 /// 包子蒸笼：手动填满触发
-/// 开盖 → 放入指定数量生包子 → 自动闭盖蒸煮 → 开盖 → 可一次性拖走所有熟包子 → 重置
+/// 开盖 → 放入生包子（销毁 + 生成显示占位）→ 显示在蒸笼中 → 放够数量 → 自动关盖蒸煮 → 开盖 → 变为熟包子 → 拖走 → 重置
 /// </summary>
 [RequireComponent(typeof(Animator))]
 public class BunSteamer : SteamerBase
 {
     [Header("配置")]
-    public GameObject rawBunPrefab;           // 用于检测 Tag
+    public GameObject rawBunPrefab;           // 用于生成“显示用”的生包子（视觉占位）
     public GameObject cookedBunPrefab;        // 熟包子预制体
-    public int requiredBuns = 3;               // 需要多少个生包子
+    public int requiredBuns = 3;               // 需要多少个
     public float cookTime = 8f;
 
     [Header("包子生成位置与大小")]
-    public Transform[] bunPositions;          // 预设位置锚点数组（在 foodParent 下）
-    public Vector3 bunScale = Vector3.one;    // 包子缩放大小
+    public Transform[] bunPositions;          // 预设位置锚点
+    public Vector3 bunScale = Vector3.one;    // 包子缩放
 
-    private List<ClickableItem> rawBuns = new List<ClickableItem>();
-    private List<GameObject> cookedBuns = new List<GameObject>();
+    private List<GameObject> visualRawBuns = new List<GameObject>(); // 显示用的生包子
+    private List<GameObject> cookedBuns = new List<GameObject>();   // 蒸好后的熟包子
 
     [Header("标签设置")]
-    public string rawBunTag = "RawBun"; // 必须与生包子的 Tag 一致
+    public string rawBunTag = "RawBun"; // 必须与生包子 Tag 一致
 
     protected override void Awake()
     {
@@ -47,24 +47,59 @@ public class BunSteamer : SteamerBase
 
         if (item.CompareTag(rawBunTag))
         {
-            rawBuns.Add(item);
+            // 🔴 第一步：销毁原始生包子
             Destroy(item.gameObject);
-            Debug.Log($"✅ 生包子已放入，当前数量: {rawBuns.Count}/{requiredBuns}");
+            Debug.Log($"✅ 原始生包子已销毁");
 
-            if (rawBuns.Count >= requiredBuns)
+            // ✅ 第二步：在蒸笼中生成一个“显示用”的生包子
+            SpawnVisualRawBun();
+
+            // 检查是否已满
+            if (visualRawBuns.Count >= requiredBuns)
             {
-                Debug.Log("✅ 生包子已满，开始蒸煮！");
-                StartCooking();
+                Debug.Log("✅ 显示包子已满，开始蒸煮！");
+                StartCooking(); // ✅ 触发关盖动画
             }
         }
     }
 
+    /// <summary>
+    /// 生成一个用于显示的生包子（视觉占位）
+    /// </summary>
+    private void SpawnVisualRawBun()
+    {
+        if (rawBunPrefab == null)
+        {
+            Debug.LogError("❌ rawBunPrefab 未赋值！");
+            return;
+        }
+
+        Vector3 spawnPos = GetNextAvailablePosition();
+
+        GameObject visualBun = Instantiate(rawBunPrefab, foodParent);
+        visualBun.transform.localPosition = spawnPos;
+        visualBun.transform.localScale = bunScale;
+
+        var clickable = visualBun.GetComponent<ClickableItem>();
+        if (clickable == null)
+            clickable = visualBun.AddComponent<ClickableItem>();
+
+        clickable.isDraggable = false;
+        clickable.isUsable = false;
+
+        visualRawBuns.Add(visualBun);
+
+        Debug.Log($"已生成显示用生包子，当前数量: {visualRawBuns.Count}/{requiredBuns}");
+    }
+
     public override void StartCooking()
     {
-        PlayCloseAnimation();
-        StartSteaming();
+        Debug.Log("播放关盖动画");
+        PlayCloseAnimation();     
+        StartSteaming();          
         OnCookingStartEvent?.Invoke();
         currentState = State.Cooking;
+
         StartCoroutine(CookRoutine());
     }
 
@@ -81,44 +116,49 @@ public class BunSteamer : SteamerBase
         currentState = State.Ready;
         isInteractable = true;
 
-        // 清理旧包子
-        foreach (var bun in cookedBuns) Destroy(bun);
+        
+        foreach (var bun in visualRawBuns)
+        {
+            if (bun != null)
+                Destroy(bun);
+        }
+        visualRawBuns.Clear();
+
+        // 清理旧熟包子（防止叠加）
+        foreach (var bun in cookedBuns)
+        {
+            if (bun != null)
+                Destroy(bun);
+        }
         cookedBuns.Clear();
 
-        // 生成熟包子
         for (int i = 0; i < requiredBuns; i++)
         {
-            // 选择位置：有预设位置则使用，否则随机
             Vector3 spawnPos;
             if (bunPositions != null && bunPositions.Length > 0)
             {
-                Transform targetPos = bunPositions[i % bunPositions.Length]; // 循环使用
-                spawnPos = targetPos.localPosition;
+                spawnPos = bunPositions[i % bunPositions.Length].localPosition;
             }
             else
             {
-                // 降级为随机位置
                 spawnPos = Random.insideUnitCircle * 0.2f;
             }
 
             GameObject bun = Instantiate(cookedBunPrefab, foodParent);
             bun.transform.localPosition = spawnPos;
-            bun.transform.localScale = bunScale; // ✅ 应用自定义缩放
+            bun.transform.localScale = bunScale;
 
-            // 确保它有 ClickableItem 组件
-            ClickableItem clickable = bun.GetComponent<ClickableItem>();
+            var clickable = bun.GetComponent<ClickableItem>();
             if (clickable == null)
                 clickable = bun.AddComponent<ClickableItem>();
             clickable.isDraggable = true;
             clickable.isUsable = true;
 
-            //// 注册移除事件，用于检测是否被拿走
             //clickable.OnItemRemovedFromWorld.AddListener(() =>
             //{
-            //    // 检查是否所有包子都被拿走
             //    if (AreAllBunsTaken())
             //    {
-            //        OnFoodTaken(); // 触发重置
+            //        OnFoodTaken();
             //    }
             //});
 
@@ -129,12 +169,21 @@ public class BunSteamer : SteamerBase
     }
 
     /// <summary>
-    /// 检查是否所有熟包子都被拿走了
+    /// 获取下一个可用位置
     /// </summary>
+    private Vector3 GetNextAvailablePosition()
+    {
+        int index = visualRawBuns.Count;
+        if (bunPositions != null && bunPositions.Length > 0)
+        {
+            return bunPositions[index % bunPositions.Length].localPosition;
+        }
+        return Random.insideUnitCircle * 0.2f;
+    }
+
     private bool AreAllBunsTaken()
     {
-        // 只要有一个还在，就返回 false
-        foreach (GameObject bun in cookedBuns)
+        foreach (var bun in cookedBuns)
         {
             if (bun != null) return false;
         }
@@ -143,10 +192,9 @@ public class BunSteamer : SteamerBase
 
     protected override void OnFoodTaken()
     {
-        // 所有熟包子被拿走
-        rawBuns.Clear();
+        cookedBuns.Clear();
         currentState = State.Idle;
         isInteractable = false;
-        Debug.Log("包子蒸笼已重置，等待下一轮");
+        Debug.Log("蒸笼已重置");
     }
 }
