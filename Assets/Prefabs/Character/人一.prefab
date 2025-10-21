@@ -79,6 +79,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: 4553890cc9b2eb04884827cc41c9f745, type: 3}
       insertIndex: -1
       addedObject: {fileID: -755052393988358786}
+    - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: 4553890cc9b2eb04884827cc41c9f745, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8115153533126156826}
   m_SourcePrefab: {fileID: 4843985084834002234, guid: 4553890cc9b2eb04884827cc41c9f745, type: 3}
 --- !u!1 &6121552038925887323 stripped
 GameObject:
@@ -97,9 +100,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 009bde566eabdf34ab48940d0e2211d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  acceptTag: Ingredient
+  onlyAcceptSpecificItems: 0
+  specificItem: {fileID: 0}
+  showHighlight: 1
+  highlightColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  dropZoneLayer: DropZones
+  draggableItemLayer: DraggableItems
+  autoSetupLayers: 1
   waitTime: 8
   isUpdate: 0
   dialogBox: {fileID: 160267596670569356, guid: fbd48c9b745d7bf4da6dd3528e89a706, type: 3}
   flame: {fileID: 8822344363708364768, guid: 36b039a4a5d0dfc42b36a83e1cfb8ec0, type: 3}
   candle: {fileID: 4322198335401827691, guid: 71a23bcb05e161d4fa1028cb329d084e, type: 3}
   fadeDuration: 1
+  offset: {x: 50, y: 50, z: 0}
+--- !u!61 &8115153533126156826
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6121552038925887323}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 4}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 5, y: 8}
+  m_EdgeRadius: 0

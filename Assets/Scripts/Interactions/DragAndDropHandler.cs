@@ -4,35 +4,35 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 /// <summary>
-/// Í¨ÓÃÍÏ×§ÏµÍ³
-/// Ö§³ÖÈÎÒâ´øÓĞ ClickableItem µÄÎïÌå½øĞĞÍÏ×§
-/// ¿ÉÉèÖÃÓĞĞ§Í¶·ÅÇøÓò£¨DroppableZone£©£¬²¢´¥·¢×Ô¶¨Òå»Øµ÷
+/// é€šç”¨æ‹–æ‹½ç³»ç»Ÿ
+/// æ”¯æŒä»»æ„å¸¦æœ‰ ClickableItem çš„ç‰©ä½“è¿›è¡Œæ‹–æ‹½
+/// å¯è®¾ç½®æœ‰æ•ˆæŠ•æ”¾åŒºåŸŸï¼ˆDroppableZoneï¼‰ï¼Œå¹¶è§¦å‘è‡ªå®šä¹‰å›è°ƒ
 /// </summary>
 public class DragAndDropHandler : MonoBehaviour
 {
-    // µ¥ÀıÄ£Ê½£ºÈ«¾ÖÎ¨Ò»ÍÏ×§´¦ÀíÆ÷
+    // å•ä¾‹æ¨¡å¼ï¼šå…¨å±€å”¯ä¸€æ‹–æ‹½å¤„ç†å™¨
     public static DragAndDropHandler Instance { get; private set; }
 
-    [Header("ÍÏ×§ÉèÖÃ")]
-    public Camera eventCamera; // ÓÃÓÚÆÁÄ»×ªÊÀ½ç×ø±êµÄÉãÏñ»ú
-    public float dragOffsetZ = 10f; // ¿ØÖÆÍÏ×§¶ÔÏóÔÚ Z ÖáÆ«ÒÆ£¨±ÜÃâÓëÆäËûUI/ÎïÌåÕÚµ²£©
+    [Header("æ‹–æ‹½è®¾ç½®")]
+    public Camera eventCamera; // ç”¨äºå±å¹•è½¬ä¸–ç•Œåæ ‡çš„æ‘„åƒæœº
+    public float dragOffsetZ = 10f; // æ§åˆ¶æ‹–æ‹½å¯¹è±¡åœ¨ Z è½´åç§»ï¼ˆé¿å…ä¸å…¶ä»–UI/ç‰©ä½“é®æŒ¡ï¼‰
 
-    [Header("ÊÓ¾õ·´À¡")]
+    [Header("è§†è§‰åé¦ˆ")]
     public bool useSmoothMovement = true;
     public float smoothSpeed = 8f;
 
-    [Header("´úÀíÍÏ×§")]
-    [Tooltip("ÊÇ·ñÆôÓÃ´úÀíÍÏ×§¹¦ÄÜ")]
+    [Header("ä»£ç†æ‹–æ‹½")]
+    [Tooltip("æ˜¯å¦å¯ç”¨ä»£ç†æ‹–æ‹½åŠŸèƒ½")]
     public bool enableProxyDragging = true;
 
-    [Header("²ã¼¶¹ıÂË")]
-    [Tooltip("¿ÉÍ¶·ÅÇøÓòµÄ²ã¼¶ÑÚÂë")]
-    public LayerMask dropZoneLayerMask = 1 << 8; // Ä¬ÈÏ¶ÔÓ¦ DropZones ²ã
+    [Header("å±‚çº§è¿‡æ»¤")]
+    [Tooltip("å¯æŠ•æ”¾åŒºåŸŸçš„å±‚çº§æ©ç ")]
+    public LayerMask dropZoneLayerMask = 1 << 8; // é»˜è®¤å¯¹åº” DropZones å±‚
 
-    [Tooltip("¼ì²â°ë¾¶")]
+    [Tooltip("æ£€æµ‹åŠå¾„")]
     public float dropDetectionRadius = 0.5f;
 
-    // µ±Ç°ÍÏ×§×´Ì¬
+    // å½“å‰æ‹–æ‹½çŠ¶æ€
     private ClickableItem _currentDragItem;
     private ProxyDragTag _currentProxyTag;
     private GameObject _currentDragProxy;
@@ -41,7 +41,7 @@ public class DragAndDropHandler : MonoBehaviour
     private Transform _originalParent;
     private Vector3 _originalPosition;
 
-    // »Øµ÷ÊÂ¼ş£¨¿ÉÓÃÓÚÍâ²¿¼àÌı£©
+    // å›è°ƒäº‹ä»¶ï¼ˆå¯ç”¨äºå¤–éƒ¨ç›‘å¬ï¼‰
     [System.Serializable] public class DragEvent : UnityEngine.Events.UnityEvent<ClickableItem> { }
     [System.Serializable] public class ProxyDragEvent : UnityEngine.Events.UnityEvent<ClickableItem, GameObject> { }
 
@@ -52,7 +52,7 @@ public class DragAndDropHandler : MonoBehaviour
     public UnityEvent<ClickableItem, DroppableZone> OnItemDropped;
 
     // ------------------------------
-    // Unity ÉúÃüÖÜÆÚº¯Êı
+    // Unity ç”Ÿå‘½å‘¨æœŸå‡½æ•°
     // ------------------------------
 
     private void Awake()
@@ -64,7 +64,7 @@ public class DragAndDropHandler : MonoBehaviour
         }
         Instance = this;
 
-        // Ä¬ÈÏÊ¹ÓÃÖ÷ÉãÏñ»ú
+        // é»˜è®¤ä½¿ç”¨ä¸»æ‘„åƒæœº
         if (eventCamera == null)
             eventCamera = Camera.main;
     }
@@ -78,14 +78,14 @@ public class DragAndDropHandler : MonoBehaviour
     }
 
     // ------------------------------
-    // Íâ²¿½Ó¿Ú£ºÓÉ ClickableItem ´¥·¢
+    // å¤–éƒ¨æ¥å£ï¼šç”± ClickableItem è§¦å‘
     // ------------------------------
 
     /// <summary>
-    /// ¿ªÊ¼ÍÏ×§ - ÊÊÅäÆ÷·½·¨£¨ÓÃÓÚUnityEvent£¬Ö»ĞèÒªÒ»¸ö²ÎÊı£©
-    /// ÕâÊÇÎªÁË½â¾öUnityEvent²ÎÊıÆ¥ÅäÎÊÌâ¶øÌí¼ÓµÄ·½·¨
+    /// å¼€å§‹æ‹–æ‹½ - é€‚é…å™¨æ–¹æ³•ï¼ˆç”¨äºUnityEventï¼Œåªéœ€è¦ä¸€ä¸ªå‚æ•°ï¼‰
+    /// è¿™æ˜¯ä¸ºäº†è§£å†³UnityEventå‚æ•°åŒ¹é…é—®é¢˜è€Œæ·»åŠ çš„æ–¹æ³•
     /// </summary>
-    /// <param name="eventData">Ö¸ÕëÊÂ¼şÊı¾İ</param>
+    /// <param name="eventData">æŒ‡é’ˆäº‹ä»¶æ•°æ®</param>
  
 
     public void StartDrag(ClickableItem item, Vector3 clickPointInWorld)
@@ -96,7 +96,7 @@ public class DragAndDropHandler : MonoBehaviour
         _originalParent = item.transform.parent;
         _originalPosition = item.transform.position;
 
-        // ¼ì²é´úÀíÍÏ×§
+        // æ£€æŸ¥ä»£ç†æ‹–æ‹½
         if (enableProxyDragging)
         {
             _currentProxyTag = item.GetComponent<ProxyDragTag>();
@@ -107,7 +107,7 @@ public class DragAndDropHandler : MonoBehaviour
             }
         }
 
-        // Õı³£ÍÏ×§
+        // æ­£å¸¸æ‹–æ‹½
         StartNormalDrag(clickPointInWorld);
     }
 
@@ -117,10 +117,10 @@ public class DragAndDropHandler : MonoBehaviour
 
         if (_currentDragProxy != null)
         {
-            // ÉèÖÃ´úÀíµÄ²ã¼¶
+            // è®¾ç½®ä»£ç†çš„å±‚çº§
             SetProxyRenderOrder(_currentDragProxy);
 
-            // ¼ÆËãÆ«ÒÆÁ¿£¨»ùÓÚ´úÀí£©
+            // è®¡ç®—åç§»é‡ï¼ˆåŸºäºä»£ç†ï¼‰
             Vector3 worldPos = GetMouseWorldPosition();
             _offset = _currentDragProxy.transform.position - worldPos;
             _offset.z = dragOffsetZ;
@@ -129,12 +129,12 @@ public class DragAndDropHandler : MonoBehaviour
             OnProxyDragStart?.Invoke(_currentDragItem, _currentDragProxy);
             OnDragStart?.Invoke(_currentDragItem);
 
-            // ½ûÓÃÔ­ÎïÌåµÄÅö×²Æ÷
+            // ç¦ç”¨åŸç‰©ä½“çš„ç¢°æ’å™¨
             _currentDragItem.SetUsable(false);
         }
         else
         {
-            // ´úÀí´´½¨Ê§°Ü£¬»ØÍËµ½Õı³£ÍÏ×§
+            // ä»£ç†åˆ›å»ºå¤±è´¥ï¼Œå›é€€åˆ°æ­£å¸¸æ‹–æ‹½
             StartNormalDrag(clickPointInWorld);
         }
     }
@@ -143,12 +143,12 @@ public class DragAndDropHandler : MonoBehaviour
     {
         _isDragging = true;
 
-        // ¼ÆËãÆ«ÒÆÁ¿
+        // è®¡ç®—åç§»é‡
         Vector3 worldPos = GetMouseWorldPosition();
         _offset = _currentDragItem.GetPosition() - worldPos;
         _offset.z = dragOffsetZ;
 
-        // ÉèÖÃäÖÈ¾Ë³Ğò
+        // è®¾ç½®æ¸²æŸ“é¡ºåº
         if (_currentDragItem.transform is RectTransform rectTransform)
         {
             rectTransform.SetAsLastSibling();
@@ -160,10 +160,10 @@ public class DragAndDropHandler : MonoBehaviour
 
 
     /// <summary>
-    /// ½áÊøÍÏ×§£¨Í¨³£ÓÉËÉ¿ªÊó±ê»òÅö×²´¥·¢£©
+    /// ç»“æŸæ‹–æ‹½ï¼ˆé€šå¸¸ç”±æ¾å¼€é¼ æ ‡æˆ–ç¢°æ’è§¦å‘ï¼‰
     /// </summary>
     /// <summary>
-    /// ½áÊøÍÏ×§
+    /// ç»“æŸæ‹–æ‹½
     /// </summary>
     public void EndDrag()
     {
@@ -172,7 +172,7 @@ public class DragAndDropHandler : MonoBehaviour
         bool dropSuccessful = false;
         DroppableZone validZone = FindValidDropZone();
 
-        Debug.Log($"³¢ÊÔÍ¶·Å {_currentDragItem.name} µ½ÇøÓò {(validZone != null ? validZone.name : "ÎŞĞ§ÇøÓò")}, ´úÀíÇé¿ö{_currentProxyTag}");
+        Debug.Log($"å°è¯•æŠ•æ”¾ {_currentDragItem.name} åˆ°åŒºåŸŸ {(validZone != null ? validZone.name : "æ— æ•ˆåŒºåŸŸ")}, ä»£ç†æƒ…å†µ{_currentProxyTag}");
 
         if (validZone != null && validZone.CanAcceptItem(_currentDragItem))
         {
@@ -181,28 +181,28 @@ public class DragAndDropHandler : MonoBehaviour
             OnItemDropped?.Invoke(_currentDragItem, validZone);
         }
 
-        // ´¦Àí´úÀíÍÏ×§½áÊø
+        // å¤„ç†ä»£ç†æ‹–æ‹½ç»“æŸ
         if (_currentProxyTag != null)
         {
-            Debug.Log("´¥·¢´úÀíÂß¼­");
+            Debug.Log("è§¦å‘ä»£ç†é€»è¾‘");
             Vector3 dropPosition = GetMouseWorldPosition();
             _currentProxyTag.HandleDragEnd(dropSuccessful, dropPosition);
             OnProxyDragEnd?.Invoke(_currentDragItem, _currentDragProxy);
         }
         else if (!dropSuccessful)
         {
-            // Õı³£ÍÏ×§ÇÒÊ§°ÜÊ±·µ»ØÔ­Î»ÖÃ
+            // æ­£å¸¸æ‹–æ‹½ä¸”å¤±è´¥æ—¶è¿”å›åŸä½ç½®
             ReturnToOriginalPosition();
         }
 
-        // ÇåÀí×´Ì¬
+        // æ¸…ç†çŠ¶æ€
         CleanupDragState(dropSuccessful);
     }
 
     /// <summary>
-    /// ½áÊøÍÏ×§ - ÊÊÅäÆ÷·½·¨£¨ÓÃÓÚUnityEvent£©
+    /// ç»“æŸæ‹–æ‹½ - é€‚é…å™¨æ–¹æ³•ï¼ˆç”¨äºUnityEventï¼‰
     /// </summary>
-    /// <param name="eventData">Ö¸ÕëÊÂ¼şÊı¾İ£¨¿ÉÑ¡£©</param>
+    /// <param name="eventData">æŒ‡é’ˆäº‹ä»¶æ•°æ®ï¼ˆå¯é€‰ï¼‰</param>
     public void EndDragWithEventData(BaseEventData eventData = null)
     {
         EndDrag();
@@ -211,7 +211,7 @@ public class DragAndDropHandler : MonoBehaviour
 
 
     // ------------------------------
-    // ÄÚ²¿Âß¼­
+    // å†…éƒ¨é€»è¾‘
     // ------------------------------
 
     private void HandleDragging()
@@ -220,7 +220,7 @@ public class DragAndDropHandler : MonoBehaviour
 
         if (_currentProxyTag != null && _currentDragProxy != null)
         {
-            // ´úÀíÍÏ×§ÔË¶¯
+            // ä»£ç†æ‹–æ‹½è¿åŠ¨
             if (useSmoothMovement)
             {
                 _currentDragProxy.transform.position = Vector3.Lerp(
@@ -236,7 +236,7 @@ public class DragAndDropHandler : MonoBehaviour
         }
         else if (_currentDragItem != null)
         {
-            // Õı³£ÍÏ×§ÔË¶¯
+            // æ­£å¸¸æ‹–æ‹½è¿åŠ¨
             if (useSmoothMovement)
             {
                 _currentDragItem.transform.position = Vector3.Lerp(
@@ -254,7 +254,7 @@ public class DragAndDropHandler : MonoBehaviour
 
     private void SetProxyRenderOrder(GameObject proxy)
     {
-        // È·±£´úÀíÏÔÊ¾ÔÚ×îÇ°Ãæ
+        // ç¡®ä¿ä»£ç†æ˜¾ç¤ºåœ¨æœ€å‰é¢
         SpriteRenderer proxyRenderer = proxy.GetComponent<SpriteRenderer>();
         if (proxyRenderer != null)
         {
@@ -266,12 +266,12 @@ public class DragAndDropHandler : MonoBehaviour
     {
         //if (!dropSuccessful && _currentProxyTag == null)
         //{
-        //    // Ö»ÓĞÕı³£ÍÏ×§ÇÒÊ§°ÜÊ±²Å»Ö¸´¿ÉÓÃ×´Ì¬
+        //    // åªæœ‰æ­£å¸¸æ‹–æ‹½ä¸”å¤±è´¥æ—¶æ‰æ¢å¤å¯ç”¨çŠ¶æ€
         //    _currentDragItem.SetUsable(true);
         //}
         //else if (_currentProxyTag == null && dropSuccessful)
         //{
-        //    // Õı³£ÍÏ×§³É¹¦£¬ÎïÆ·ÒÑ¾­±»·ÅÖÃÇøÓò´¦Àí
+        //    // æ­£å¸¸æ‹–æ‹½æˆåŠŸï¼Œç‰©å“å·²ç»è¢«æ”¾ç½®åŒºåŸŸå¤„ç†
         //}
 
         _currentDragItem.SetUsable(true);
@@ -284,23 +284,23 @@ public class DragAndDropHandler : MonoBehaviour
     }
 
     /// <summary>
-    /// »ñÈ¡Êó±êµ±Ç°ÔÚÊÀ½ç¿Õ¼äÖĞµÄÎ»ÖÃ
+    /// è·å–é¼ æ ‡å½“å‰åœ¨ä¸–ç•Œç©ºé—´ä¸­çš„ä½ç½®
     /// </summary>
     private Vector3 GetMouseWorldPosition()
     {
         Vector3 mouseScreenPos = Input.mousePosition;
-        mouseScreenPos.z = dragOffsetZ; // Ê¹ÓÃ¹Ì¶¨Éî¶È
+        mouseScreenPos.z = dragOffsetZ; // ä½¿ç”¨å›ºå®šæ·±åº¦
         return eventCamera.ScreenToWorldPoint(mouseScreenPos);
     }
 
     /// <summary>
-    /// ²éÕÒµ±Ç°ÊÇ·ñĞüÍ£ÔÚÒ»¸öÓĞĞ§µÄÍ¶·ÅÇø
+    /// æŸ¥æ‰¾å½“å‰æ˜¯å¦æ‚¬åœåœ¨ä¸€ä¸ªæœ‰æ•ˆçš„æŠ•æ”¾åŒº
     /// </summary>
     public DroppableZone FindValidDropZone()
     {
         Vector2 mouseWorldPos = GetMouseWorldPosition();
 
-        // Ê¹ÓÃ²ã¼¶ÑÚÂë¹ıÂË£¬Ö»¼ì²âÖ¸¶¨µÄÍ¶·ÅÇøÓò²ã
+        // ä½¿ç”¨å±‚çº§æ©ç è¿‡æ»¤ï¼Œåªæ£€æµ‹æŒ‡å®šçš„æŠ•æ”¾åŒºåŸŸå±‚
         Collider2D[] hits = Physics2D.OverlapCircleAll(
             mouseWorldPos,
             dropDetectionRadius,
@@ -319,7 +319,7 @@ public class DragAndDropHandler : MonoBehaviour
     }
 
     /// <summary>
-    /// ·µ»ØÔ­Ê¼Î»ÖÃ£¨Í¶·ÅÊ§°Ü£©
+    /// è¿”å›åŸå§‹ä½ç½®ï¼ˆæŠ•æ”¾å¤±è´¥ï¼‰
     /// </summary>
     private void ReturnToOriginalPosition()
     {
@@ -335,21 +335,21 @@ public class DragAndDropHandler : MonoBehaviour
     }
 
     // ------------------------------
-    // ¹«¹²·½·¨£¨¹©Íâ²¿µ÷ÓÃ£©
+    // å…¬å…±æ–¹æ³•ï¼ˆä¾›å¤–éƒ¨è°ƒç”¨ï¼‰
     // ------------------------------
 
     /// <summary>
-    /// ÊÇ·ñÕıÔÚÍÏ×§Ä³¸öÎïÌå
+    /// æ˜¯å¦æ­£åœ¨æ‹–æ‹½æŸä¸ªç‰©ä½“
     /// </summary>
     public bool IsDragging() => _isDragging;
 
     /// <summary>
-    /// »ñÈ¡µ±Ç°±»ÍÏ×§µÄÎïÆ·
+    /// è·å–å½“å‰è¢«æ‹–æ‹½çš„ç‰©å“
     /// </summary>
     public ClickableItem GetCurrentDragItem() => _currentDragItem;
 
     /// <summary>
-    /// Ç¿ÖÆ½áÊøÍÏ×§£¨ÀıÈç¹Ë¿ÍÀë¿ªÊ±£©
+    /// å¼ºåˆ¶ç»“æŸæ‹–æ‹½ï¼ˆä¾‹å¦‚é¡¾å®¢ç¦»å¼€æ—¶ï¼‰
     /// </summary>
     public void ForceEndDrag()
     {

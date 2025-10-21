@@ -1,28 +1,28 @@
 using UnityEngine;
 
 /// <summary>
-/// Í¶·ÅÇøÓò»ùÀà£¨Èç£ºÈâÏÚÇø¡¢ÕôÁı¿Ú¡¢ÌÀÍëµÈ£©
-/// µ±ÍÏ×§ÎïÌå½øÈë´ËÇøÓò²¢ÊÍ·ÅÊ±´¥·¢Âß¼­
+/// æŠ•æ”¾åŒºåŸŸåŸºç±»ï¼ˆå¦‚ï¼šè‚‰é¦…åŒºã€è’¸ç¬¼å£ã€æ±¤ç¢—ç­‰ï¼‰
+/// å½“æ‹–æ‹½ç‰©ä½“è¿›å…¥æ­¤åŒºåŸŸå¹¶é‡Šæ”¾æ—¶è§¦å‘é€»è¾‘
 /// </summary>
 public class DroppableZone : MonoBehaviour
 {
-    [Header("»ù´¡ÉèÖÃ")]
-    public string acceptTag = "Ingredient"; // ¿É½ÓÊÜµÄ±êÇ©£¨Èç"Meat", "Skin"µÈ£©
+    [Header("åŸºç¡€è®¾ç½®")]
+    public string acceptTag = "Ingredient"; // å¯æ¥å—çš„æ ‡ç­¾ï¼ˆå¦‚"Meat", "Skin"ç­‰ï¼‰
     public bool onlyAcceptSpecificItems = false;
-    public ClickableItem specificItem; // Èç¹ûÖ»½ÓÊÜÌØ¶¨ÎïÆ·
+    public ClickableItem specificItem; // å¦‚æœåªæ¥å—ç‰¹å®šç‰©å“
 
-    [Header("ÊÓ¾õ·´À¡")]
+    [Header("è§†è§‰åé¦ˆ")]
     public bool showHighlight = true;
     public Color highlightColor = Color.yellow;
     private Color _originalColor;
     private SpriteRenderer _renderer;
 
-    [Header("²ã¼¶¹ÜÀí")]
-    [Tooltip("Í¶·ÅÇøÓòËùÔÚµÄ²ã¼¶")]
+    [Header("å±‚çº§ç®¡ç†")]
+    [Tooltip("æŠ•æ”¾åŒºåŸŸæ‰€åœ¨çš„å±‚çº§")]
     public string dropZoneLayer = "DropZones";
-    [Tooltip("¿ÉÍÏ×§ÎïÆ·ËùÔÚµÄ²ã¼¶")]
+    [Tooltip("å¯æ‹–æ‹½ç‰©å“æ‰€åœ¨çš„å±‚çº§")]
     public string draggableItemLayer = "DraggableItems";
-    [Tooltip("ÊÇ·ñ×Ô¶¯ÉèÖÃ²ã¼¶")]
+    [Tooltip("æ˜¯å¦è‡ªåŠ¨è®¾ç½®å±‚çº§")]
     public bool autoSetupLayers = true;
 
     protected virtual void Awake()
@@ -40,11 +40,11 @@ public class DroppableZone : MonoBehaviour
     }
 
     /// <summary>
-    /// ÉèÖÃÍ¶·ÅÇøÓòºÍ¿ÉÍÏ×§ÎïÆ·µÄ²ã¼¶
+    /// è®¾ç½®æŠ•æ”¾åŒºåŸŸå’Œå¯æ‹–æ‹½ç‰©å“çš„å±‚çº§
     /// </summary>
     protected virtual void SetupLayers()
     {
-        // ÉèÖÃ×ÔÉíÎªÍ¶·ÅÇøÓò²ã
+        // è®¾ç½®è‡ªèº«ä¸ºæŠ•æ”¾åŒºåŸŸå±‚
         if (!string.IsNullOrEmpty(dropZoneLayer))
         {
             int layer = LayerMask.NameToLayer(dropZoneLayer);
@@ -54,16 +54,16 @@ public class DroppableZone : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning($"²ã¼¶ '{dropZoneLayer}' ²»´æÔÚ£¬Çë¼ì²é²ã¼¶ÉèÖÃ");
+                Debug.LogWarning($"å±‚çº§ '{dropZoneLayer}' ä¸å­˜åœ¨ï¼Œè¯·æ£€æŸ¥å±‚çº§è®¾ç½®");
             }
         }
 
-        // ²éÕÒ²¢ÉèÖÃ¿ÉÍÏ×§×ÓÎïÌåµÄ²ã¼¶
+        // æŸ¥æ‰¾å¹¶è®¾ç½®å¯æ‹–æ‹½å­ç‰©ä½“çš„å±‚çº§
         SetupDraggableChildren();
     }
 
     /// <summary>
-    /// ÉèÖÃ¿ÉÍÏ×§×ÓÎïÌåµÄ²ã¼¶
+    /// è®¾ç½®å¯æ‹–æ‹½å­ç‰©ä½“çš„å±‚çº§
     /// </summary>
     protected virtual void SetupDraggableChildren()
     {
@@ -72,7 +72,7 @@ public class DroppableZone : MonoBehaviour
         int draggableLayer = LayerMask.NameToLayer(draggableItemLayer);
         if (draggableLayer == -1) return;
 
-        // ²éÕÒËùÓĞ¿ÉÄÜÓĞÍÏ×§ĞèÇóµÄ×ÓÎïÌå
+        // æŸ¥æ‰¾æ‰€æœ‰å¯èƒ½æœ‰æ‹–æ‹½éœ€æ±‚çš„å­ç‰©ä½“
         ClickableItem[] draggableItems = GetComponentsInChildren<ClickableItem>();
         foreach (ClickableItem item in draggableItems)
         {
@@ -84,13 +84,13 @@ public class DroppableZone : MonoBehaviour
     }
 
     /// <summary>
-    /// ÎªÖ¸¶¨ÎïÌåÉèÖÃ ClickableItem ×é¼şºÍ²ã¼¶
+    /// ä¸ºæŒ‡å®šç‰©ä½“è®¾ç½® ClickableItem ç»„ä»¶å’Œå±‚çº§
     /// </summary>
     public virtual void SetupDraggableObject(GameObject targetObject, bool makeDraggable = true)
     {
         if (targetObject == null) return;
 
-        // ÉèÖÃ²ã¼¶
+        // è®¾ç½®å±‚çº§
         if (!string.IsNullOrEmpty(draggableItemLayer))
         {
             int layer = LayerMask.NameToLayer(draggableItemLayer);
@@ -100,7 +100,7 @@ public class DroppableZone : MonoBehaviour
             }
         }
 
-        // ÉèÖÃ ClickableItem ×é¼ş
+        // è®¾ç½® ClickableItem ç»„ä»¶
         ClickableItem clickableItem = targetObject.GetComponent<ClickableItem>();
         if (clickableItem == null)
         {
@@ -113,19 +113,19 @@ public class DroppableZone : MonoBehaviour
             clickableItem.isUsable = true;
         }
 
-        // È·±£ÓĞ Collider
+        // ç¡®ä¿æœ‰ Collider
         EnsureColliderExists(targetObject);
     }
 
     /// <summary>
-    /// È·±£ÎïÌåÓĞºÏÊÊµÄ Collider
+    /// ç¡®ä¿ç‰©ä½“æœ‰åˆé€‚çš„ Collider
     /// </summary>
     protected virtual void EnsureColliderExists(GameObject targetObject)
     {
         Collider2D existingCollider = targetObject.GetComponent<Collider2D>();
         if (existingCollider != null) return;
 
-        // ¸ù¾İÎïÌåÀàĞÍÌí¼ÓºÏÊÊµÄ Collider
+        // æ ¹æ®ç‰©ä½“ç±»å‹æ·»åŠ åˆé€‚çš„ Collider
         SpriteRenderer spriteRenderer = targetObject.GetComponent<SpriteRenderer>();
         if (spriteRenderer != null && spriteRenderer.sprite != null)
         {
@@ -140,7 +140,7 @@ public class DroppableZone : MonoBehaviour
     }
 
     /// <summary>
-    /// µİ¹éÉèÖÃÎïÌå¼°ÆäËùÓĞ×ÓÎïÌåµÄ²ã¼¶
+    /// é€’å½’è®¾ç½®ç‰©ä½“åŠå…¶æ‰€æœ‰å­ç‰©ä½“çš„å±‚çº§
     /// </summary>
     protected void SetLayerRecursively(GameObject obj, int layer)
     {
@@ -155,7 +155,7 @@ public class DroppableZone : MonoBehaviour
 
 
     /// <summary>
-    /// ÅĞ¶Ï¸ÃÇøÓòÊÇ·ñ½ÓÊÜ´ËÎïÆ·
+    /// åˆ¤æ–­è¯¥åŒºåŸŸæ˜¯å¦æ¥å—æ­¤ç‰©å“
     /// </summary>
     public virtual bool CanAcceptItem(ClickableItem item)
     {
@@ -170,22 +170,22 @@ public class DroppableZone : MonoBehaviour
     }
 
     /// <summary>
-    /// µ±ÎïÆ·±»Í¶·Åµ½´ËÇøÓòÊ±µ÷ÓÃ
-    /// ×ÓÀàÓ¦ÖØĞ´´Ë·½·¨ÊµÏÖ¾ßÌåÂß¼­
+    /// å½“ç‰©å“è¢«æŠ•æ”¾åˆ°æ­¤åŒºåŸŸæ—¶è°ƒç”¨
+    /// å­ç±»åº”é‡å†™æ­¤æ–¹æ³•å®ç°å…·ä½“é€»è¾‘
     /// </summary>
     public virtual void OnItemDrop(ClickableItem item)
     {
-        Debug.Log($"{item.name} ±»Í¶·Åµ½ {name}");
+        Debug.Log($"{item.name} è¢«æŠ•æ”¾åˆ° {name}");
 
-        // Ä¬ÈÏ²¥·Å·´À¡
+        // é»˜è®¤æ’­æ”¾åé¦ˆ
         PlayFeedback();
 
-        // Ê¾Àı£ºÏú»ÙÔ­ÁÏ£¬Éú³ÉĞÂ¶ÔÏó£¨Èç°üÏÚ£©
-        // ÓÉ×ÓÀà¾ßÌåÊµÏÖ
+        // ç¤ºä¾‹ï¼šé”€æ¯åŸæ–™ï¼Œç”Ÿæˆæ–°å¯¹è±¡ï¼ˆå¦‚åŒ…é¦…ï¼‰
+        // ç”±å­ç±»å…·ä½“å®ç°
     }
 
     /// <summary>
-    /// ÊÓ¾õ·´À¡
+    /// è§†è§‰åé¦ˆ
     /// </summary>
     protected virtual void PlayFeedback()
     {

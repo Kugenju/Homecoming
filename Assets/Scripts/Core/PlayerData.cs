@@ -72,7 +72,7 @@ public class PlayerData : MonoBehaviour
     {
         string json = JsonUtility.ToJson(playerStats, true);
         File.WriteAllText(Application.persistentDataPath + SaveFilePath, json);
-        Debug.Log($"Money: {playerStats.money}, Stamina: {playerStats.stamina}, LastStaminaRecoveryTime: {playerStats.lastStaminaRecoveryTime}");
+        // Debug.Log($"Money: {playerStats.money}, Stamina: {playerStats.stamina}, LastStaminaRecoveryTime: {playerStats.lastStaminaRecoveryTime}");
     }
 
     private void TryRecoverStamina()
