@@ -1990,6 +1990,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1782864850}
   m_CullTransparentMesh: 1
+--- !u!4 &1923798159 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5472393683311885137, guid: a875d9a1deca16c4ab3cea064b8f810e, type: 3}
+  m_PrefabInstance: {fileID: 6464161584438651515}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &297093610909747497
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2137,9 +2142,37 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 10565882686694943, guid: a875d9a1deca16c4ab3cea064b8f810e, type: 3}
+      propertyPath: bunScale.x
+      value: 0.1428
+      objectReference: {fileID: 0}
+    - target: {fileID: 10565882686694943, guid: a875d9a1deca16c4ab3cea064b8f810e, type: 3}
+      propertyPath: bunScale.y
+      value: 0.1111
+      objectReference: {fileID: 0}
+    - target: {fileID: 10565882686694943, guid: a875d9a1deca16c4ab3cea064b8f810e, type: 3}
+      propertyPath: foodParent
+      value: 
+      objectReference: {fileID: 1923798159}
+    - target: {fileID: 10565882686694943, guid: a875d9a1deca16c4ab3cea064b8f810e, type: 3}
       propertyPath: rawBunPrefab
       value: 
       objectReference: {fileID: 5645136761856503587, guid: 46549e0eed2885d4aa09d30c719fbed8, type: 3}
+    - target: {fileID: 10565882686694943, guid: a875d9a1deca16c4ab3cea064b8f810e, type: 3}
+      propertyPath: Raw_bunScale.x
+      value: 0.71428
+      objectReference: {fileID: 0}
+    - target: {fileID: 10565882686694943, guid: a875d9a1deca16c4ab3cea064b8f810e, type: 3}
+      propertyPath: Raw_bunScale.y
+      value: 0.556
+      objectReference: {fileID: 0}
+    - target: {fileID: 10565882686694943, guid: a875d9a1deca16c4ab3cea064b8f810e, type: 3}
+      propertyPath: Raw_bunScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 10565882686694943, guid: a875d9a1deca16c4ab3cea064b8f810e, type: 3}
+      propertyPath: cookedBunPrefab
+      value: 
+      objectReference: {fileID: 325063442181982619, guid: 31819182c358c8d44afa020d7d36b021, type: 3}
     - target: {fileID: 2488007641483175222, guid: a875d9a1deca16c4ab3cea064b8f810e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.32
