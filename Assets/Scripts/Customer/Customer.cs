@@ -1,13 +1,17 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
+using System.Reflection;
+using UnityEditor;
 
-public class Customer : MonoBehaviour
+public class Customer : DroppableZone
 {
     private const int FixedFine = 3;
     public float waitTime = 8f;
     private float timer;
     public List<Dish> RequiredDish { get; set; }
+    private int dishIndex = -1;
     public bool isUpdate = false;
     public GameObject UsedPrefab { get; set; } // 新增：记录使用的预制体
     public GameObject dialogBox;
@@ -31,13 +35,6 @@ public class Customer : MonoBehaviour
     private float dialogHeight => currentDialog != null ? 
         currentDialog.GetComponent<SpriteRenderer>().bounds.size.y : 0;
 
-    private void Awake()
-    {
-        Debug.Log($"[Customer Awake] 属性初始化:");
-        Debug.Log($"- waitTime: {waitTime}");
-        // Debug.Log($"- RequiredDish: {(RequiredDish != null ? RequiredDish.dishName : "null")}");
-    }
-
     private void Start()
     {
         // 获取SpriteRenderer组件
@@ -54,11 +51,16 @@ public class Customer : MonoBehaviour
         timer = waitTime;
 
         playerData = PlayerData.Instance; // 实例化PlayerData
+
+        // RenderRequiredDishes();
     }
     
     private void RenderRequiredDishes()
     {
-        if (RequiredDish == null || RequiredDish.Count == 0 || currentDialog == null) return;
+        if (RequiredDish == null || RequiredDish.Count == 0 || currentDialog == null) {
+            DestroySprite();
+            return;
+        }
         
         // 清除旧实例
         foreach (var dish in dishInstances) Destroy(dish);
@@ -311,20 +313,96 @@ public class Customer : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public bool TryServe(Dish deliveredDish)
+    public override bool CanAcceptItem(ClickableItem item)
     {
-        if (deliveredDish == null || RequiredDish == null)
+        // 0. 如果item.name中有"碗"字，直接返回false
+        if (item.name.Contains("碗"))
+        {
             return false;
+        }
+        dishIndex = -1;
 
-        // bool isMatch = (deliveredDish == RequiredDish) ||
-        //               (deliveredDish.dishName == RequiredDish.dishName);
+        // 使用for循环替代foreach
+        for (int i = 0; i < RequiredDish.Count; i++)
+        {
+            var dish = RequiredDish[i];
+            string dishName = dish.dishName;
+            string itemName = item.name;
 
-        // if (isMatch)
-        // {
-        //     PlayerData.Instance.AddMoney(RequiredDish.price);
-        //     DestroySprite();
-        //     return true;
-        // }
+            // 1. 如果两个name中都有“糕”字，返回true
+            if (dishName.Contains("糕") && itemName.Contains("糕"))
+            {
+                dishIndex = i;
+                return true;
+            }
+
+            // 2. 如果两个name中都有“包”字，返回true
+            if (dishName.Contains("包") && itemName.Contains("包"))
+            {
+                dishIndex = i;
+                return true;
+            }
+
+            // 3. 如果两个name中都有“全四种”，返回true
+            if (dishName.Contains("全四种") && itemName.Contains("全四种"))
+            {
+                dishIndex = i;
+                return true;
+            }
+
+            // 4. 统计"血""葱""豆"三个字的数目并判断条件
+            int dishBlood = CountChar(dishName, '血');
+            int itemBlood = CountChar(itemName, '血');
+            int dishOnion = CountChar(dishName, '葱');
+            int itemOnion = CountChar(itemName, '葱');
+            int dishBean = CountChar(dishName, '豆');
+            int itemBean = CountChar(itemName, '豆');
+
+            int sumItem = itemBlood + itemOnion + itemBean;
+
+            if (dishBlood == itemBlood + 1 
+                && dishOnion == itemOnion 
+                && dishBean == itemBean 
+                && sumItem > 0)
+            {
+                dishIndex = i;
+                return true;
+            }
+        }
+
+        // 5. 最后返回false
         return false;
+    }
+
+    // 辅助方法：统计字符串中指定字符的出现次数
+    private int CountChar(string str, char c)
+    {
+        int count = 0;
+        foreach (char ch in str)
+        {
+            if (ch == c)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public override void OnItemDrop(ClickableItem item)
+    {
+        base.OnItemDrop(item);
+
+        Destroy(item.gameObject);
+
+        if (dishIndex >= 0 && dishIndex <= RequiredDish.Count)
+        {
+            playerData.AddMoney(RequiredDish[dishIndex].price);
+            RequiredDish.RemoveAt(dishIndex);
+            dishIndex = -1;
+            RenderRequiredDishes();
+        }
+
+        // 示例：销毁原料，生成新对象（如包馅）
+        // 由子类具体实现
     }
 }

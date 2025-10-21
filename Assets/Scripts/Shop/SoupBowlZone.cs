@@ -51,6 +51,10 @@ public class SoupBowlZone : DroppableZone
         CreateBaseBowl();
     }
 
+    private void Update() {
+        if (currentSoupBowl == null) CreateBaseBowl();
+    }
+
     private void CreateBaseBowl()
     {
         if (baseBowlPrefab == null)
@@ -94,7 +98,7 @@ public class SoupBowlZone : DroppableZone
         {
             clickableItem.OnDragStart.AddListener(OnBowlDragStart);
             clickableItem.OnDragEnd.AddListener(OnBowlDragEnd);
-            //clickableItem.OnClicked.AddListener(OnBowlClicked);
+            clickableItem.OnClicked.AddListener(OnBowlClicked);
         }
     }
 
@@ -143,6 +147,8 @@ public class SoupBowlZone : DroppableZone
 
         if (bowlPickupSound != null)
             audioSource.PlayOneShot(bowlPickupSound);
+        
+        Debug.Log("开始拖拽汤碗！");
     }
 
     private void CreateDragProxy()
@@ -304,7 +310,7 @@ public class SoupBowlZone : DroppableZone
         if (DragAndDropHandler.Instance != null)
         {
             DroppableZone dropZone = DragAndDropHandler.Instance.FindValidDropZone();
-            return dropZone != null && dropZone is CustomerZone;
+            return dropZone != null && dropZone is Customer;
         }
         return false;
     }

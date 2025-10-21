@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4842760939302985221
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5380991711198729528}
+  - component: {fileID: 8721599295379758027}
+  m_Layer: 0
+  m_Name: CustomerSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5380991711198729528
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4842760939302985221}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2161.7231, y: 1178.6802, z: -0.43666703}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8721599295379758027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4842760939302985221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9366b56edcd0d1a4693316781df19065, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customerPrefabs:
+  - {fileID: 6121552038925887323, guid: cf4c875c7df743d499d74d8c4ea09716, type: 3}
+  - {fileID: 6765657643523361253, guid: e04e19907f3f12347b1038568b3f31c1, type: 3}
+  - {fileID: 1353501136825555521, guid: fccff5a2234ea8048997c79672cd22a3, type: 3}
+  - {fileID: 348052487527618476, guid: e6795a188da331245a45b97db37941af, type: 3}
+  dishes:
+  - price: 2
+    dishName: "\u9E2D\u8840\u7C89\u4E1D\u6C64+\u8089"
+    prefab: {fileID: 4346847766600070409, guid: 75ea946e9985ec04abda7ebda62e43d1, type: 3}
+  - price: 2
+    dishName: "\u9E2D\u8840\u7C89\u4E1D\u6C64+\u8471"
+    prefab: {fileID: 2283902581046867546, guid: 6e458251eb51c644ca3e98b06b6504af, type: 3}
+  - price: 2
+    dishName: "\u9E2D\u8840\u7C89\u4E1D\u6C64+\u8840"
+    prefab: {fileID: 7065608820844759819, guid: 983dfb2e626cec747af4492dab087361, type: 3}
+  - price: 2
+    dishName: "\u9E2D\u8840\u7C89\u4E1D\u6C64+\u8C46"
+    prefab: {fileID: 8548736095418931391, guid: 36dfecade798097468af7c00a94c1815, type: 3}
+  - price: 3
+    dishName: "\u9E2D\u8840\u7C89\u4E1D\u6C64+\u8089\u8471"
+    prefab: {fileID: 3691805132303877529, guid: af380e9c757ff5d459215a02ae01d2f0, type: 3}
+  - price: 3
+    dishName: "\u9E2D\u8840\u7C89\u4E1D\u6C64+\u8089\u8C46"
+    prefab: {fileID: 1939414484915860618, guid: bb0305ab53b532f4a84473925425b070, type: 3}
+  - price: 3
+    dishName: "\u9E2D\u8840\u7C89\u4E1D\u6C64+\u8840\u8089"
+    prefab: {fileID: 2962265853275607796, guid: 4202efbbd3f4cb045a7f0cedcb3261fa, type: 3}
+  - price: 3
+    dishName: "\u9E2D\u8840\u7C89\u4E1D\u6C64+\u8840\u8471"
+    prefab: {fileID: 8978595173893709727, guid: 057cd6855e8117b46a37e36cfeb9a3a7, type: 3}
+  - price: 3
+    dishName: "\u9E2D\u8840\u7C89\u4E1D\u6C64+\u8840\u8C46"
+    prefab: {fileID: 7055492649819871894, guid: cbfa4b239c2ae6740a8a710f940e6c16, type: 3}
+  - price: 3
+    dishName: "\u9E2D\u8840\u7C89\u4E1D\u6C64+\u8C46\u8471"
+    prefab: {fileID: 1143736122472449107, guid: 1d44a660a9a4b2c47ae1eff14c181aa7, type: 3}
+  - price: 4
+    dishName: "\u9E2D\u8840\u7C89\u4E1D\u6C64+\u8089\u8471\u8C46"
+    prefab: {fileID: 325342604762253641, guid: 07b2c0c4bad6ad447bd0eab81c95bff9, type: 3}
+  - price: 4
+    dishName: "\u9E2D\u8840\u7C89\u4E1D\u6C64+\u8840\u8089\u8471"
+    prefab: {fileID: 459477917351213336, guid: 87e29bbe3dd92b64ca25a4d9a2d3179f, type: 3}
+  - price: 4
+    dishName: "\u9E2D\u8840\u7C89\u4E1D\u6C64+\u8840\u8089\u8C46"
+    prefab: {fileID: 6110430255961237953, guid: 910afb8f55c892d4793a508a69c0bb46, type: 3}
+  - price: 4
+    dishName: "\u9E2D\u8840\u7C89\u4E1D\u6C64+\u8840\u8471\u8C46"
+    prefab: {fileID: 3267941763665851802, guid: c8dff958ef18f6644927c00b4100974b, type: 3}
+  - price: 5
+    dishName: "\u9E2D\u8840\u7C89\u4E1D\u6C64+\u5168\u56DB\u79CD"
+    prefab: {fileID: 5766813106575892801, guid: 38567e62dd57b114b99612fb2a7c0995, type: 3}
+  - price: 2
+    dishName: "\u6842\u82B1\u7CD5"
+    prefab: {fileID: 7720030303418454598, guid: 5f28c198c87372949b66e0a5611dd9bd, type: 3}
+  - price: 3
+    dishName: "\u5C0F\u7B3C\u5305"
+    prefab: {fileID: 579327539986937489, guid: 6b852c711a8d5dc4385aa81365c8e10a, type: 3}
+  initialSpawnInterval: 5
+  minSpawnInterval: 0.5
+  intervalDecreaseRate: 0.1
