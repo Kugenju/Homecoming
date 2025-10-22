@@ -11,9 +11,9 @@ public class CustomerSpawner : MonoBehaviour
     public List<Dish> dishes; // 菜品列表
     
     [Header("生成设置")]
-    public float initialSpawnInterval = 5f;  // 初始生成间隔
+    public float initialSpawnInterval = 15f;  // 初始生成间隔
     public float minSpawnInterval = 0.5f;      // 最小生成间隔
-    public float intervalDecreaseRate = 0.1f;  // 间隔减少速率
+    public float intervalDecreaseRate = 0.5f;  // 间隔减少速率
 
     private RandomParameterGenerator paramGenerator;  // 随机参数生成器
     private float currentSpawnInterval;  // 当前生成间隔

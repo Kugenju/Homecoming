@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
+using UnityEngine.UI;
 
 
 public class SoupBowlZone : DroppableZone
@@ -55,6 +56,7 @@ public class SoupBowlZone : DroppableZone
         if (currentSoupBowl == null) CreateBaseBowl();
     }
 
+
     private void CreateBaseBowl()
     {
         if (baseBowlPrefab == null)
@@ -63,11 +65,144 @@ public class SoupBowlZone : DroppableZone
             return;
         }
 
+        // 实例化汤碗
         GameObject baseBowl = Instantiate(baseBowlPrefab, bowlSpawnPoint.position, bowlSpawnPoint.rotation, transform);
         baseBowl.transform.localScale = targetScale;
         baseBowl.name = "BaseSoupBowl";
         SetupBowlForDragging(baseBowl, false);
         currentSoupBowl = baseBowl;
+
+        // 启动淡入效果协程
+        StartCoroutine(FadeInAllChildren(currentSoupBowl, 2f));
+    }
+
+    /// <summary>
+    /// 递归获取所有子物体的渲染组件，并同步执行淡入效果
+    /// </summary>
+    private IEnumerator FadeInAllChildren(GameObject target, float duration)
+    {
+        // 收集所有需要淡入的组件（包括自身和所有子物体）
+        List<Graphic> uiGraphics = new List<Graphic>(target.GetComponentsInChildren<Graphic>(true)); // true表示包含 inactive 组件
+        List<SpriteRenderer> spriteRenderers = new List<SpriteRenderer>(target.GetComponentsInChildren<SpriteRenderer>(true));
+        List<MeshRenderer> meshRenderers = new List<MeshRenderer>(target.GetComponentsInChildren<MeshRenderer>(true));
+        List<SkinnedMeshRenderer> skinnedMeshRenderers = new List<SkinnedMeshRenderer>(target.GetComponentsInChildren<SkinnedMeshRenderer>(true));
+
+        // 保存所有组件的原始状态（用于淡入结束后恢复）
+        Dictionary<Graphic, Color> originalGraphicColors = new Dictionary<Graphic, Color>();
+        Dictionary<SpriteRenderer, Color> originalSpriteColors = new Dictionary<SpriteRenderer, Color>();
+        Dictionary<MeshRenderer, (Color color, Material originalMat)> originalMeshData = new Dictionary<MeshRenderer, (Color, Material)>();
+        Dictionary<SkinnedMeshRenderer, (Color color, Material originalMat)> originalSkinnedMeshData = new Dictionary<SkinnedMeshRenderer, (Color, Material)>();
+
+        // 初始化UI组件（设置初始透明度为0）
+        foreach (var graphic in uiGraphics)
+        {
+            originalGraphicColors[graphic] = graphic.color;
+            graphic.color = new Color(graphic.color.r, graphic.color.g, graphic.color.b, 0);
+        }
+
+        // 初始化Sprite组件
+        foreach (var sprite in spriteRenderers)
+        {
+            originalSpriteColors[sprite] = sprite.color;
+            sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, 0);
+        }
+
+        // 初始化MeshRenderer（创建材质实例避免影响其他物体）
+        foreach (var mesh in meshRenderers)
+        {
+            if (mesh.material == null) continue;
+            Material instance = new Material(mesh.material);
+            originalMeshData[mesh] = (instance.color, mesh.material); // 保存原始颜色和材质
+            mesh.material = instance; // 替换为实例材质
+            instance.color = new Color(instance.color.r, instance.color.g, instance.color.b, 0); // 初始透明
+        }
+
+        // 初始化SkinnedMeshRenderer（骨骼动画网格）
+        foreach (var skinnedMesh in skinnedMeshRenderers)
+        {
+            if (skinnedMesh.material == null) continue;
+            Material instance = new Material(skinnedMesh.material);
+            originalSkinnedMeshData[skinnedMesh] = (instance.color, skinnedMesh.material);
+            skinnedMesh.material = instance;
+            instance.color = new Color(instance.color.r, instance.color.g, instance.color.b, 0);
+        }
+
+        // 检查是否有可淡入的组件
+        if (uiGraphics.Count == 0 && spriteRenderers.Count == 0 && meshRenderers.Count == 0 && skinnedMeshRenderers.Count == 0)
+        {
+            Debug.LogWarning($"物体 {target.name} 及其子物体中未找到任何可淡入的渲染组件", target);
+            yield break;
+        }
+
+        // 同步淡入过程
+        float elapsedTime = 0;
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float alpha = Mathf.Lerp(0, 1, elapsedTime / duration); // 统一的插值进度
+
+            // 更新UI组件透明度
+            foreach (var graphic in uiGraphics)
+            {
+                if (graphic == null) continue; // 防止组件被销毁
+                Color original = originalGraphicColors[graphic];
+                graphic.color = new Color(original.r, original.g, original.b, alpha);
+            }
+
+            // 更新Sprite透明度
+            foreach (var sprite in spriteRenderers)
+            {
+                if (sprite == null) continue;
+                Color original = originalSpriteColors[sprite];
+                sprite.color = new Color(original.r, original.g, original.b, alpha);
+            }
+
+            // 更新MeshRenderer透明度
+            foreach (var mesh in meshRenderers)
+            {
+                if (mesh == null || mesh.material == null) continue;
+                Color original = originalMeshData[mesh].color;
+                mesh.material.color = new Color(original.r, original.g, original.b, alpha);
+            }
+
+            // 更新SkinnedMeshRenderer透明度
+            foreach (var skinnedMesh in skinnedMeshRenderers)
+            {
+                if (skinnedMesh == null || skinnedMesh.material == null) continue;
+                Color original = originalSkinnedMeshData[skinnedMesh].color;
+                skinnedMesh.material.color = new Color(original.r, original.g, original.b, alpha);
+            }
+
+            yield return null; // 等待下一帧
+        }
+
+        // 淡入结束：恢复原始状态（确保完全不透明）
+        foreach (var graphic in uiGraphics)
+        {
+            if (graphic != null) graphic.color = originalGraphicColors[graphic];
+        }
+        foreach (var sprite in spriteRenderers)
+        {
+            if (sprite != null) sprite.color = originalSpriteColors[sprite];
+        }
+        foreach (var mesh in meshRenderers)
+        {
+            if (mesh != null && originalMeshData.ContainsKey(mesh))
+            {
+                mesh.material.color = originalMeshData[mesh].color;
+                // 可选：如果不需要保留实例材质，可以恢复原始材质（避免内存占用）
+                // mesh.material = originalMeshData[mesh].originalMat;
+            }
+        }
+        foreach (var skinnedMesh in skinnedMeshRenderers)
+        {
+            if (skinnedMesh != null && originalSkinnedMeshData.ContainsKey(skinnedMesh))
+            {
+                skinnedMesh.material.color = originalSkinnedMeshData[skinnedMesh].color;
+                // 可选：恢复原始材质
+                // skinnedMesh.material = originalSkinnedMeshData[skinnedMesh].originalMat;
+            }
+        }
     }
 
     private void SetupBowlForDragging(GameObject bowlObject, bool makeDraggable = true)
@@ -98,7 +233,7 @@ public class SoupBowlZone : DroppableZone
         {
             clickableItem.OnDragStart.AddListener(OnBowlDragStart);
             clickableItem.OnDragEnd.AddListener(OnBowlDragEnd);
-            clickableItem.OnClicked.AddListener(OnBowlClicked);
+            // clickableItem.OnClicked.AddListener(OnBowlClicked);
         }
     }
 
