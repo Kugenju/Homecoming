@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using System.Collections;
+
 /// <summary>
-/// 桂花糕蒸笼：全自动
-/// 初始开盖 → 有熟糕 → 拖走后等待 → 自动闭盖蒸煮 → 开盖 → 淡入生成新糕
+/// 桂花糕蒸笼：全自动（通过currentCake == null检测触发流程）
+/// 初始开盖 → 有熟糕 → 拖走后（currentCake自动为null）→ 自动闭盖蒸煮 → 开盖 → 淡入生成新糕
 /// </summary>
 [RequireComponent(typeof(Animator))]
 public class OsmanthusCakeSteamer : SteamerBase
@@ -13,33 +13,39 @@ public class OsmanthusCakeSteamer : SteamerBase
     public GameObject cakePrefab;           // 桂花糕预制体
 
     [Header("时间配置")]
-    public float regenDelay = 3f;           // 被拿走后延迟再生
+    public float regenDelay = 0.5f;           // 被拿走后延迟再生
     public float cookTime = 5f;             // 蒸煮时间
 
     private GameObject currentCake;
+    private bool isRegenerating = false;    // 防止重复触发再生流程
 
     protected override void Start()
     {
         base.Start();
-        // 初始生成一个桂花糕（开盖后）
-        Invoke(nameof(SpawnCake), 0.5f); // 稍微延迟确保开启动画完成
+        // 初始生成一个桂花糕（等待开启动画完成）
+        Invoke(nameof(SpawnCake), 0.5f);
+    }
+
+    private void Update()
+    {
+        // 核心逻辑：检测蛋糕为空且不在再生状态时，触发再生流程
+        if (currentCake == null && !isRegenerating && currentState == State.Ready)
+        {
+            StartCoroutine(RegenAfterDelay());
+        }
     }
 
     public override void OnFoodAdded(ClickableItem item)
     {
-        // 桂花糕蒸笼不接受放入食物
+        // 桂花糕蒸笼不接受外部放入食物
     }
 
     public override void StartCooking()
     {
-        // 不需要外部触发，由内部流程控制
-        StartCoroutine(CookRoutine());
-    }
-
-    private IEnumerator CookRoutine()
-    {
-        yield return new WaitForSeconds(cookTime);
-        OnCookingComplete(); // 触发基类逻辑：开盖 + 可交互
+        // 由内部流程触发蒸煮
+        StartSteaming();
+        currentState = State.Cooking;
+        OnCookingStartEvent?.Invoke();
     }
 
     private void SpawnCake()
@@ -50,9 +56,18 @@ public class OsmanthusCakeSteamer : SteamerBase
         if (currentCake != null)
             Destroy(currentCake);
 
+        // 生成新蛋糕（不绑定移除监听器，完全通过currentCake == null检测）
         currentCake = Instantiate(cakePrefab, foodParent);
         currentCake.transform.localPosition = Vector3.zero;
         currentCake.SetActive(false);
+
+        // 确保蛋糕可拖拽（如果预制体未默认设置）
+        var clickable = currentCake.GetComponent<ClickableItem>();
+        if (clickable != null)
+        {
+            clickable.isDraggable = true;
+            clickable.isUsable = true;
+        }
 
         // 淡入效果
         StartCoroutine(FadeInObject(currentCake));
@@ -82,27 +97,41 @@ public class OsmanthusCakeSteamer : SteamerBase
 
     protected override void OnFoodTaken()
     {
-        // 食物被拖走后，开始再生流程
-        if (currentCake != null)
-        {
-            Destroy(currentCake);
-            currentCake = null;
-        }
-
-        // 延迟后开始闭盖蒸煮
-        StartCoroutine(RegenAfterDelay());
+        // 无需额外处理，完全依赖currentCake == null检测
+        currentState = State.Ready;
     }
 
     private IEnumerator RegenAfterDelay()
     {
-        yield return new WaitForSeconds(regenDelay);
-        PlayCloseAnimation();
-        StartSteaming();
-        currentState = State.Cooking;
-        OnCookingStartEvent?.Invoke();
+        isRegenerating = true;
+        currentState = State.Idle; // 再生期间设为Idle，防止重复触发
 
+        // 等待再生延迟
+        yield return new WaitForSeconds(regenDelay);
+
+        // 闭盖（等待动画完成后进入Cooking状态，依赖SteamerBase的OnAnimation_CloseComplete）
+        PlayCloseAnimation();
+        // yield return new WaitUntil(() => currentState == State.Cooking);
+
+        // 开始蒸煮
+        StartCooking();
+
+        // 蒸煮倒计时
         yield return new WaitForSeconds(cookTime);
-        OnCookingComplete(); // 开盖 + 可交互
-        SpawnCake(); // 重新生成（淡入）
+
+        // 蒸煮完成，开盖（自动进入Ready状态）
+        OnCookingComplete();
+
+        // 生成新蛋糕
+        SpawnCake();
+
+        // 重置再生状态
+        isRegenerating = false;
+        currentState = State.Ready;
+    }
+
+    protected override void OnCookingComplete()
+    {
+        base.OnCookingComplete(); // 调用基类逻辑：停止蒸汽、开盖、设置状态为Ready
     }
 }

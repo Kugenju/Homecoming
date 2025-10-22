@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using System.Collections; // 添加 Coroutine 支持
+using System.Collections;
+using System.Collections.Generic; // 引入泛型集合命名空间
 
 /// <summary>
 /// 可点击物品组件
@@ -13,9 +14,9 @@ public class ClickableItem : MonoBehaviour,
     IPointerExitHandler,
     IPointerDownHandler,
     IPointerUpHandler,
-    IBeginDragHandler,    // 添加拖拽开始接口
-    IDragHandler,         // 添加拖拽中接口
-    IEndDragHandler       // 添加拖拽结束接口
+    IBeginDragHandler,
+    IDragHandler,
+    IEndDragHandler
 {
     [Header("基础设置")]
     public bool isDraggable = false;       // 是否可拖拽
@@ -41,6 +42,7 @@ public class ClickableItem : MonoBehaviour,
     private bool isHovering = false;
     private float lastClickTime = 0f;
     private const float DoubleClickThreshold = 0.3f; // 双击判断时间阈值
+    private Dictionary<Renderer, int> originalSortingOrders = new Dictionary<Renderer, int>(); // 存储原始层级
 
     // 组件引用
     private Collider2D _collider2D;
@@ -91,7 +93,6 @@ public class ClickableItem : MonoBehaviour,
     /// </summary>
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
-        //Debug.Log($"OnPointerEnter 触发在 {gameObject.name}");
         if (!isUsable)
         {
             Debug.Log($"物品不可用 isUsable = false,触发在 {gameObject.name}");
@@ -109,7 +110,6 @@ public class ClickableItem : MonoBehaviour,
     /// </summary>
     public virtual void OnPointerExit(PointerEventData eventData)
     {
-        //Debug.Log($"OnPointerExit 触发在 {gameObject.name}");
         isHovering = false;
         OnHoverExit?.Invoke();
 
@@ -121,7 +121,6 @@ public class ClickableItem : MonoBehaviour,
     /// </summary>
     public virtual void OnPointerDown(PointerEventData eventData)
     {
-        //Debug.Log($"OnPointerDown 触发在 {gameObject.name}");
         if (!isUsable || !canClick) return;
 
         if (isDraggable)
@@ -138,7 +137,6 @@ public class ClickableItem : MonoBehaviour,
     /// </summary>
     public virtual void OnPointerUp(PointerEventData eventData)
     {
-        //Debug.Log($"OnPointerUp 触发在 {gameObject.name}");
         if (!isUsable || !canClick) return;
 
         if (!isDraggable)
@@ -154,8 +152,10 @@ public class ClickableItem : MonoBehaviour,
     {
         if (!isUsable || !isDraggable) return;
 
-        //Debug.Log($"OnBeginDrag 触发在 {gameObject.name}");
         OnDragStart?.Invoke();
+
+        // 记录原始层级并增加1000
+        SetRenderersSortingOrder(1000);
 
         // 通知拖拽管理器开始拖拽
         if (DragAndDropHandler.Instance != null)
@@ -182,8 +182,10 @@ public class ClickableItem : MonoBehaviour,
     {
         if (!isDraggable) return;
 
-        Debug.Log($"OnEndDrag 触发在 {gameObject.name}");
         OnDragEnd?.Invoke();
+
+        // 恢复原始层级
+        RestoreRenderersSortingOrder();
 
         // 通知拖拽管理器结束拖拽
         if (DragAndDropHandler.Instance != null)
@@ -226,6 +228,41 @@ public class ClickableItem : MonoBehaviour,
         {
             _canvasGroup.alpha = 1f;
         }
+    }
+
+    // ------------------------------
+    // 层级调整方法
+    // ------------------------------
+
+    /// <summary>
+    /// 调整当前物体及子物体的渲染层级
+    /// </summary>
+    private void SetRenderersSortingOrder(int offset)
+    {
+        originalSortingOrders.Clear();
+        // 获取所有子物体（包括自身）的Renderer组件，true表示包含非激活状态的
+        Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
+        
+        foreach (var renderer in renderers)
+        {
+            // 记录原始层级
+            originalSortingOrders[renderer] = renderer.sortingOrder;
+            // 应用偏移
+            renderer.sortingOrder += offset;
+        }
+    }
+
+    /// <summary>
+    /// 恢复当前物体及子物体的原始渲染层级
+    /// </summary>
+    private void RestoreRenderersSortingOrder()
+    {
+        foreach (var kvp in originalSortingOrders)
+        {
+            // 恢复原始层级
+            kvp.Key.sortingOrder = kvp.Value;
+        }
+        originalSortingOrders.Clear();
     }
 
     // ------------------------------
