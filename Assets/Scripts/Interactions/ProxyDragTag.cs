@@ -4,54 +4,54 @@ using UnityEngine;
 using static ProxyDragTag;
 
 /// <summary>
-/// ±ê¼ÇĞèÒª´úÀíÍÏ×§µÄÎïÆ·£¬Ìá¹©·á¸»µÄÅäÖÃÑ¡Ïî
+/// æ ‡è®°éœ€è¦ä»£ç†æ‹–æ‹½çš„ç‰©å“ï¼Œæä¾›ä¸°å¯Œçš„é…ç½®é€‰é¡¹
 /// </summary>
 public class ProxyDragTag : MonoBehaviour
 {
     public enum DropBehavior
     {
         None,
-        ReturnToOriginal,    // »Ø¹éÔ­Î»ÖÃ
-        DestroyProxy,        // Ïú»Ù´úÀí
-        StayAtDropPosition,  // ±£ÁôÔÚ·ÅÖÃÎ»ÖÃ
-        CustomBehavior       // ×Ô¶¨ÒåĞĞÎª
+        ReturnToOriginal,    // å›å½’åŸä½ç½®
+        DestroyProxy,        // é”€æ¯ä»£ç†
+        StayAtDropPosition,  // ä¿ç•™åœ¨æ”¾ç½®ä½ç½®
+        CustomBehavior       // è‡ªå®šä¹‰è¡Œä¸º
     }
 
-    [Header("´úÀíÉèÖÃ")]
-    [Tooltip("ÍÏ×§Ê±ÏÔÊ¾µÄ´úÀíÔ¤ÖÆÌå")]
+    [Header("ä»£ç†è®¾ç½®")]
+    [Tooltip("æ‹–æ‹½æ—¶æ˜¾ç¤ºçš„ä»£ç†é¢„åˆ¶ä½“")]
     public GameObject proxyPrefab;
 
-    [Tooltip("³É¹¦·ÅÖÃºóµÄ´¦Àí·½Ê½£¨¸²¸ÇÈ«¾ÖÉèÖÃ£©")]
+    [Tooltip("æˆåŠŸæ”¾ç½®åçš„å¤„ç†æ–¹å¼ï¼ˆè¦†ç›–å…¨å±€è®¾ç½®ï¼‰")]
     public DropBehavior successDropBehavior = DropBehavior.CustomBehavior;
 
-    [Tooltip("È¡Ïû·ÅÖÃºóµÄ´¦Àí·½Ê½£¨¸²¸ÇÈ«¾ÖÉèÖÃ£©")]
+    [Tooltip("å–æ¶ˆæ”¾ç½®åçš„å¤„ç†æ–¹å¼ï¼ˆè¦†ç›–å…¨å±€è®¾ç½®ï¼‰")]
     public DropBehavior cancelDropBehavior = DropBehavior.CustomBehavior;
 
-    [Header("ÊÓ¾õĞ§¹û")]
-    [Tooltip("ÍÏ×§Ê±Ô­ÎïÌåÊÇ·ñÒş²Ø")]
+    [Header("è§†è§‰æ•ˆæœ")]
+    [Tooltip("æ‹–æ‹½æ—¶åŸç‰©ä½“æ˜¯å¦éšè—")]
     public bool hideOriginalDuringDrag = true;
 
-    [Tooltip("´úÀíµÄËõ·Å±ÈÀı")]
+    [Tooltip("ä»£ç†çš„ç¼©æ”¾æ¯”ä¾‹")]
     public Vector3 proxyScale = Vector3.one;
 
-    [Tooltip("´úÀíµÄÍ¸Ã÷¶È")]
+    [Tooltip("ä»£ç†çš„é€æ˜åº¦")]
     [Range(0f, 1f)] public float proxyAlpha = 0.8f;
 
 
-    [Header("¸ß¼¶ÉèÖÃ")]
-    [Tooltip("ÊÇ·ñ¸´ÖÆÔ­ÎïÌåµÄSpriteRendererÊôĞÔ")]
+    [Header("é«˜çº§è®¾ç½®")]
+    [Tooltip("æ˜¯å¦å¤åˆ¶åŸç‰©ä½“çš„SpriteRendererå±æ€§")]
     public bool copySpriteProperties = true;
 
-    [Tooltip("ÊÇ·ñÆôÓÃÍÏ×§Ğı×ªĞ§¹û")]
+    [Tooltip("æ˜¯å¦å¯ç”¨æ‹–æ‹½æ—‹è½¬æ•ˆæœ")]
     public bool enableRotationEffect = true;
 
-    [Tooltip("×î´óĞı×ª½Ç¶È")]
+    [Tooltip("æœ€å¤§æ—‹è½¬è§’åº¦")]
     public float maxRotationAngle = 15f;
 
     [System.NonSerialized] private bool _isProxyActive;
     [System.NonSerialized] private GameObject _currentProxy;
 
-    // ÊôĞÔ·â×°£¨Ìá¹©Ö»¶Á·ÃÎÊ£©
+    // å±æ€§å°è£…ï¼ˆæä¾›åªè¯»è®¿é—®ï¼‰
     public bool IsProxyActive { get { return _isProxyActive; } }
     public GameObject CurrentProxy { get { return _currentProxy; } }
 
@@ -62,27 +62,27 @@ public class ProxyDragTag : MonoBehaviour
 
     public GameObject CreateProxy(Vector3 position)
     {
-        //Debug.Log("´¥·¢´´½¨´úÀí");
+        //Debug.Log("è§¦å‘åˆ›å»ºä»£ç†");
         if (proxyPrefab == null)
         {
             Debug.LogWarning($"ProxyPrefab is null on {gameObject.name}");
             return null;
         }
 
-        // ±£´æÔ­ÎïÌå×´Ì¬
+        // ä¿å­˜åŸç‰©ä½“çŠ¶æ€
         originalPosition = transform.position;
         originalRotation = transform.rotation;
         originalScale = transform.localScale;
         originalActiveState = gameObject.activeSelf;
 
-        // ´´½¨´úÀíÊµÀı£¨Ö±½Ó¸³Öµ¸ø×Ö¶Î£©
+        // åˆ›å»ºä»£ç†å®ä¾‹ï¼ˆç›´æ¥èµ‹å€¼ç»™å­—æ®µï¼‰
         _currentProxy = Instantiate(proxyPrefab, position, Quaternion.identity);
         _currentProxy.name = $"{gameObject.name}_Proxy";
 
-        // Ó¦ÓÃ´úÀíÉèÖÃ
+        // åº”ç”¨ä»£ç†è®¾ç½®
         ApplyProxySettings(_currentProxy);
 
-        // ´¦ÀíÔ­ÎïÌå
+        // å¤„ç†åŸç‰©ä½“
         if (hideOriginalDuringDrag)
         {
             gameObject.SetActive(false);
@@ -95,10 +95,10 @@ public class ProxyDragTag : MonoBehaviour
 
     private void ApplyProxySettings(GameObject proxy)
     {
-        // Ó¦ÓÃËõ·Å
+        // åº”ç”¨ç¼©æ”¾
         proxy.transform.localScale = proxyScale;
 
-        // Ó¦ÓÃÍ¸Ã÷¶È
+        // åº”ç”¨é€æ˜åº¦
         SpriteRenderer proxyRenderer = proxy.GetComponent<SpriteRenderer>();
         if (proxyRenderer != null)
         {
@@ -107,7 +107,7 @@ public class ProxyDragTag : MonoBehaviour
             proxyRenderer.color = color;
         }
 
-        // ¸´ÖÆSpriteÊôĞÔ
+        // å¤åˆ¶Spriteå±æ€§
         if (copySpriteProperties)
         {
             SpriteRenderer originalRenderer = GetComponent<SpriteRenderer>();
@@ -123,7 +123,7 @@ public class ProxyDragTag : MonoBehaviour
             }
         }
 
-        // Ìí¼ÓĞı×ªĞ§¹û×é¼ş
+        // æ·»åŠ æ—‹è½¬æ•ˆæœç»„ä»¶
         if (enableRotationEffect)
         {
             var rotationEffect = proxy.AddComponent<ProxyRotationEffect>();
@@ -132,7 +132,7 @@ public class ProxyDragTag : MonoBehaviour
     }
 
     /// <summary>
-    /// ´¦ÀíÍÏ×§½áÊø
+    /// å¤„ç†æ‹–æ‹½ç»“æŸ
     /// </summary>
     public void HandleDragEnd(bool dropSuccessful, Vector3 dropPosition)
     {
@@ -160,9 +160,7 @@ public class ProxyDragTag : MonoBehaviour
                 break;
         }
 
-     
-
-        // »Ö¸´Ô­ÎïÌå
+        // æ¢å¤åŸç‰©ä½“
         if (hideOriginalDuringDrag)
         {
             gameObject.SetActive(originalActiveState);
@@ -174,7 +172,7 @@ public class ProxyDragTag : MonoBehaviour
 
 
     /// <summary>
-    /// È¡ÏûÍÏ×§£¨Ç¿ÖÆ½áÊø£©
+    /// å–æ¶ˆæ‹–æ‹½ï¼ˆå¼ºåˆ¶ç»“æŸï¼‰
     /// </summary>
     public void CancelDrag()
     {
@@ -219,17 +217,17 @@ public class ProxyDragTag : MonoBehaviour
         if (_currentProxy != null)
         {
             _currentProxy.transform.position = position;
-            // ±£³Öµ±Ç°Ğı×ªºÍËõ·Å
+            // ä¿æŒå½“å‰æ—‹è½¬å’Œç¼©æ”¾
         }
     }
 
     private void HandleCustomBehavior(bool dropSuccessful, Vector3 dropPosition)
     {
-        // ÕâÀï¿ÉÒÔÀ©Õ¹×Ô¶¨ÒåĞĞÎª
-        // ÀıÈç´¥·¢ÊÂ¼ş¡¢²¥·Å¶¯»­µÈ
+        // è¿™é‡Œå¯ä»¥æ‰©å±•è‡ªå®šä¹‰è¡Œä¸º
+        // ä¾‹å¦‚è§¦å‘äº‹ä»¶ã€æ’­æ”¾åŠ¨ç”»ç­‰
         Debug.Log($"Custom drop behavior: successful={dropSuccessful}, position={dropPosition}");
 
-        // Ä¬ÈÏĞĞÎª£º³É¹¦Ê±±£Áô£¬È¡ÏûÊ±·µ»Ø
+        // é»˜è®¤è¡Œä¸ºï¼šæˆåŠŸæ—¶ä¿ç•™ï¼Œå–æ¶ˆæ—¶è¿”å›
         if (dropSuccessful)
         {
             KeepProxyAtPosition(dropPosition);
@@ -242,7 +240,7 @@ public class ProxyDragTag : MonoBehaviour
 
     private void OnDestroy()
     {
-        // ÇåÀí×ÊÔ´
+        // æ¸…ç†èµ„æº
         if (_currentProxy != null)
         {
             Destroy(_currentProxy);
@@ -274,16 +272,16 @@ public class ProxyRotationEffect : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, currentRotation);
     }
 }
-// ¶ÔÓÚ¹¤¾ßÀàÎïÆ·£º
+// å¯¹äºå·¥å…·ç±»ç‰©å“ï¼š
 // dropBehavior = ReturnToOriginal
-// successDropBehavior = CustomBehavior (±£³ÖÄ¬ÈÏ)
+// successDropBehavior = CustomBehavior (ä¿æŒé»˜è®¤)
 // cancelDropBehavior = ReturnToOriginal
 
-// ¶ÔÓÚÏûºÄÆ·ÀàÎïÆ·£º
+// å¯¹äºæ¶ˆè€—å“ç±»ç‰©å“ï¼š
 // dropBehavior = DestroyProxy  
 // successDropBehavior = DestroyProxy
 // cancelDropBehavior = ReturnToOriginal
 
-// ¶ÔÓÚĞèÒª¾«È·¶¨Î»µÄÎïÆ·£º
+// å¯¹äºéœ€è¦ç²¾ç¡®å®šä½çš„ç‰©å“ï¼š
 // dropBehavior = StayAtDropPosition
 // hideOriginalDuringDrag = true

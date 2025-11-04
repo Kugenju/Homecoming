@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -124,14 +124,10 @@ public class BunSteamer : SteamerBase
         cookedBuns.Clear();
 
         // ✅ 创建父对象
-        GameObject groupBuns = new GameObject("CookedBuns_Group");
+        GameObject groupBuns = new GameObject("CookedBuns_Group包子组");
         groupBuns.transform.SetParent(foodParent);
         groupBuns.transform.localPosition = Vector3.zero;
         groupBuns.transform.localScale = Vector3.one; // 假设为 (1,1,1)
-
-        var clickable = groupBuns.AddComponent<ClickableItem>();
-        clickable.isDraggable = true;
-        clickable.isUsable = true;
 
         //clickable.OnItemRemovedFromWorld.AddListener(() =>
         //{
@@ -183,17 +179,20 @@ public class BunSteamer : SteamerBase
         // ✅ 现在 worldBounds 是所有包子的合并世界包围盒
 
         // ✅ 添加 BoxCollider 到父对象
-        BoxCollider collider = groupBuns.AddComponent<BoxCollider>();
+        BoxCollider2D collider = groupBuns.AddComponent<BoxCollider2D>();
 
         // ✅ 转换为父物体的局部空间
         Vector3 localCenter = groupBuns.transform.InverseTransformPoint(worldBounds.center);
         Vector3 localSize = groupBuns.transform.InverseTransformVector(worldBounds.size);
 
-        collider.center = localCenter;
+        collider.offset = localCenter;
         collider.size = localSize;
 
-        Debug.Log($"📦 Collider 已设置：局部中心={collider.center:F2}, 局部大小={collider.size:F2}");
+        Debug.Log($"📦 Collider 已设置：局部中心={collider.offset:F2}, 局部大小={collider.size:F2}");
 
+        var clickable = groupBuns.AddComponent<ClickableItem>();
+        clickable.isDraggable = true;
+        clickable.isUsable = true;
         // ✅ 加入列表
         cookedBuns.Add(groupBuns);
 
