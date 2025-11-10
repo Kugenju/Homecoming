@@ -71,6 +71,8 @@ public class DragAndDropHandler : MonoBehaviour
 
     private void Update()
     {
+        if (eventCamera == null)
+            eventCamera = Camera.main;
         if (_isDragging)
         {
             HandleDragging();
