@@ -24,14 +24,14 @@ public class PauseMenuUI : MonoBehaviour
 
     private void Awake()
     {
-        if (GameManager.Instance == null)
+        if (GameFlowController.Instance == null)
         {
-            Debug.LogError("GameManager 未找到！请确保场景中有 GameManager 对象。");
+            Debug.LogError("GameFlowController 未初始化！");
             return;
         }
 
-        // 向GameManager注册自己
-        GameManager.Instance.RegisterPauseMenuUI(this);
+        //// 向GameManager注册自己
+        //GameManager.Instance.RegisterPauseMenuUI(this);
 
         SetupButtons();
         Hide();
@@ -49,7 +49,7 @@ public class PauseMenuUI : MonoBehaviour
     {
         pausePanel.SetActive(true);
         Time.timeScale = 0f;
-        GameManager.Instance.currentState = GameManager.GameState.Paused;
+        //GameManager.Instance.currentState = GameManager.GameState.Paused;
         //Cursor.visible = true;
     }
 
@@ -57,7 +57,7 @@ public class PauseMenuUI : MonoBehaviour
     {
         pausePanel.SetActive(false);
         Time.timeScale = 1f;
-        GameManager.Instance.currentState = GameManager.GameState.Playing;
+        //GameManager.Instance.currentState = GameManager.GameState.Playing;
         //Cursor.visible = false;
     }
 
@@ -111,12 +111,12 @@ public class PauseMenuUI : MonoBehaviour
 
     private void ReturnToMainMenu()
     {
-        GameManager.Instance.LoadMainMenu();
+        GameFlowController.Instance.ReturnToMainMenu();
     }
 
     private void QuitGame()
     {
-        GameManager.Instance.QuitGame();
+        GameFlowController.Instance.ExitGame();
     }
 
 }

@@ -23,9 +23,9 @@ public class MainMenuUI : MonoBehaviour
     private void Awake()
     {
         // 获取 GameManager（确保存在）
-        if (GameManager.Instance == null)
+        if (GameFlowController.Instance == null)
         {
-            Debug.LogError("GameManager 未找到！请确保场景中有 GameManager 对象。");
+            Debug.LogError("GameFlowController 未初始化！");
             return;
         }
 
@@ -95,7 +95,7 @@ public class MainMenuUI : MonoBehaviour
     /// </summary>
     private void OnStartGame()
     {
-        GameManager.Instance.StartGame();
+        GameFlowController.Instance.EnterSubMenu();
     }
 
     /// <summary>
@@ -142,7 +142,7 @@ public class MainMenuUI : MonoBehaviour
     /// </summary>
     private void OnQuitGame()
     {
-        GameManager.Instance.QuitGame();
+        GameFlowController.Instance.ExitGame();
     }
 
     // ------------------------------

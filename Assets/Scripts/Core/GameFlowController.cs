@@ -14,6 +14,20 @@ public class GameFlowController : Singleton<GameFlowController>
     // 外部调用接口
     // ------------------------------
 
+    public void EnterSubMenu()
+    {
+        var config = GetSceneConfig(GameMode.SubMenu, -1);
+        if (config != null)
+        {
+            currentMode = GameMode.SubMenu;
+            SceneLoader.Instance.LoadScene(config.sceneName, GameMode.SubMenu);
+        }
+        else
+        {
+            Debug.LogError("未找到子菜单场景配置！");
+        }
+    }
+
     /// <summary>
     /// 进入日常模式
     /// </summary>
@@ -75,6 +89,43 @@ public class GameFlowController : Singleton<GameFlowController>
         GlobalManager.Instance.LoadMainMenu();
     }
 
+    public void RestartCurrentMode()
+    {
+        switch (currentMode)
+        {
+            case GameMode.MainMenu:
+                ReturnToMainMenu();
+                break;
+            case GameMode.DailyLife:
+                EnterDailyLife();
+                break;
+            case GameMode.StoryLine:
+                EnterStoryChapter(currentStoryChapter);
+                break;
+            case GameMode.SubMenu:
+                EnterSubMenu();
+                break;
+            default:
+                Debug.LogError("未知游戏模式，无法重启！");
+                break;
+        }
+    }
+
+    public void ExitGame()
+    {
+        Debug.Log("[GameFlowController] 退出游戏");
+        #if UNITY_EDITOR
+                            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+                Application.Quit();
+        #endif
+    }
+
+    public void ReturnToSubMenu()
+    {
+        currentMode = GameMode.SubMenu;
+        EnterSubMenu();
+    }
     // ------------------------------
     // 内部逻辑
     // ------------------------------
@@ -110,4 +161,6 @@ public class GameFlowController : Singleton<GameFlowController>
         }
         return null;
     }
+
+
 }

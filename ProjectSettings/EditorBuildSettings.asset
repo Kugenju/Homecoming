@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 0f4708afd7bc8bd468394069c069d16a
+  - enabled: 1
+    path: Assets/Scenes/SubMenu.unity
+    guid: 5fbdd4cf69b13fb4291bb01c3cbf0cfe
+  - enabled: 1
+    path: Assets/Scenes/TurtleSoup.unity
+    guid: e6c05a0378b641a4e9547b0f4b5fb26c
   m_configObjects: {}
