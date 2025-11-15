@@ -5,6 +5,7 @@ public class GameFlowController : Singleton<GameFlowController>
 {
     [Header("场景配置")]
     public SceneConfig[] allSceneConfigs;
+    public DialogueManager dialogueManager;
 
     [Header("当前状态")]
     public GameMode currentMode = GameMode.MainMenu;
@@ -25,6 +26,20 @@ public class GameFlowController : Singleton<GameFlowController>
         else
         {
             Debug.LogError("未找到子菜单场景配置！");
+        }
+    }
+
+    public void EnterMainMenu()
+    {
+        var config = GetSceneConfig(GameMode.MainMenu, -1);
+        if (config != null)
+        {
+            currentMode = GameMode.MainMenu;
+            SceneLoader.Instance.LoadScene(config.sceneName, GameMode.MainMenu);
+        }
+        else
+        {
+            Debug.LogError("未找到主菜单场景配置！");
         }
     }
 
@@ -50,17 +65,33 @@ public class GameFlowController : Singleton<GameFlowController>
     /// </summary>
     public void EnterStoryChapter(int chapter)
     {
-        var config = GetSceneConfig(GameMode.StoryLine, chapter);
-        if (config != null)
+        if(currentMode != GameMode.StoryLine)
         {
-            currentMode = GameMode.StoryLine;
-            currentStoryChapter = chapter;
-            SceneLoader.Instance.LoadScene(config.sceneName, GameMode.StoryLine);
+            var config = GetSceneConfig(GameMode.StoryLine, 1);
+            if (config != null)
+            {
+                currentMode = GameMode.StoryLine;
+                currentStoryChapter = chapter;
+                SceneLoader.Instance.LoadScene(config.sceneName, GameMode.StoryLine);
+            }
+            else
+            {
+                Debug.LogError($"未找到剧情场景配置！");
+            }
         }
-        else
+    }
+
+    public void EnterMiniGame(string GameID)
+    {
+        try
         {
-            Debug.LogError($"未找到剧情第 {chapter} 章配置！");
+            SceneLoader.Instance.LoadScene(GameID, GameMode.MiniGame);
         }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"加载小游戏 {GameID} 失败: {e.Message}");
+        }
+
     }
 
     /// <summary>
@@ -135,10 +166,33 @@ public class GameFlowController : Singleton<GameFlowController>
     /// </summary>
     public void OnSceneLoaded(GameMode mode)
     {
-        // 可在此触发事件，如 EventManager.Trigger("OnGameModeChanged", mode);
         Debug.Log($"[GameFlowController] 当前模式: {mode}");
+        if (mode == GameMode.StoryLine)
+        {
+            // 判断是否是主线剧情（而非小游戏）
+            if (currentStoryChapter < 100) // 假设 100+ 是小游戏
+            {
+                LoadAndPlayNarrativeForChapter(currentStoryChapter);
+            }
+        }
     }
 
+    private void LoadAndPlayNarrativeForChapter(int chapter)
+    {
+        string graphPath = $"NarrativeGraphs/Chapter_{chapter}";
+        var graph = Resources.Load<NarrativeGraph>(graphPath);
+
+        if (graph != null)
+        {
+            DialogueManager.Instance.LoadAndPlayGraph(graph);
+        }
+        else
+        {
+            Debug.LogError($"未找到剧情段落: {graphPath}");
+            // 可选：回退到主菜单
+            EnterMainMenu();
+        }
+    }
     /// <summary>
     /// 根据模式和章节查找配置
     /// </summary>

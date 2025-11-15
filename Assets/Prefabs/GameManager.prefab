@@ -44,6 +44,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 113cd166898592a4fae56d488b9c195b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &475947053923484766
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8404816004179281870}
+  - component: {fileID: 6931592539598821393}
+  m_Layer: 0
+  m_Name: DialogueManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8404816004179281870
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475947053923484766}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1538999886627546171}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6931592539598821393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 475947053923484766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2a49976ba630854bb0939937f5c5bf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueUI: {fileID: 0}
 --- !u!1 &3951202111674997827
 GameObject:
   m_ObjectHideFlags: 0
@@ -160,7 +205,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b854f3b6407c4a34793a07f267a96cdb, type: 2}
   - {fileID: 11400000, guid: 2afa270478d9c214a93397b998cb8864, type: 2}
   - {fileID: 11400000, guid: e8b91c8f1326b6d46be6fa8834d10f4a, type: 2}
+  - {fileID: 11400000, guid: 8194b6d89e8c7fd47a97e3174eeb8b1f, type: 2}
   - {fileID: 11400000, guid: 2d4f9d5f08193d94d85950f24556ada9, type: 2}
+  - {fileID: 11400000, guid: 1d6422d4f3afc824695ecb9e711637a5, type: 2}
+  dialogueManager: {fileID: 0}
   currentMode: 0
   currentStoryChapter: 0
 --- !u!1 &8491258238802108430
@@ -196,6 +244,7 @@ Transform:
   - {fileID: 1388824554075492625}
   - {fileID: 4301878701637781470}
   - {fileID: 286825962073495040}
+  - {fileID: 8404816004179281870}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8138959353562538745

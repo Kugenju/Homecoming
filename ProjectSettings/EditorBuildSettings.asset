@@ -17,4 +17,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TurtleSoup.unity
     guid: e6c05a0378b641a4e9547b0f4b5fb26c
+  - enabled: 1
+    path: "Assets/Scenes/\u5C0F\u6E38\u620F1.unity"
+    guid: ebbb10a16666c3b4984480d95e277282
+  - enabled: 1
+    path: Assets/Scenes/StoryLine.unity
+    guid: e360bbe69093df146806642aa934af7d
   m_configObjects: {}

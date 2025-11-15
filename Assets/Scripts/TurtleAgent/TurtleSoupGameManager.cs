@@ -66,16 +66,28 @@ public class TurtleSoupGameManager : MonoBehaviour
         }));
     }
 
+    //    private void StartNewGame()
+    //    {
+    //        session.Reset();
+    //        session.currentPuzzle = allPuzzles[Random.Range(0, allPuzzles.Length)];
+
+    //        string intro = $@"汤面：
+    //{session.currentPuzzle.soupSurface}
+
+    //现在请你通过提问，还原出故事的全貌。注意，问题的答案只能为'是’或‘否’，否则，我会拒绝回答。在你觉得已经还原全貌后，请对我说“我知道了。”我会问你两个问题，如果你全部答对，则通关；只要答错一个，你就输了。如果你问了十五个问题还没能对我说“我知道了。”那你也输啦！";
+
+    //        SendGameMessage(intro);
+    //    }
     private void StartNewGame()
     {
         session.Reset();
         session.currentPuzzle = allPuzzles[Random.Range(0, allPuzzles.Length)];
 
-        string intro = $@"汤面：
-{session.currentPuzzle.soupSurface}
+        // 更新左侧面板的汤面
+        var ui = FindObjectOfType<TurtleSoupUI>();
+        ui?.UpdateSoupSurface(session.currentPuzzle.soupSurface);
 
-现在请你通过提问，还原出故事的全貌。注意，问题的答案只能为'是’或‘否’，否则，我会拒绝回答。在你觉得已经还原全貌后，请对我说“我知道了。”我会问你两个问题，如果你全部答对，则通关；只要答错一个，你就输了。如果你问了十五个问题还没能对我说“我知道了。”那你也输啦！";
-
+        string intro = @"谜题已生成，请开始提问。记住：只能问是非问题（答案是“是”或“否”）。";
         SendGameMessage(intro);
     }
 

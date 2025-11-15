@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: TurtleSoup
   mode: 3
-  chapterIndex: 1
+  chapterIndex: -1
   description: 
