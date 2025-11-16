@@ -99,7 +99,8 @@ public class GameFlowController : Singleton<GameFlowController>
     /// </summary>
     public void AdvanceToNextChapter()
     {
-        LoadAndPlayNarrativeForChapter(currentStoryChapter + 1);
+        currentStoryChapter++;
+        LoadAndPlayNarrativeForChapter(currentStoryChapter);
     }
 
     /// <summary>

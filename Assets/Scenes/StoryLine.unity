@@ -892,6 +892,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 438830959}
     - target: {fileID: 1126898368512748282, guid: 34d78ce86fe264e4f96f9087ac40f34d, type: 3}
+      propertyPath: m_fontSize
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1126898368512748282, guid: 34d78ce86fe264e4f96f9087ac40f34d, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1126898368512748282, guid: 34d78ce86fe264e4f96f9087ac40f34d, type: 3}
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -2059142843583440789, guid: 3f1ff3abfb5c084459c9f75833995525, type: 2}

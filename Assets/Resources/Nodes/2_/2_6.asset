@@ -10,16 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14539ffbad31942429168485c00c2d00, type: 3}
-  m_Name: 2_1
+  m_Name: 2_6
   m_EditorClassIdentifier: 
-  nodeId: 2_1
-  nodeType: 4
-  lines: []
+  nodeId: 2_6
+  nodeType: 0
+  lines:
+  - "\u5F88\u62B1\u6B49\u3002"
   backgroundSprite: {fileID: 21300000, guid: e88b6ef390e0659419fcc33b0edb87f3, type: 3}
-  characters: []
+  characters:
+  - characterName: 
+    position: 0
+    characterSprite: {fileID: 21300000, guid: bfe9c68b1728e8e4ba353c9e8ae983d6, type: 3}
+  - characterName: "\u6821\u957F"
+    position: 1
+    characterSprite: {fileID: 21300000, guid: bfe9c68b1728e8e4ba353c9e8ae983d6, type: 3}
   options: []
   miniGameName: 
-  nextNodeId: 2_2
+  nextNodeId: 2_7
   autoAdvance: 0
   autoAdvanceDelay: 1
   zoomBackgroundOnEnter: 0

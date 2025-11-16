@@ -17,3 +17,10 @@ MonoBehaviour:
   startNodeId: 2_1
   nodes:
   - {fileID: 11400000, guid: 6df26204d44c86c4a91885803ac16607, type: 2}
+  - {fileID: 11400000, guid: 1ac4109bd4d528041a7c9ef4e98ec37c, type: 2}
+  - {fileID: 11400000, guid: 0cbd55172658be84885baeee0508acc0, type: 2}
+  - {fileID: 11400000, guid: 2d4b1e78cbd90f447b9e898a9a429f6d, type: 2}
+  - {fileID: 11400000, guid: 38386bde329b6044fac143a0d3abedb8, type: 2}
+  - {fileID: 11400000, guid: 50e44b6cc6f8f4247a24300db615f5d4, type: 2}
+  - {fileID: 11400000, guid: f358f72d863ab7945b0d107b7c9cf2d8, type: 2}
+  - {fileID: 11400000, guid: 95ba8b6fe4c58c74c88b87e415d1cb5f, type: 2}
