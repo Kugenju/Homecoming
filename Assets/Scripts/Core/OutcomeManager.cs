@@ -153,5 +153,5 @@ public class EndingConfig
     public string id;               // 如 "axe_victim"
     public string title;            // 显示标题
     public string description;      // 结局文本
-    // public AudioClip audioClip;  // 可选：配音或BGM
+    public AudioClip audioClip;  // 可选：配音或BGM
 }

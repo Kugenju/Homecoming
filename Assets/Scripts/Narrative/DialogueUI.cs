@@ -1,37 +1,55 @@
-// DialogueUI.cs
+ï»¿// DialogueUI.cs
 using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
 using TMPro;
+using System.Collections;
+
 
 public class DialogueUI : MonoBehaviour
 {
-    [Header("UI ÒıÓÃ")]
-    public GameObject dialoguePanel;           // ¶Ô»°Ãæ°å£¨º¬ÎÄ±¾¿ò£©
-    public TMP_Text dialogueText;                  // Ì¨´ÊÎÄ±¾
-    public TMP_Text nameText;                     // Ëµ»°ÈËĞÕÃûÎÄ±¾
-    public GameObject choicesPanel;            // Ñ¡ÏîÈİÆ÷
-    public Button choiceButtonPrefab;          // Ñ¡Ïî°´Å¥Ô¤ÖÆÌå£¨ĞèÔÚ Inspector ¹Ò½Ó£©
+    [Header("UI å¼•ç”¨")]
+    public GameObject dialoguePanel;           // å¯¹è¯é¢æ¿ï¼ˆå«æ–‡æœ¬æ¡†ï¼‰
+    public TMP_Text dialogueText;                  // å°è¯æ–‡æœ¬
+    public TMP_Text nameText;                     // è¯´è¯äººå§“åæ–‡æœ¬
+    public GameObject choicesPanel;            // é€‰é¡¹å®¹å™¨
+    public Button choiceButtonPrefab;          // é€‰é¡¹æŒ‰é’®é¢„åˆ¶ä½“ï¼ˆéœ€åœ¨ Inspector æŒ‚æ¥ï¼‰
+    public Button nextButton;              // ä¸‹ä¸€æ­¥æŒ‰é’®
 
-    [Header("ÊÓ¾õ±íÏÖ")]
-    public Image background;                   // ±³¾°Í¼
-    public Image[] characterSlots;             // ½ÇÉ«Á¢»æ²ÛÎ»£¨Left, Center, Right£©
+    [Header("è§†è§‰è¡¨ç°")]
+    public Image background;                   // èƒŒæ™¯å›¾
+    public Image[] characterSlots;             // è§’è‰²ç«‹ç»˜æ§½ä½ï¼ˆLeft, Center, Rightï¼‰
 
+    private bool _isWaitingForEndConfirmation = false;
+    private bool _isPlayingDialogue = false;
     private Queue<string> _linesQueue = new();
     private Action _onDialogueComplete;
     private List<Button> _spawnedButtons = new();
 
-    void Start()
+    void Awake()
     {
-        HideAll();
+        DialogueManager.Instance.dialogueUI = this;
+        nextButton.onClick.AddListener(DisplayNextLine);
+        //HideAll();
+    }
+    public void SetActive()
+    {
+        dialoguePanel.SetActive(true);
+        choicesPanel.SetActive(false);
     }
 
     public void ShowDialogue(string[] lines, Action onComplete)
     {
+        if (_isPlayingDialogue)
+        {
+            Debug.LogWarning("Dialogue is already playing! Ignoring new request.");
+            return;
+        }
         HideChoices();
         dialoguePanel.SetActive(true);
-
+        _isPlayingDialogue = true;
+        _isWaitingForEndConfirmation = false;
         _linesQueue = new Queue<string>(lines);
         _onDialogueComplete = onComplete;
         DisplayNextLine();
@@ -39,8 +57,19 @@ public class DialogueUI : MonoBehaviour
 
     private void DisplayNextLine()
     {
+        if (_isWaitingForEndConfirmation)
+        {
+            // ç”¨æˆ·ç¡®è®¤ç»“æŸå¯¹è¯
+            _isWaitingForEndConfirmation = false;
+            _isPlayingDialogue = false;
+            dialoguePanel.SetActive(false);
+            _onDialogueComplete?.Invoke();
+            return;
+        }
+
         if (_linesQueue.Count == 0)
         {
+            // å®‰å…¨å…œåº•
             dialoguePanel.SetActive(false);
             _onDialogueComplete?.Invoke();
             return;
@@ -49,18 +78,21 @@ public class DialogueUI : MonoBehaviour
         string line = _linesQueue.Dequeue();
         dialogueText.text = line;
 
-        // µÈ´ıµã»÷¼ÌĞø£¨¼ò»¯°æ£º×Ô¶¯ÑÓ³Ù»ò¼àÌıÊäÈë£©
-        // ´Ë´¦¼ÙÉèµã»÷ÈÎÒâÎ»ÖÃ¼ÌĞø£¨Êµ¼Ê¿É°ó¶¨°´Å¥»ò Input£©
-        StartCoroutine(WaitForClickOrAutoAdvance());
+        if (_linesQueue.Count == 0)
+        {
+            // å·²æ— æ›´å¤šå°è¯ï¼Œè¿›å…¥â€œç­‰å¾…ç¡®è®¤ç»“æŸâ€çŠ¶æ€
+            _isWaitingForEndConfirmation = true;
+        }
+        // å¦åˆ™ï¼šç»§ç»­ç­‰å¾…ä¸‹ä¸€æ¬¡ç‚¹å‡»
     }
 
     System.Collections.IEnumerator WaitForClickOrAutoAdvance()
     {
-        // ·½°¸1£ºµÈ´ıÍæ¼Òµã»÷£¨ÍÆ¼ö£©
-        // yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+        // æ–¹æ¡ˆ1ï¼šç­‰å¾…ç©å®¶ç‚¹å‡»ï¼ˆæ¨èï¼‰
+        yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
 
-        // ·½°¸2£º×Ô¶¯²¥·Å£¨µ÷ÊÔÓÃ£©
-        yield return new WaitForSeconds(1.5f);
+        // æ–¹æ¡ˆ2ï¼šè‡ªåŠ¨æ’­æ”¾ï¼ˆè°ƒè¯•ç”¨ï¼‰
+        //yield return new WaitForSeconds(1.5f);
 
         DisplayNextLine();
     }
@@ -70,16 +102,25 @@ public class DialogueUI : MonoBehaviour
         dialoguePanel.SetActive(false);
         choicesPanel.SetActive(true);
 
-        // Çå³ı¾É°´Å¥
+        // æ¸…é™¤æ—§æŒ‰é’®
         foreach (var btn in _spawnedButtons) Destroy(btn.gameObject);
         _spawnedButtons.Clear();
 
-        // ´´½¨ĞÂÑ¡Ïî°´Å¥
+        // åˆ›å»ºæ–°é€‰é¡¹æŒ‰é’®
         foreach (var option in options)
         {
             Button btn = Instantiate(choiceButtonPrefab, choicesPanel.transform);
-            btn.GetComponentInChildren<Text>().text = option.text;
-            var localOption = option; // ±ÜÃâ±Õ°üÏİÚå
+            TMP_Text textComponent = btn.GetComponentInChildren<TMP_Text>();
+            if (textComponent != null)
+            {
+                textComponent.text = option.text;
+            }
+            else
+            {
+                Debug.LogError("Choice button prefab is missing a TMP_Text component as child!");
+            }
+
+            var localOption = option;
             btn.onClick.AddListener(() =>
             {
                 onSelect?.Invoke(localOption);
@@ -89,44 +130,90 @@ public class DialogueUI : MonoBehaviour
         }
     }
 
-    private void HideChoices()
+    public void HideChoices()
     {
         choicesPanel.SetActive(false);
         foreach (var btn in _spawnedButtons) Destroy(btn.gameObject);
         _spawnedButtons.Clear();
     }
-
-    public void SetBackground(string backgroundAssetName)
+    public void HideDialogue()
     {
-        if (string.IsNullOrEmpty(backgroundAssetName))
-        {
-            background.sprite = null;
-            return;
-        }
-
-        // ´Ó Resources »ò Addressables ¼ÓÔØ£¨´Ë´¦ÓÃ Resources ¼ò»¯£©
-        Sprite bgSprite = Resources.Load<Sprite>($"Backgrounds/{backgroundAssetName}");
-        background.sprite = bgSprite;
+        dialoguePanel.SetActive(false);
     }
+
+    public void SetBackground(Sprite bgSprite)
+    {
+        background.sprite = bgSprite; // ç›´æ¥èµ‹å€¼
+    }
+
 
     public void SetCharacters(CharacterShow[] characters)
     {
-        // ÏÈÇå¿ÕËùÓĞ²ÛÎ»
-        foreach (var slot in characterSlots) slot.sprite = null;
-
-        if (characters == null) return;
-
-        foreach (var charShow in characters)
+        // Step 1: å…ˆéšè—æ‰€æœ‰è§’è‰²æ§½
+        foreach (var slot in characterSlots)
         {
-            int slotIndex = GetSlotIndex(charShow.position);
-            if (slotIndex < characterSlots.Length)
+            if (slot != null)
             {
-                // ¼ÓÔØ½ÇÉ«Á¢»æ£¨ÃüÃû¹æ·¶£ºCharacter_WangChun_normal£©
-                string spriteName = $"Characters/{charShow.characterName}_{charShow.expression}";
-                Sprite charSprite = Resources.Load<Sprite>(spriteName);
-                characterSlots[slotIndex].sprite = charSprite;
+                slot.gameObject.SetActive(false); //
             }
         }
+
+        // Step 2: å¦‚æœæ²¡æœ‰è§’è‰²æ•°æ®ï¼Œç›´æ¥è¿”å›
+        if (characters == null)
+            return;
+
+        // Step 3: éå†ä¼ å…¥çš„è§’è‰²ï¼Œæ¿€æ´»å¹¶è®¾ç½®å¯¹åº”æ§½ä½
+        foreach (var charShow in characters)
+        {
+            if (charShow == null || charShow.characterSprite == null)
+                continue;
+
+            int slotIndex = GetSlotIndex(charShow.position);
+            if (slotIndex >= 0 && slotIndex < characterSlots.Length)
+            {
+                Image slot = characterSlots[slotIndex];
+                if (slot != null)
+                {
+                    slot.sprite = charShow.characterSprite;
+                    slot.gameObject.SetActive(true); 
+
+                    // å¦‚æœæ˜¯ Center æ§½ä½ï¼Œæ›´æ–°è¯´è¯äººåå­—
+                    if (slotIndex == 1)
+                    {
+                        nameText.text = !string.IsNullOrEmpty(charShow.characterName)
+                            ? charShow.characterName
+                            : "";
+                        nameText.gameObject.SetActive(true);
+                    }
+                }
+            }
+        }
+
+        // å¯é€‰ï¼šå¦‚æœ Center æ²¡æœ‰è§’è‰²ï¼Œä¹Ÿéšè—åå­—
+        bool hasCenterChar = characters != null &&
+            System.Array.Exists(characters, c => c != null && c.position == CharacterPosition.Center);
+        if (!hasCenterChar)
+        {
+            nameText.gameObject.SetActive(false);
+        }
+    }
+
+    public IEnumerator ZoomInBackground(float duration, float targetScale = 1.2f)
+    {
+        if (background == null) yield break;
+
+        RectTransform bgRect = background.rectTransform;
+        Vector3 startScale = Vector3.one;
+        Vector3 endScale = new Vector3(targetScale, targetScale, 1f);
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            bgRect.localScale = Vector3.Lerp(startScale, endScale, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        bgRect.localScale = endScale;
     }
 
     private int GetSlotIndex(CharacterPosition pos)
@@ -140,7 +227,22 @@ public class DialogueUI : MonoBehaviour
         };
     }
 
-    private void HideAll()
+    public void WaitForClickToContinue(Action onComplete)
+    {
+        StartCoroutine(WaitForClickCoroutine(onComplete));
+    }
+
+    private System.Collections.IEnumerator WaitForClickCoroutine(Action onComplete)
+    {
+        // ç¡®ä¿ UI å·²æ˜¾ç¤ºï¼ˆèƒŒæ™¯å·²è®¾ç½®ï¼‰
+        while (!Input.GetMouseButtonDown(0) && !Input.GetKeyDown(KeyCode.Space))
+        {
+            yield return null;
+        }
+        onComplete?.Invoke();
+    }
+
+    public void HideAll()
     {
         dialoguePanel?.SetActive(false);
         choicesPanel?.SetActive(false);

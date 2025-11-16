@@ -9,7 +9,8 @@ public class NarrativeNode : ScriptableObject
         Dialogue,       // 普通对话
         Choice,         // 选项分支
         MiniGame,       // 触发小游戏
-        Ending          // 结局结算点
+        Ending,          // 结局结算点
+        VisualBeat
     }
 
     [Header("基础信息")]
@@ -21,17 +22,25 @@ public class NarrativeNode : ScriptableObject
     public string[] lines;              // 支持多行台词
 
     [Header("视觉表现")]
-    public string backgroundAsset;      // 背景资源名（如 "bg_school_hall"）
+    public Sprite backgroundSprite;      
     public CharacterShow[] characters;  // 显示的角色（见下方结构体）
 
     [Header("选项节点专用")]
     public ChoiceOption[] options;      // 若为 Choice 类型，此处有效
 
     [Header("小游戏节点专用")]
-    public string miniGameId;           // 如 "wangchun", "liule"
+    public string miniGameName;           
 
     [Header("默认下一节点（线性推进用）")]
     public string nextNodeId;           // 自动跳转的下一个节点（选项节点可为空）
+
+    [Header("Auto Visual Effects (Optional)")]
+    public bool autoAdvance = false;                 // 是否自动跳转（不等点击）
+    public float autoAdvanceDelay = 1f;              // 自动跳转前等待时间（秒）
+
+    public bool zoomBackgroundOnEnter = false;       // 进入时是否放大背景
+    public float zoomDuration = 2f;                  // 放大持续时间
+    public float zoomScale = 1.2f;                   // 最终放大比例
 }
 
 // 角色显示配置（用于立绘/位置）
@@ -39,8 +48,8 @@ public class NarrativeNode : ScriptableObject
 public class CharacterShow
 {
     public string characterName;        // 如 "WangChun"
-    public CharacterPosition position;  // Left / Center / Right
-    public string expression;           // 可选：如 "angry", "sad"
+    public CharacterPosition position;
+    public Sprite characterSprite;            // 可选：如 "angry", "sad"
 }
 
 public enum CharacterPosition
