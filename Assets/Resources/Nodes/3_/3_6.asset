@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14539ffbad31942429168485c00c2d00, type: 3}
+  m_Name: 3_6
+  m_EditorClassIdentifier: 
+  nodeId: 3_6
+  nodeType: 0
+  lines:
+  - "\u4ED6\u4EEC\u5176\u5B9E\u8FD8\u662F\u633A\u597D\u7684\u4E00\u7FA4\u5B69\u5B50\u3002"
+  backgroundSprite: {fileID: 21300000, guid: 763875af1a559774f8d92cbadd67e415, type: 3}
+  characters:
+  - characterName: "\u6821\u957F"
+    position: 1
+    characterSprite: {fileID: 21300000, guid: bfe9c68b1728e8e4ba353c9e8ae983d6, type: 3}
+  options: []
+  miniGameName: 
+  nextNodeId: 3_7
+  autoAdvance: 0
+  autoAdvanceDelay: 1
+  zoomBackgroundOnEnter: 0
+  zoomDuration: 2
+  zoomScale: 1.2

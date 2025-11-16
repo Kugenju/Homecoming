@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14539ffbad31942429168485c00c2d00, type: 3}
+  m_Name: 3_24
+  m_EditorClassIdentifier: 
+  nodeId: 3_24
+  nodeType: 0
+  lines:
+  - "\u5218\u4E50\u91CD\u91CD\u5730\u70B9\u4E86\u70B9\u5934\u3002"
+  - "\u6DE1\u91D1\u8272\u7684\u5934\u53D1\u4E0B\uFF0C\u90A3\u5BF9\u9EDD\u9ED1\u7684\u773C\u775B\u6D41\u9732\u51FA\u4E00\u79CD\u72E1\u9EE0\u4E0E\u5BB3\u7F9E\uFF0C\u81EA\u8C6A\u4E0E\u72C2\u70ED\u6DF7\u6742\u5728\u4E00\u8D77\u7684\u795E\u60C5\u3002"
+  - "\u4ED6\u629A\u6478\u7740\u81EA\u5DF1\u7684\u4F24\u75A4\uFF0C\u5C31\u50CF\u5728\u629A\u6478\u81EA\u5DF1\u6700\u7231\u7684\u90A3\u4E2A\u73A9\u5076\u3002"
+  backgroundSprite: {fileID: 21300000, guid: 08600251a7f8d7e43b536c2cac71d2d1, type: 3}
+  characters:
+  - characterName: "\u65C1\u767D"
+    position: 1
+    characterSprite: {fileID: 21300000, guid: 78aa7aa2dd3e5754bb1910b92a7b26d3, type: 3}
+  options: []
+  miniGameName: 
+  nextNodeId: 3_25
+  autoAdvance: 0
+  autoAdvanceDelay: 1
+  zoomBackgroundOnEnter: 0
+  zoomDuration: 2
+  zoomScale: 1.2
