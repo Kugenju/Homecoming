@@ -12,14 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14539ffbad31942429168485c00c2d00, type: 3}
   m_Name: 4_34
   m_EditorClassIdentifier: 
-  nodeId: 
+  nodeId: 4_34
   nodeType: 0
-  lines: []
-  backgroundSprite: {fileID: 0}
-  characters: []
+  lines:
+  - "\u8001\u5E08\uFF0C\u5BF9\u4E8E\u738B\u6625\u7684\u4E8B\uFF0C\u6211\u4E5F\u611F\u5230\u5F88\u60B2\u4F24\u3002"
+  - "\u4ECA\u5929\u4E4B\u540E\u6211\u4F1A\u628A\u5B66\u6821\u7684\u6240\u6709\u7A97\u6237\u5C01\u8D77\u6765\u3002"
+  - "\u8BF7\u6765\u5427\uFF0C\u4E0D\u8981\u803D\u8BEF\u5176\u4ED6\u5B69\u5B50\u7684\u70B9\u5FC3\u3002"
+  backgroundSprite: {fileID: 21300000, guid: 073025821441cac4e8a3fa491093f779, type: 3}
+  characters:
+  - characterName: "\u6821\u957F"
+    position: 1
+    characterSprite: {fileID: 21300000, guid: bfe9c68b1728e8e4ba353c9e8ae983d6, type: 3}
+  - characterName: "\u6821\u957F"
+    position: 0
+    characterSprite: {fileID: 21300000, guid: bfe9c68b1728e8e4ba353c9e8ae983d6, type: 3}
   options: []
   miniGameName: 
-  nextNodeId: 
+  nextNodeId: 4_35
   autoAdvance: 0
   autoAdvanceDelay: 1
   zoomBackgroundOnEnter: 0

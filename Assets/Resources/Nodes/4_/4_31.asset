@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeId: 4_31
   nodeType: 0
-  lines: []
+  lines:
+  - "\u738B\u6625\uFF1F"
   backgroundSprite: {fileID: 21300000, guid: 17bfaebfce23ed94786fcb5ca27467a2, type: 3}
   characters:
   - characterName: 

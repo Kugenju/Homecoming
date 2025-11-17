@@ -23,7 +23,7 @@ MonoBehaviour:
     characterSprite: {fileID: 21300000, guid: 78aa7aa2dd3e5754bb1910b92a7b26d3, type: 3}
   options: []
   miniGameName: 
-  nextNodeId: 4_7
+  nextNodeId: 4_8
   autoAdvance: 0
   autoAdvanceDelay: 1
   zoomBackgroundOnEnter: 0

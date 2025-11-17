@@ -222,23 +222,16 @@ public class DialogueManager : MonoBehaviour
     private void StartMiniGame(string gameId)
     {
         // 记录当前段落检查点（用于失败后返回）
-        GameStateTracker.Instance.SetTempFlag("return_graph_id", _currentGraph.graphId);
-        GameStateTracker.Instance.SetTempFlag("return_node_id", _currentGraph.GetRestartCheckpoint());
+        GameStateTracker.Instance.SetTempFlag("mini_game_return_graph", _currentGraph.graphId);
+        GameStateTracker.Instance.SetTempFlag("mini_game_success_next", _currentNode.nextNodeId);
+        GameStateTracker.Instance.SetTempFlag("mini_game_failure_restart", _currentGraph.GetRestartCheckpoint());
 
+        MiniGameEvents.OnMiniGameFinished += OnMiniGameFinishedExternally;
         // 跳转到对应小游戏场景（通过 GameFlowController）
         GameFlowController.Instance.EnterMiniGame(gameId);
     }
 
-    //private int GetMiniGameChapter(string gameId)
-    //{
-    //    // 根据你的 SceneConfig 配置映射
-    //    return gameId switch
-    //    {
-    //        "wangchun" => 101,
-    //        "liule" => 102,
-    //        _ => -1
-    //    };
-    //}
+
 
     private void TriggerEnding(string endingId)
     {
@@ -280,6 +273,30 @@ public class DialogueManager : MonoBehaviour
             {
                 PlayFromNode(nodeId); // 重试起点
             }
+        }
+    }
+
+    public void OnMiniGameFinishedExternally(bool success)
+    {
+        // 先取消订阅，避免内存泄漏
+        MiniGameEvents.OnMiniGameFinished -= OnMiniGameFinishedExternally;
+
+        string graphId = GameStateTracker.Instance.GetTempFlag("mini_game_return_graph");
+        string successNext = GameStateTracker.Instance.GetTempFlag("mini_game_success_next");
+        string failureRestart = GameStateTracker.Instance.GetTempFlag("mini_game_failure_restart");
+
+        string targetNodeId = success ? successNext : failureRestart;
+
+        var graph = Resources.Load<NarrativeGraph>($"NarrativeGraphs/{graphId}");
+        if (graph != null)
+        {
+            LoadAndPlayGraph(graph);
+            PlayFromNode(targetNodeId);
+        }
+        else
+        {
+            Debug.LogError($"Failed to reload narrative graph: {graphId}");
+            GameFlowController.Instance.EnterMainMenu(); // fallback
         }
     }
 }
