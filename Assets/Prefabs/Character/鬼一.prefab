@@ -116,6 +116,7 @@ MonoBehaviour:
   candle: {fileID: 4322198335401827691, guid: 71a23bcb05e161d4fa1028cb329d084e, type: 3}
   fadeDuration: 1
   offset: {x: 50, y: 50, z: 0}
+  handleSound: {fileID: 8300000, guid: b8cfeb9fff382d24ab4237f72c0c54db, type: 3}
 --- !u!61 &2257350759941208808
 BoxCollider2D:
   m_ObjectHideFlags: 0

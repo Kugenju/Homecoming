@@ -36,6 +36,9 @@ public class Customer : DroppableZone
     private float dialogHeight => currentDialog != null ? 
         currentDialog.GetComponent<SpriteRenderer>().bounds.size.y : 0;
 
+    [Tooltip("提交成功音效")]
+    public AudioClip handleSound;
+
     private void Start()
     {
         // 获取SpriteRenderer组件
@@ -471,6 +474,15 @@ public class Customer : DroppableZone
             playerData.AddMoney(RequiredDish[dishIndex].price);
             RequiredDish.RemoveAt(dishIndex);
             dishIndex = -1;
+            // 检查音效和管理器是否有效
+            if (handleSound != null && MusicManager.Instance != null)
+            {
+                MusicManager.Instance.PlaySound(handleSound);
+            }
+            else if (handleSound == null)
+            {
+                Debug.LogWarning("未分配点击音效，请在Inspector中设置handleSound");
+            }
             RenderRequiredDishes();
         }
 

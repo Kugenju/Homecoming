@@ -45,6 +45,9 @@ public class CoreLogic : MonoBehaviour
     public float badEndingDelay = 1f; // 延迟显示时间
     public float fadeInDuration = 3f; // 淡入持续时间
 
+    [Tooltip("恐怖音效")]
+    public AudioClip horrorSound;
+
 
     void Start()
     {
@@ -135,6 +138,15 @@ public class CoreLogic : MonoBehaviour
             // 随机等待4-8秒（下次突变前的间隔）
             float waitTime = Random.Range(minInterval, maxInterval);
             yield return new WaitForSeconds(waitTime);
+            // 检查音效和管理器是否有效
+            if (horrorSound != null && MusicManager.Instance != null)
+            {
+                MusicManager.Instance.PlaySound(horrorSound);
+            }
+            else if (horrorSound == null)
+            {
+                Debug.LogWarning("未分配点击音效，请在Inspector中设置horrorSound");
+            }
 
             // 当计数达到目标值时设置newIndex为3，否则随机1-2
             int newIndex;
