@@ -36,7 +36,10 @@ public class PlayerData : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        if (isTest) playerStats.money = testMoney;
+        if (isTest) {
+            playerStats.money = testMoney;
+            SaveData();
+        }
     }
 
     private void Update()

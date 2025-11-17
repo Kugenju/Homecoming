@@ -502,6 +502,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2525098445704818512, guid: 5b6ad2cb24aa02841b732c448e7d7ad4, type: 3}
+      propertyPath: isImage
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8514038227387177833, guid: 5b6ad2cb24aa02841b732c448e7d7ad4, type: 3}
       propertyPath: m_Name
       value: TimeandMoneyColumn
@@ -696,6 +700,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1906201179632427799, guid: 59918f1b9ebf5974a9454604e6e2214d, type: 3}
       propertyPath: isTest
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1906201179632427799, guid: 59918f1b9ebf5974a9454604e6e2214d, type: 3}
+      propertyPath: testMoney
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4947939993028070119, guid: 59918f1b9ebf5974a9454604e6e2214d, type: 3}

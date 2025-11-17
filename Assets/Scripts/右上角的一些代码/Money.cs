@@ -1,16 +1,36 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Money : MonoBehaviour
 {
-    public List<GameObject> digitPrefabs; // 0-9数字预制体（编辑器拖拽赋值）
+    public List<GameObject> digitPrefabs; // 0-9数字预制体（必须带SpriteRenderer组件）
+    public bool isImage = true; // 是否用UI图片显示（从预制体的SpriteRenderer取图）
+    public float digitSpacing = -50f; // 间距（UI模式为像素，非UI为单位）
     private PlayerData playerData;
-    private int currentMoney = -1; // 初始值-1确保首次更新
+    private int currentMoney = -1;
     private List<GameObject> currentDigits = new List<GameObject>();
 
     void Start()
     {
-        playerData = PlayerData.Instance; // 实例化PlayerData
+        // 校验预制体是否包含SpriteRenderer
+        if (digitPrefabs.Count != 10)
+        {
+            Debug.LogError("digitPrefabs必须包含0-9共10个预制体！");
+            enabled = false;
+            return;
+        }
+        foreach (var prefab in digitPrefabs)
+        {
+            if (prefab.GetComponent<SpriteRenderer>() == null)
+            {
+                Debug.LogError($"预制体{prefab.name}缺少SpriteRenderer组件！");
+                enabled = false;
+                return;
+            }
+        }
+
+        playerData = PlayerData.Instance;
         UpdateMoneyDisplay();
     }
 
@@ -22,41 +42,27 @@ public class Money : MonoBehaviour
     private void UpdateMoneyDisplay()
     {
         int newMoney = playerData.GetMoney();
-        
-        // 金钱未变化时直接返回
         if (newMoney == currentMoney) return;
-        
+
         currentMoney = newMoney;
-        
-        // 销毁旧数字对象
         ClearCurrentDigits();
-        
-        // 分解数字（从个位开始存储）
         List<int> digits = ParseMoneyToDigits(newMoney);
-        
-        // 创建新数字对象
         SpawnDigitObjects(digits);
     }
 
     private List<int> ParseMoneyToDigits(int money)
     {
         List<int> digits = new List<int>();
-        
-        // 处理0的特殊情况
         if (money == 0)
         {
             digits.Add(0);
             return digits;
         }
-        
-        // 分解数字（个位在列表首位）
         while (money > 0)
         {
             digits.Add(money % 10);
             money /= 10;
         }
-        
-        // 限制最多4位（千位）
         return digits.Count > 4 ? digits.GetRange(0, 4) : digits;
     }
 
@@ -64,40 +70,47 @@ public class Money : MonoBehaviour
     {
         for (int i = 0; i < digits.Count; i++)
         {
-            int digitValue = digits[i];
-            // 确保数字有效（0-9）
-            digitValue = Mathf.Clamp(digitValue, 0, 9);
-            
-            // 实例化数字对象
-            GameObject digitObj = Instantiate(
-                digitPrefabs[digitValue], 
-                transform // 设置为当前对象的子对象
-            );
-            
-            // 计算偏移位置（个位i=0无偏移，十位i=1偏移-0.2）
-            float offset = -0.2f * i;
-            digitObj.transform.localPosition += new Vector3(offset, 0, 0);
-            
+            int digitValue = Mathf.Clamp(digits[i], 0, 9);
+            GameObject digitObj;
+
+            if (isImage)
+            {
+                // 图片模式：创建UI Image，从预制体的SpriteRenderer取图
+                digitObj = new GameObject($"Digit_UI_{digitValue}");
+                digitObj.transform.SetParent(transform, false); // 父对象应为Canvas子对象
+
+                // 添加UI Image组件
+                Image digitImage = digitObj.AddComponent<Image>();
+                // 从预制体的SpriteRenderer中获取精灵图片
+                digitImage.sprite = digitPrefabs[digitValue].GetComponent<SpriteRenderer>().sprite;
+
+                // 调整UI位置和尺寸
+                RectTransform rect = digitObj.GetComponent<RectTransform>();
+                rect.sizeDelta = new Vector2(-digitSpacing, - 2 * digitSpacing); // 图片尺寸（可根据实际调整）
+                rect.anchoredPosition = new Vector2(digitSpacing * i, 0); // 横向排列
+            }
+            else
+            {
+                // 非图片模式：直接实例化预制体（使用其SpriteRenderer渲染）
+                digitObj = Instantiate(digitPrefabs[digitValue], transform);
+                digitObj.transform.localPosition += new Vector3(digitSpacing * i, 0, 0);
+            }
+
             currentDigits.Add(digitObj);
         }
     }
 
     private void ClearCurrentDigits()
     {
-        // 反向销毁避免索引问题
-        for (int i = currentDigits.Count - 1; i >= 0; i--)
+        foreach (var digit in currentDigits)
         {
-            if (currentDigits[i] != null)
-            {
-                Destroy(currentDigits[i]);
-            }
-            currentDigits.RemoveAt(i);
+            if (digit != null) Destroy(digit);
         }
+        currentDigits.Clear();
     }
 
     private void OnDestroy()
     {
-        // 确保销毁时清理所有子对象
         ClearCurrentDigits();
     }
 }
