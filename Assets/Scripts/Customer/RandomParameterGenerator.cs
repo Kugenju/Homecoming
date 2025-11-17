@@ -180,13 +180,12 @@ public class RandomParameterGenerator
     /// </summary>
     private Dish GetRandomDish()
     {
+        if (dishes.Count < 15)
+                return dishes[Random.Range(0, dishes.Count)];
+        
         if (Random.Range(0.0f, 1.0f) < 0.5f) {
-            if (dishes.Count >= 15)
-                return dishes[Random.Range(0, 15)];
-            // else
-            //     return dishes[Random.Range(0, dishes.Count)];
+            return dishes[Random.Range(0, 15)];
         } else {
-            if (dishes.Count > 15)
             return dishes[Random.Range(15, dishes.Count)];
         }
         

@@ -1,4 +1,5 @@
 using UnityEngine;
+using static MiniGameEvents;
 
 public class TimeColumn : MonoBehaviour
 {
@@ -23,6 +24,8 @@ public class TimeColumn : MonoBehaviour
             
             // 当达到总时长时标记完成
             isCompleted = Mathf.Approximately(progress, 1f);
+        } else {
+            OnPlayerWin();
         }
     }
 
@@ -33,4 +36,6 @@ public class TimeColumn : MonoBehaviour
         isCompleted = false;
         transform.localScale = new Vector3(0f, transform.localScale.y, transform.localScale.z);
     }
+
+    public void OnPlayerWin() => MiniGameEvents.OnMiniGameFinished?.Invoke(true);
 }

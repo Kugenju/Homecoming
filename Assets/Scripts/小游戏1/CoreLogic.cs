@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using static MiniGameEvents;
 
 public class CoreLogic : MonoBehaviour
 {
@@ -181,6 +182,11 @@ public class CoreLogic : MonoBehaviour
         // 检查选中的按钮索引是否与当前核心index-1相等
         if (buttonLogic.selectedButtonIndex == index-1)
         {
+            if (totalCounter == winCondition)
+            {
+                Debug.Log("Win");
+                OnPlayerWin();
+            }
             totalCounter++;
             Debug.Log($"索引匹配成功！当前总计数: {totalCounter}");
             return true;
@@ -219,6 +225,7 @@ public class CoreLogic : MonoBehaviour
             
             // 延迟后开始坏结局渲染器淡入
             StartCoroutine(StartBadEndingFade());
+            OnPlayerLose();
         }
         return false;
     }
@@ -333,4 +340,7 @@ public class CoreLogic : MonoBehaviour
 
         UnityEditor.Handles.Label(transform.position + Vector3.up * 2f, info, style);
     }
+
+    public void OnPlayerWin() => MiniGameEvents.OnMiniGameFinished?.Invoke(true);
+    public void OnPlayerLose() => MiniGameEvents.OnMiniGameFinished?.Invoke(false);
 }

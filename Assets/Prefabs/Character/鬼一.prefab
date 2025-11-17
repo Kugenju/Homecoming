@@ -105,6 +105,11 @@ MonoBehaviour:
   draggableItemLayer: DraggableItems
   autoSetupLayers: 1
   waitTime: 8
+  Ingredients:
+  - {fileID: 9088353858215482188, guid: 5b735f9a80447c14b8d6ee3a8a82207c, type: 3}
+  - {fileID: 1188139390861689187, guid: 418dc09d5f0e47244847e4686148bae0, type: 3}
+  - {fileID: 8410847744386030455, guid: bc6e9f4609edfee4684e86689d2bc288, type: 3}
+  - {fileID: 43140248753532523, guid: eb73a4218822d01428cc578ef6c2f1ca, type: 3}
   isUpdate: 0
   dialogBox: {fileID: 160267596670569356, guid: fbd48c9b745d7bf4da6dd3528e89a706, type: 3}
   flame: {fileID: 8822344363708364768, guid: 36b039a4a5d0dfc42b36a83e1cfb8ec0, type: 3}

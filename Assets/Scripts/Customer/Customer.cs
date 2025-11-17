@@ -11,6 +11,7 @@ public class Customer : DroppableZone
     public float waitTime = 8f;
     private float timer;
     public List<Dish> RequiredDish { get; set; }
+    public List<GameObject> Ingredients;
     private int dishIndex = -1;
     public bool isUpdate = false;
     public GameObject UsedPrefab { get; set; } // 新增：记录使用的预制体
@@ -91,27 +92,95 @@ public class Customer : DroppableZone
     private void CreateDishInstance(Dish dish, float yOffset, SpriteRenderer dialogRenderer)
     {
         if (dish == null || dish.prefab == null) return;
+
+        var dishName = dish.dishName;
+
+        float baseX = dishName.StartsWith("鸭") ? dialogWidth * 0.5f - 35f : dialogWidth * 0.5f;
         
-        // 计算位置
-        var position = currentDialog.transform.position + 
-            new Vector3(dialogWidth * 0.5f, yOffset, 0);
+        // 计算菜品实例基础位置
+        Vector3 basePosition = currentDialog.transform.position + 
+            new Vector3(baseX, yOffset, 0);
         
-        // 实例化
-        var instance = Instantiate(dish.prefab, position, Quaternion.identity);
+        // 实例化菜品
+        var instance = Instantiate(dish.prefab, basePosition, Quaternion.identity);
         
         // 设置层级
         SetSortingLayer(instance, currentDialog);
-        // var instanceRenderer = instance.GetComponent<SpriteRenderer>();
-        // if (instanceRenderer != null && dialogRenderer != null)
-        // {
-        //     // instanceRenderer.sortingLayer = dialogRenderer.sortingLayer;
-        //     instanceRenderer.sortingOrder = dialogRenderer.sortingOrder + 1;
-        // }
         
-        // 缩放控制
+        // 缩放菜品以适应dialog尺寸
         ScaleDishToFit(instance);
         
         dishInstances.Add(instance);
+
+        // 处理以"鸭"开头的菜品的原料排列（右侧竖排且整体居中）
+        if (dishName.StartsWith("鸭") && Ingredients != null && Ingredients.Count > 0)
+        {
+            var dishRenderer = instance.GetComponent<SpriteRenderer>();
+            if (dishRenderer == null) return;
+
+            // 计算菜品宽度，确定原料起始X位置（菜品右侧+间距）
+            float dishWidth = dishRenderer.bounds.size.x;
+            float startX = instance.transform.position.x + 100f; // 100f为间距
+
+            // 预计算所有原料总高度（包含间距）
+            float totalIngredientsHeight = 0;
+            float spacing = 5f; // 原料间垂直间距
+            List<float> ingredientHeights = new List<float>(); // 存储每个原料的高度
+
+            var currentIngredients = new List<GameObject>();
+            if (CountChar(dishName, '葱') > 0) currentIngredients.Add(Ingredients[0]);
+            if (CountChar(dishName, '豆') > 0) currentIngredients.Add(Ingredients[1]);
+            if (CountChar(dishName, '血') > 1) currentIngredients.Add(Ingredients[2]);
+            if (CountChar(dishName, '肉') > 0) currentIngredients.Add(Ingredients[3]);
+
+            foreach (var ingredientPrefab in currentIngredients)
+            {
+                if (ingredientPrefab == null) continue;
+                var ingRenderer = ingredientPrefab.GetComponent<SpriteRenderer>();
+                if (ingRenderer != null)
+                {
+                    float height = ingRenderer.bounds.size.y;
+                    ingredientHeights.Add(height);
+                    totalIngredientsHeight += height + spacing;
+                }
+            }
+            // 减去最后一个多余的间距
+            if (ingredientHeights.Count > 0)
+                totalIngredientsHeight -= spacing;
+
+            // 计算原料整体的起始Y位置（使所有原料居中于菜品中心）
+            // 核心逻辑：菜品中心Y - 总高度的一半 = 第一个原料的顶部位置
+            float startY = instance.transform.position.y - totalIngredientsHeight / 2f;
+            float currentY = startY;
+
+            // 按顺序排列原料
+            for (int i = 0; i < currentIngredients.Count; i++)
+            {
+                var ingredientPrefab = currentIngredients[currentIngredients.Count - 1 - i];
+                if (ingredientPrefab == null) continue;
+                if (i >= ingredientHeights.Count) continue;
+
+                var ingredientInstance = Instantiate(ingredientPrefab, Vector3.zero, Quaternion.identity);
+                var ingRenderer = ingredientInstance.GetComponent<SpriteRenderer>();
+                if (ingRenderer == null)
+                {
+                    Destroy(ingredientInstance);
+                    continue;
+                }
+
+                // 当前原料的Y位置 = 起始Y + 自身高度的一半（使底部对齐起始线）
+                currentY += ingredientHeights[i] / 2f;
+                ingredientInstance.transform.position = new Vector3(startX, currentY, 0);
+
+                // 为下一个原料准备位置（加上当前原料高度的一半和间距）
+                currentY += ingredientHeights[i] / 2f + spacing;
+
+                // 设置层级
+                SetSortingLayer(ingredientInstance, instance);
+
+                dishInstances.Add(ingredientInstance);
+            }
+        }
     }
 
     private void SetSortingLayer(GameObject obj, GameObject reference)
@@ -357,12 +426,15 @@ public class Customer : DroppableZone
             int itemOnion = CountChar(itemName, '葱');
             int dishBean = CountChar(dishName, '豆');
             int itemBean = CountChar(itemName, '豆');
+            int dishMeat = CountChar(dishName, '肉');
+            int itemMeat = CountChar(itemName, '肉');
 
-            int sumItem = itemBlood + itemOnion + itemBean;
+            int sumItem = itemBlood + itemOnion + itemBean + itemMeat;
 
             if (dishBlood == itemBlood + 1 
                 && dishOnion == itemOnion 
                 && dishBean == itemBean 
+                && dishMeat == itemMeat
                 && sumItem > 0)
             {
                 dishIndex = i;
