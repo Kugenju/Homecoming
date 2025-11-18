@@ -35,6 +35,7 @@ public class PlayerData : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            return;
         }
         if (isTest) {
             playerStats.money = testMoney;
