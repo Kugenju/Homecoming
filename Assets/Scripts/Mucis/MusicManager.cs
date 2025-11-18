@@ -16,6 +16,11 @@ public class MusicManager : MonoBehaviour
 
     // 音效相关组件与设置
     private List<AudioSource> soundSources = new List<AudioSource>();
+
+    // 新增：点击时播放的音效
+    [Tooltip("点击行为触发的音效")]
+    public AudioClip clickSound;
+
     [Header("音效设置")]
     public int maxSoundSources = 10;
 
@@ -56,6 +61,15 @@ public class MusicManager : MonoBehaviour
         {
             Destroy(gameObject);
             return;
+        }
+    }
+
+    private void Update()
+    {
+        // 检测点击行为（鼠标左键或触屏点击）
+        if (Input.GetMouseButtonDown(0)) // 0表示鼠标左键，触屏设备也会触发
+        {
+            PlaySound(clickSound);
         }
     }
 

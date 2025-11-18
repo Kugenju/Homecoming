@@ -220,6 +220,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 4bbd90929c5f3864ebb680c0c2bc427e, type: 3}
   useFade: 1
   fadeDuration: 1
+  clickSound: {fileID: 0}
   maxSoundSources: 10
   audioMixer: {fileID: 0}
   defaultMusicVolume: 1

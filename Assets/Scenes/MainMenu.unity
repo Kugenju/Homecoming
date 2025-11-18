@@ -425,12 +425,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 273263110}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1531263942}
+  m_Father: {fileID: 705323195}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -696,6 +696,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 273263111}
   - {fileID: 55230105}
   - {fileID: 551027384}
   - {fileID: 158807961}
@@ -921,6 +922,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 4bbd90929c5f3864ebb680c0c2bc427e, type: 3}
   useFade: 1
   fadeDuration: 1
+  clickSound: {fileID: 8300000, guid: 7e9929c2236f08847a8fd41977b42e63, type: 3}
   maxSoundSources: 10
   audioMixer: {fileID: 0}
   defaultMusicVolume: 1
@@ -1048,7 +1050,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b1c1eeff1c4c0448bbb32cda4265283, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetMusicIndex: 2
   clickSound: {fileID: 8300000, guid: b8cfeb9fff382d24ab4237f72c0c54db, type: 3}
 --- !u!1 &1241671895
 GameObject:
@@ -1280,7 +1281,6 @@ RectTransform:
   m_Children:
   - {fileID: 705323195}
   - {fileID: 2102608670}
-  - {fileID: 273263111}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
