@@ -17,7 +17,7 @@ public class CookieMiniGameController : MonoBehaviour
     public GameObject butterSelectionPanel;
     public GameObject recipeSelectionPanel;
     public GameObject detailPopupPanel;
-    public TMPro.TMP_Text detailTitleText;
+    //public TMPro.TMP_Text detailTitleText;
     public TMPro.TMP_Text detailDescText;
 
     private ButterType? pendingButterSelection = null;
@@ -67,7 +67,7 @@ public class CookieMiniGameController : MonoBehaviour
     void ShowButterDetail(ButterType type)
     {
         pendingButterSelection = type;
-        detailTitleText.text = type == ButterType.Normal ? "∆’Õ®ª∆”Õ" : "Ãÿ÷∆ª∆”Õ";
+        //detailTitleText.text = type == ButterType.Normal ? "∆’Õ®ª∆”Õ" : "Ãÿ÷∆ª∆”Õ";
         detailDescText.text = GetButterDescription(type);
         detailPopupPanel.SetActive(true);
     }
@@ -77,7 +77,7 @@ public class CookieMiniGameController : MonoBehaviour
     public void OnClickRecipe(CookieRecipe recipe)
     {
         pendingRecipeSelection = recipe;
-        detailTitleText.text = recipe.recipeName;
+        //detailTitleText.text = recipe.recipeName;
         detailDescText.text = recipe.description;
         detailPopupPanel.SetActive(true);
     }

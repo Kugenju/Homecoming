@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 165967597}
   - component: {fileID: 165967596}
   m_Layer: 5
-  m_Name: butterSelectionPanel
+  m_Name: RecipeSelectionPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -340,6 +340,7 @@ GameObject:
   - component: {fileID: 348768557}
   - component: {fileID: 348768556}
   - component: {fileID: 348768555}
+  - component: {fileID: 348768558}
   m_Layer: 5
   m_Name: Button (2)
   m_TagString: Untagged
@@ -448,6 +449,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 348768553}
   m_CullTransparentMesh: 1
+--- !u!114 &348768558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348768553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3f29a257d3aa9e4aa60fb6cba3a385f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recipe: {fileID: 11400000, guid: 1f6271dfe22ba214abb558f65e52d862, type: 2}
+  controller: {fileID: 406304144}
 --- !u!1 &398899012
 GameObject:
   m_ObjectHideFlags: 0
@@ -460,6 +475,7 @@ GameObject:
   - component: {fileID: 398899016}
   - component: {fileID: 398899015}
   - component: {fileID: 398899014}
+  - component: {fileID: 398899017}
   m_Layer: 5
   m_Name: Button (1)
   m_TagString: Untagged
@@ -568,6 +584,69 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 398899012}
   m_CullTransparentMesh: 1
+--- !u!114 &398899017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 398899012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3f29a257d3aa9e4aa60fb6cba3a385f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recipe: {fileID: 11400000, guid: 5dc95e98e039c6447aa06ae07ed7ba80, type: 2}
+  controller: {fileID: 406304144}
+--- !u!1 &406304143
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 406304145}
+  - component: {fileID: 406304144}
+  m_Layer: 0
+  m_Name: CookieMiniGameController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &406304144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 406304143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d20fc59ca1142a4fbf95c2bde91f047, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allRecipes: []
+  butterSelectionPanel: {fileID: 1470362948}
+  recipeSelectionPanel: {fileID: 165967594}
+  detailPopupPanel: {fileID: 856523432}
+  detailDescText: {fileID: 1393400946}
+--- !u!4 &406304145
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 406304143}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2056.906, y: 1081.5966, z: -2.5012083}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &407236106
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,7 +729,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 407236109}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 406304144}
+        m_TargetAssemblyTypeName: CookieMiniGameController, Assembly-CSharp
+        m_MethodName: OnCancelSelection
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &407236109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -855,6 +946,7 @@ RectTransform:
   m_Children:
   - {fileID: 1228500413}
   - {fileID: 407236107}
+  - {fileID: 1393400948}
   m_Father: {fileID: 964358063}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -912,6 +1004,7 @@ GameObject:
   - component: {fileID: 916579876}
   - component: {fileID: 916579875}
   - component: {fileID: 916579874}
+  - component: {fileID: 916579877}
   m_Layer: 5
   m_Name: Button (5)
   m_TagString: Untagged
@@ -1020,6 +1113,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 916579872}
   m_CullTransparentMesh: 1
+--- !u!114 &916579877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 916579872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3f29a257d3aa9e4aa60fb6cba3a385f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recipe: {fileID: 11400000, guid: 3689c5550fc641e408a59140b8cbcef1, type: 2}
+  controller: {fileID: 406304144}
 --- !u!1 &964358059
 GameObject:
   m_ObjectHideFlags: 0
@@ -1397,7 +1504,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1228500415}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 406304144}
+        m_TargetAssemblyTypeName: CookieMiniGameController, Assembly-CSharp
+        m_MethodName: OnConfirmSelection
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1228500415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1493,6 +1612,140 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7efe4b48f3147a44db083bf4a56fa04b, type: 3}
+--- !u!1 &1393400945
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1393400948}
+  - component: {fileID: 1393400947}
+  - component: {fileID: 1393400946}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1393400946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1393400945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: "\u6750\u6599\u8BE6\u60C5"
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 3f1ff3abfb5c084459c9f75833995525, type: 2}
+  m_sharedMaterial: {fileID: -2059142843583440789, guid: 3f1ff3abfb5c084459c9f75833995525, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 80
+  m_fontSizeBase: 80
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1393400947
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1393400945}
+  m_CullTransparentMesh: 1
+--- !u!224 &1393400948
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1393400945}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 856523433}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 6.0557, y: 148.0695}
+  m_SizeDelta: {x: 944.9179, y: 525.9343}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1470362948
 GameObject:
   m_ObjectHideFlags: 0
@@ -1505,7 +1758,7 @@ GameObject:
   - component: {fileID: 1470362951}
   - component: {fileID: 1470362950}
   m_Layer: 5
-  m_Name: recipeSelectionPanel
+  m_Name: ButterSelectionPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1582,6 +1835,7 @@ GameObject:
   - component: {fileID: 1537725415}
   - component: {fileID: 1537725414}
   - component: {fileID: 1537725413}
+  - component: {fileID: 1537725416}
   m_Layer: 5
   m_Name: Button (1)
   m_TagString: Untagged
@@ -1690,6 +1944,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1537725411}
   m_CullTransparentMesh: 1
+--- !u!114 &1537725416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1537725411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc26a24e937278a4ca8286ae4800130f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  butterType: 0
+  controller: {fileID: 406304144}
 --- !u!1 &1757393346
 GameObject:
   m_ObjectHideFlags: 0
@@ -1702,6 +1970,7 @@ GameObject:
   - component: {fileID: 1757393350}
   - component: {fileID: 1757393349}
   - component: {fileID: 1757393348}
+  - component: {fileID: 1757393351}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -1810,6 +2079,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1757393346}
   m_CullTransparentMesh: 1
+--- !u!114 &1757393351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1757393346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc26a24e937278a4ca8286ae4800130f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  butterType: 1
+  controller: {fileID: 406304144}
 --- !u!1 &1821556184
 GameObject:
   m_ObjectHideFlags: 0
@@ -1914,6 +2197,7 @@ GameObject:
   - component: {fileID: 1828452891}
   - component: {fileID: 1828452890}
   - component: {fileID: 1828452889}
+  - component: {fileID: 1828452892}
   m_Layer: 5
   m_Name: Button (4)
   m_TagString: Untagged
@@ -2022,6 +2306,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1828452887}
   m_CullTransparentMesh: 1
+--- !u!114 &1828452892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1828452887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3f29a257d3aa9e4aa60fb6cba3a385f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recipe: {fileID: 11400000, guid: 4cfa0b4ba2496f84792d6c2ba9935832, type: 2}
+  controller: {fileID: 406304144}
 --- !u!1 &2037983007
 GameObject:
   m_ObjectHideFlags: 0
@@ -2034,6 +2332,7 @@ GameObject:
   - component: {fileID: 2037983011}
   - component: {fileID: 2037983010}
   - component: {fileID: 2037983009}
+  - component: {fileID: 2037983012}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -2142,6 +2441,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2037983007}
   m_CullTransparentMesh: 1
+--- !u!114 &2037983012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2037983007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3f29a257d3aa9e4aa60fb6cba3a385f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recipe: {fileID: 11400000, guid: 8cb35e8daf6410d4784039e62ccec7eb, type: 2}
+  controller: {fileID: 406304144}
 --- !u!1 &2136344635
 GameObject:
   m_ObjectHideFlags: 0
@@ -2154,6 +2467,7 @@ GameObject:
   - component: {fileID: 2136344639}
   - component: {fileID: 2136344638}
   - component: {fileID: 2136344637}
+  - component: {fileID: 2136344640}
   m_Layer: 5
   m_Name: Button (3)
   m_TagString: Untagged
@@ -2262,6 +2576,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2136344635}
   m_CullTransparentMesh: 1
+--- !u!114 &2136344640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2136344635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3f29a257d3aa9e4aa60fb6cba3a385f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recipe: {fileID: 11400000, guid: ab3b393083d3cce4d82021c89749f1c8, type: 2}
+  controller: {fileID: 406304144}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2272,3 +2600,4 @@ SceneRoots:
   - {fileID: 109725263}
   - {fileID: 964358063}
   - {fileID: 253123707}
+  - {fileID: 406304145}

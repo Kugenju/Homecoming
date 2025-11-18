@@ -144,6 +144,11 @@ public class DialogueUI : MonoBehaviour
     public void SetBackground(Sprite bgSprite)
     {
         background.sprite = bgSprite; // 直接赋值
+
+        if (background.rectTransform != null)
+        {
+            background.rectTransform.localScale = Vector3.one;
+        }
     }
 
 
