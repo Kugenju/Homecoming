@@ -7,24 +7,14 @@ public class ButtonLogic : MonoBehaviour
     [Header("核心按钮设置")]
     [Tooltip("需要监听点击的功能按钮列表")]
     public List<GameObject> buttons; // 功能按钮列表（按索引对应）
-
-    [Header("特殊按钮")]
-    [Tooltip("返回按钮（点击无事件）")]
-    public GameObject backButton;
-    [Tooltip("暂停按钮（点击切换暂停状态）")]
-    public GameObject pauseButton;
+    public BackButton backButton; // 返回按钮
 
     [Header("亮度设置")]
     [Tooltip("选中时的亮度倍率（1=原始亮度，>1更亮）")]
     [Range(1.1f, 2f)] public float highlightBrightness = 1.5f;
 
-    // 在ButtonLogic.cs中新增变量
-    [Header("暂停相关设置")]
-    public GameObject blurLayer; // 关联模糊层对象
-    public CoreLogic coreLogic; // 关联核心逻辑
-    public HorrorBackgroundRenderer horrorRenderer; // 关联背景渲染器
-    private bool isPaused = false; // 暂停状态
-
+    // 关联核心逻辑
+    public CoreLogic coreLogic; 
     public int selectedButtonIndex = -1; // 选中的按钮索引
     public bool isEnd = false; // 是否结束
     private List<SpriteRenderer> buttonRenderers; // 功能按钮的渲染器列表
@@ -39,7 +29,7 @@ public class ButtonLogic : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !isEnd)
+        if (!backButton.isPaused && Input.GetMouseButtonDown(0) && !isEnd)
         {
             CheckClickArea();
         }
@@ -84,23 +74,12 @@ public class ButtonLogic : MonoBehaviour
                 Debug.LogWarning($"功能按钮 {btn.name} 自动添加了BoxCollider2D", btn);
             }
         }
-
-        EnsureSpecialButtonCollider(backButton, "返回按钮");
-        EnsureSpecialButtonCollider(pauseButton, "暂停按钮");
-    }
-
-    private void EnsureSpecialButtonCollider(GameObject btn, string btnName)
-    {
-        if (btn == null) return;
-        if (btn.GetComponent<Collider2D>() == null)
-        {
-            btn.AddComponent<BoxCollider2D>();
-            Debug.LogWarning($"{btnName} 自动添加了BoxCollider2D", btn);
-        }
     }
 
     private void CheckClickArea()
     {
+        if (backButton.isPaused) return;
+        
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
@@ -110,6 +89,7 @@ public class ButtonLogic : MonoBehaviour
 
             // 处理功能按钮点击
             int funcBtnIndex = buttons.IndexOf(clickedObj);
+            if (funcBtnIndex == -1) return;
             float xPos = (funcBtnIndex == 1 || funcBtnIndex == 0) ? 1 - 2 * funcBtnIndex : 0;
             // 调用协程时先停止已有实例
             if (currentCoroutine != null)
@@ -122,54 +102,14 @@ public class ButtonLogic : MonoBehaviour
                 OnFunctionButtonClicked(funcBtnIndex);
                 return;
             }
-
-            // 处理暂停按钮点击（切换暂停状态）
-            if (clickedObj == pauseButton)
-            {
-                TogglePause();
-                return;
-            }
-
-            // 处理返回按钮点击（仅示例，可扩展）
-            if (clickedObj == backButton)
-            {
-                // 可添加返回逻辑（如回到主菜单）
-                return;
-            }
         }
 
         // 点击空白区域重置选中状态
-        ResetAllSelection();
-    }
-
-    /// <summary>
-    /// 切换暂停/恢复状态
-    /// </summary>
-    private void TogglePause()
-    {
-        isPaused = !isPaused;
-
-        if (isPaused)
-        {
-            // 暂停：显示模糊层 + 停止协程
-            blurLayer?.SetActive(true);
-            Debug.Log("暂停游戏");
-            coreLogic?.StopAllCoroutines();
-            // horrorRenderer?.StopFlashing();
-        }
-        else
-        {
-            // 恢复：隐藏模糊层 + 重启协程
-            blurLayer?.SetActive(false);
-            coreLogic?.StartCoroutine(coreLogic.IndexUpdateCycle());
-            // horrorRenderer?.StartFlashing();
-        }
+        // ResetAllSelection();
     }
 
     private void OnFunctionButtonClicked(int index)
     {
-        if (isPaused) return; // 暂停时不响应功能按钮点击
-
         selectedButtonIndex = index;
 
         for (int i = 0; i < buttonRenderers.Count; i++)
@@ -210,7 +150,7 @@ public class ButtonLogic : MonoBehaviour
         style.normal.textColor = Color.yellow;
         style.fontSize = 14;
         UnityEditor.Handles.Label(transform.position + Vector3.up * 3f, 
-            $"当前选中索引：{selectedButtonIndex}\n暂停状态：{isPaused}", style);
+            $"当前选中索引：{selectedButtonIndex}", style);
     }
 
     /// <summary>
