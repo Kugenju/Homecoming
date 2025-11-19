@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14539ffbad31942429168485c00c2d00, type: 3}
+  m_Name: e3_1
+  m_EditorClassIdentifier: 
+  nodeId: e3_1
+  nodeType: 0
+  lines:
+  - "\u6821\u957F\u7ED9\u4F60\u53D1\u77ED\u4FE1\uFF0C\u8BF4\u5B69\u5B50\u4EEC\u60F3\u7ED9\u4F60\u529E\u4E00\u4E2A\u6B22\u9001\u4F1A\u3002"
+  - "\u8D70\u8FDB\u6559\u5BA4\u65F6\u4F60\u95FB\u5230\u4E00\u80A1\u6D53\u90C1\u7684\u997C\u5E72\u9999\uFF0C\u5B69\u5B50\u4EEC\u4EEC\u4E89\u5148\u6050\u540E\u5730\u8981\u4F60\u5C1D\u5C1D\u4ED6\u4EEC\u4E3A\u4F60\u505A\u7684\u997C\u5E72\uFF0C\u4ED6\u4EEC\u4EAE\u6676\u6676\u7684\u773C\u775B\u5DF4\u5DF4\u5730\u671B\u7740\u4F60\u3002"
+  - "\u4F60\u5C1D\u4E86\u4E00\u5757\uFF0C\u6D53\u539A\u7684\u9EC4\u6CB9\u5473\u5728\u4F60\u5634\u91CC\u5316\u5F00\uFF0C\u90A3\u79CD\u6E29\u6696\u548C\u751C\u871C\u628A\u4F60\u5305\u88F9\u4F4F\uFF0C\u4E00\u77AC\u95F4\u4F60\u89C9\u5F97\u4E0D\u79BB\u5F00\uFF0C\u4E5F\u5F88\u4E0D\u9519\u3002"
+  backgroundSprite: {fileID: 21300000, guid: 3308df3717d13194293b96df0f104398, type: 3}
+  characters:
+  - characterName: "\u65C1\u767D"
+    position: 1
+    characterSprite: {fileID: 21300000, guid: 78aa7aa2dd3e5754bb1910b92a7b26d3, type: 3}
+  options: []
+  miniGameName: 
+  onLoseNodeId: 
+  nextNodeId: e3_2
+  autoAdvance: 0
+  autoAdvanceDelay: 1
+  zoomBackgroundOnEnter: 0
+  zoomDuration: 2
+  zoomScale: 1.2

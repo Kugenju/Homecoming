@@ -17,6 +17,8 @@ public class DialogueManager : MonoBehaviour
     // UI 引用（需在 Inspector 挂接或通过 FindObjectOfType 获取）
     public DialogueUI dialogueUI; // 假设你有一个负责显示文本/选项的 UI 类
     private bool _isProcessingNode = false;
+    private bool _isEndingNarrative = false;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -141,7 +143,16 @@ public class DialogueManager : MonoBehaviour
         if (!string.IsNullOrEmpty(node.nextNodeId))
             PlayFromNode(node.nextNodeId);
         else
-            OnNarrativeCompleted();
+        {
+            if (_isEndingNarrative)
+            {
+                OnEndingNarrativeFinished();
+            }
+            else
+            {
+                OnNarrativeCompleted();
+            }
+        }
     }
 
 
@@ -152,7 +163,17 @@ public class DialogueManager : MonoBehaviour
         if (!string.IsNullOrEmpty(_currentNode.nextNodeId))
             PlayFromNode(_currentNode.nextNodeId);
         else
-            OnNarrativeCompleted();
+        {
+            if (_isEndingNarrative)
+            {
+                OnEndingNarrativeFinished();
+            }
+            else
+            {
+                OnNarrativeCompleted();
+            }
+        }
+            
     }
 
     private void UpdateVisuals(NarrativeNode node)
@@ -202,8 +223,8 @@ public class DialogueManager : MonoBehaviour
 
     private void TriggerEnding(string endingId)
     {
-        dialogueUI?.HideAll();
-        OutcomeManager.Instance.TriggerEnding(endingId);
+        _isEndingNarrative = true;
+        OutcomeManager.Instance.EvaluateAndTriggerFinalEnding();
     }
 
     private void ShowVisualBeat(Action onComplete)
@@ -271,5 +292,13 @@ public class DialogueManager : MonoBehaviour
         //_currentGraph = null;
         //_currentNode = null;
         _isProcessingNode = false;
+    }
+
+    public void OnEndingNarrativeFinished()
+    {
+        
+        _isEndingNarrative = false;
+        // 返回主菜单
+        GameFlowController.Instance.EnterMainMenu();
     }
 }
