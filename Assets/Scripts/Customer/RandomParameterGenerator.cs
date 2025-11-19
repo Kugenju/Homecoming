@@ -40,24 +40,45 @@ public class RandomParameterGenerator
     /// </summary>
     /// <returns>(位置, 所需菜品, 预制体)</returns>
     public (Vector3 position, List<Dish> requiredDish, GameObject prefab) 
-        GenerateRandomParameters(double probability)
+        GenerateRandomParameters(double probability, int dishIndexFirst, int dishIndexSecond)
     {
-        var dish = GetRandomDish();
-        if (dish == null) {
-            // Debug.LogWarning("No dish available. Returning (0, null, null)");
-            return (Vector3.zero, null, null);
-        }
-        List<Dish> requiredDish = new List<Dish> { dish };
-        // Debug.Log(probability);
+        List<Dish> requiredDish = new List<Dish>();
+        if (dishIndexFirst == -1)
+        {
+            var dish = GetRandomDish();
+            if (dish == null) {
+                Debug.LogWarning("No dish available. Returning (0, null, null)");
+                return (Vector3.zero, null, null);
+            }
+            requiredDish.Add(dish);
+            // Debug.Log(probability);
 
-        if (Random.Range(0.0f, 1.0f) < probability) {
-            dish = GetRandomDish();
+            if (Random.Range(0.0f, 1.0f) < probability) {
+                dish = GetRandomDish();
+                if (dish == null) {
+                    Debug.LogWarning("No dish available. Returning (0, null, null)");
+                    return (Vector3.zero, null, null);
+                }
+                requiredDish.Add(dish);
+            }
+        } else if (dishIndexSecond == -1) 
+        {
+            var dish = GetRandomDish(dishIndexFirst);
+            if (dish == null) {
+                Debug.LogWarning("No dish available. Returning (0, null, null)");
+                return (Vector3.zero, null, null);
+            }
+            requiredDish.Add(dish);
+        } else 
+        {
+            var dish = GetRandomDish(dishIndexFirst, dishIndexSecond);
             if (dish == null) {
                 Debug.LogWarning("No dish available. Returning (0, null, null)");
                 return (Vector3.zero, null, null);
             }
             requiredDish.Add(dish);
         }
+        
         // 获取可用预制体（排除已使用的）
         var usablePrefabs = availablePrefabs
             .Where(prefab => prefab != null && !usedPrefabs.Contains(prefab))
@@ -192,6 +213,22 @@ public class RandomParameterGenerator
         
         Debug.LogError("Dishes not initialized or empty");
         return null;
+    }
+
+    /// <summary>
+    /// 从菜单系统获取随机菜品
+    /// </summary>
+    private Dish GetRandomDish(int index)
+    {
+        return dishes[index];
+    }
+
+    /// <summary>
+    /// 从菜单系统获取随机菜品
+    /// </summary>
+    private Dish GetRandomDish(int firstIndex, int secondIndex)
+    {
+        return dishes[Random.Range(firstIndex, secondIndex)];
     }
 
     /// <summary>

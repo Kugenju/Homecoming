@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using static MiniGameEvents;
 
 /// <summary>
 /// 客户生成管理器，负责控制客户生成逻辑和间隔
@@ -9,6 +10,11 @@ public class CustomerSpawner : MonoBehaviour
     [Header("预制体配置")]
     public List<GameObject> customerPrefabs; // 使用列表管理多个预制体
     public List<Dish> dishes; // 菜品列表
+
+    [Header("随机参数")]
+    public List<Range> dishIndexRanges; // 菜品索引范围
+    private int rangesIndex = 0; // 当前索引
+    public int maxLoopCount = 2; // 最大循环次数
     
     [Header("生成设置")]
     public float initialSpawnInterval = 15f;  // 初始生成间隔
@@ -63,7 +69,22 @@ public class CustomerSpawner : MonoBehaviour
     /// </summary>
     private void SpawnCustomer()
     {
-        var randomParams = paramGenerator.GenerateRandomParameters(minSpawnInterval / currentSpawnInterval - 0.05);
+        if (maxLoopCount <= 0) return;
+        (Vector3 position, List<Dish> requiredDish, GameObject prefab) randomParams;
+        if (dishIndexRanges.Count == 0) 
+        {
+            randomParams = paramGenerator.GenerateRandomParameters(minSpawnInterval / currentSpawnInterval - 0.05, -1 , -1);
+        }
+        else
+        {
+            randomParams = paramGenerator.GenerateRandomParameters(minSpawnInterval / currentSpawnInterval - 0.05, dishIndexRanges[rangesIndex].Start, dishIndexRanges[rangesIndex].End);
+            rangesIndex++;
+            if (rangesIndex >= dishIndexRanges.Count)
+            {
+                rangesIndex = 0;
+                maxLoopCount--;
+            }
+        }
         if (randomParams.requiredDish == null) return;
         // 如果没有可用预制体则跳过生成
         if (randomParams.prefab == null) {
@@ -94,7 +115,14 @@ public class CustomerSpawner : MonoBehaviour
     {
         currentCustomerCount = Mathf.Max(0, currentCustomerCount - 1);
         paramGenerator.ReleasePrefab(usedPrefab); // 释放预制体
+        if (maxLoopCount <= 0)
+        {
+            Debug.Log("Game Over");
+            OnPlayerWin();
+        }
     }
+
+    public void OnPlayerWin() => MiniGameEvents.OnMiniGameFinished?.Invoke(true);
 }
 
 [System.Serializable]
@@ -102,4 +130,12 @@ public class Dish{
     public int price;
     public string dishName;
     public GameObject prefab;
+}
+
+// 自定义一个可序列化的“索引范围”结构体
+[System.Serializable] 
+public struct Range
+{
+    public int Start; // 起始索引
+    public int End;   // 结束索引
 }
