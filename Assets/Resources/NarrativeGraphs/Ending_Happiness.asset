@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ab64ddd97970c6448af5a23f57657d8, type: 3}
   m_Name: Ending_Happiness
   m_EditorClassIdentifier: 
-  graphId: 
+  graphId: Ending_Happiness
   chapterNumber: 0
-  startNodeId: 
+  startNodeId: e3_1
   nodes:
   - {fileID: 11400000, guid: 1004ebe5f84c99f4882e6b144fd96cb7, type: 2}
   - {fileID: 11400000, guid: 72ea74c7f5cfc6e4bbadbdf5f4ad6653, type: 2}

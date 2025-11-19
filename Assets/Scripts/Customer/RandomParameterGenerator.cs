@@ -211,8 +211,8 @@ public class RandomParameterGenerator
         }
         
         
-        Debug.LogError("Dishes not initialized or empty");
-        return null;
+        //Debug.LogError("Dishes not initialized or empty");
+        //return null;
     }
 
     /// <summary>

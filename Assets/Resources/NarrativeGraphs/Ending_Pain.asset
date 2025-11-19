@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ab64ddd97970c6448af5a23f57657d8, type: 3}
   m_Name: Ending_Pain
   m_EditorClassIdentifier: 
-  graphId: 
+  graphId: Ending_Pain
   chapterNumber: 0
-  startNodeId: 
+  startNodeId: e2_1
   nodes:
   - {fileID: 11400000, guid: 21bd25ef595915c419d7e012f97cdc73, type: 2}

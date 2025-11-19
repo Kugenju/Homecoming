@@ -56,8 +56,5 @@ public class OutcomeManager : MonoBehaviour
 
         // 3. 交由 DialogueManager 播放（复用现有流程）
         DialogueManager.Instance.LoadAndPlayGraph(graph);
-
-        // 4. 监听叙事结束事件，结束后返回主菜单
-        DialogueManager.Instance.OnEndingNarrativeFinished();
     }
 }

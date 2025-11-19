@@ -68,7 +68,7 @@ MonoBehaviour:
   m_text: "\u9009\u62E91"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3f1ff3abfb5c084459c9f75833995525, type: 2}
-  m_sharedMaterial: {fileID: -5040343096219761582, guid: 3f1ff3abfb5c084459c9f75833995525, type: 2}
+  m_sharedMaterial: {fileID: -2059142843583440789, guid: 3f1ff3abfb5c084459c9f75833995525, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -92,8 +92,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
-  m_fontSizeBase: 60
+  m_fontSize: 100
+  m_fontSizeBase: 100
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -170,8 +170,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000038147, y: 232}
-  m_SizeDelta: {x: 1136.9028, y: 160.4766}
+  m_AnchoredPosition: {x: 265.92386, y: 194.46423}
+  m_SizeDelta: {x: 1668.7507, y: 235.5482}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1144047232705106099
 CanvasRenderer:

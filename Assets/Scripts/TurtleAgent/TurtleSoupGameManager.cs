@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class TurtleSoupGameManager : MonoBehaviour
 {
     public TurtleSoupPuzzle[] allPuzzles;
@@ -146,13 +147,20 @@ public class TurtleSoupGameManager : MonoBehaviour
         if (win)
         {
             SendGameMessage("你赢了。\n\n汤底：" + session.currentPuzzle.soupBottom);
-            OnPlayerWin();
+            //等待五秒后触发胜利事件
+            StartCoroutine(DelayedWin(5f));
         }
         else
         {
             SendGameMessage("你输了。\n\n汤底：" + session.currentPuzzle.soupBottom);
             OnPlayerLose();
         }
+    }
+
+    private System.Collections.IEnumerator DelayedWin(float second)
+    {
+        yield return new WaitForSeconds(second);
+        OnPlayerWin();
     }
 
     private void SendGameMessage(string msg)

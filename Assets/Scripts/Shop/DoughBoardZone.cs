@@ -22,10 +22,10 @@ public class DoughBoardZone : DroppableZone
     public override bool CanAcceptItem(ClickableItem item)
     {
         if (item == null) return false;
-
-        // 只接受“面团”
-        return item.CompareTag("Dough") && occupiedSpots.Count < spawnPositions.Count;
+        // 只接受“面团”标签，并且有空闲槽位
+        return item.CompareTag("Dough") && GetFirstEmptyIndex() >= 0;
     }
+
 
     public override void OnItemDrop(ClickableItem item)
     {
@@ -66,23 +66,50 @@ public class DoughBoardZone : DroppableZone
         return occupiedSpots[index];
     }
 
+    /// <summary>
+    /// 判断指定槽位是否为空（支持索引超出 occupiedSpots 范围）
+    /// </summary>
     public bool IsSpotEmpty(int index)
     {
-        return GetDoughSkinAt(index) == null;
+        if (index < 0 || index >= spawnPositions.Count)
+            return true; // 无效索引视为“空”
+
+        // 如果 occupiedSpots 长度不够，说明该位置从未被占用 → 空
+        if (index >= occupiedSpots.Count)
+            return true;
+
+        GameObject obj = occupiedSpots[index];
+        // Unity 中已销毁对象 == null
+        if (obj == null)
+            return true;
+
+        // 可选：如果对象被禁用，也视为可覆盖（根据需求）
+        return !obj.activeInHierarchy;
     }
 
+    /// <summary>
+    /// 获取第一个真正空闲的槽位索引（基于 spawnPositions 数量）
+    /// </summary>
     public int GetFirstEmptyIndex()
     {
-        for (int i = 0; i < occupiedSpots.Count; i++)
+        // 遍历所有预设槽位（不是 occupiedSpots.Count！）
+        for (int i = 0; i < spawnPositions.Count; i++)
         {
-            if (IsSpotEmpty(i)) return i;
+            if (IsSpotEmpty(i))
+                return i;
         }
         return -1;
     }
 
     public void UpdateOccupiedSpot(int index, GameObject newObject)
     {
-        if (index < 0 || index >= occupiedSpots.Count) return;
+        if (index < 0) return;
+
+        // 确保列表足够长
+        while (occupiedSpots.Count <= index)
+        {
+            occupiedSpots.Add(null);
+        }
 
         occupiedSpots[index] = newObject;
     }

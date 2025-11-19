@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ab64ddd97970c6448af5a23f57657d8, type: 3}
   m_Name: Ending_Immortality
   m_EditorClassIdentifier: 
-  graphId: 
+  graphId: Ending_Immortality
   chapterNumber: 0
-  startNodeId: 
+  startNodeId: e1_1
   nodes:
   - {fileID: 11400000, guid: 7beced1119f216346aab691b29cef2eb, type: 2}
   - {fileID: 11400000, guid: 1a471f13051b04f4ab55e6fb9697320a, type: 2}

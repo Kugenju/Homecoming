@@ -208,6 +208,7 @@ public class DialogueManager : MonoBehaviour
 
     private void StartMiniGame(string gameId)
     {
+        dialogueUI?.HideDialogue();
         // 记录当前段落检查点（用于失败后返回）
         GameStateTracker.Instance.SetTempFlag("mini_game_chapter", _currentGraph.chapterNumber.ToString());
         GameStateTracker.Instance.SetTempFlag("mini_game_return_graph", _currentGraph.graphId);
@@ -224,6 +225,7 @@ public class DialogueManager : MonoBehaviour
     private void TriggerEnding(string endingId)
     {
         _isEndingNarrative = true;
+        _isProcessingNode = false;
         OutcomeManager.Instance.EvaluateAndTriggerFinalEnding();
     }
 
