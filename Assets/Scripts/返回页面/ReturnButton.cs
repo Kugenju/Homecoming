@@ -31,5 +31,6 @@ public class ReturnButton : MonoBehaviour
     {
         Debug.Log("返回主页面");
         GameFlowController.Instance.EnterMainMenu();
+        DialogueManager.Instance.SafetyReset();
     }
 }

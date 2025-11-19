@@ -19,8 +19,9 @@ MonoBehaviour:
   characters: []
   options: []
   miniGameName: 
+  onLoseNodeId: 
   nextNodeId: 2_2
-  autoAdvance: 0
+  autoAdvance: 1
   autoAdvanceDelay: 1
   zoomBackgroundOnEnter: 0
   zoomDuration: 2

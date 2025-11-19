@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: 4_game2
   m_EditorClassIdentifier: 
   nodeId: 4_game2
-  nodeType: 4
+  nodeType: 2
   lines: []
-  backgroundSprite: {fileID: 0}
+  backgroundSprite: {fileID: 21300000, guid: 2b144af65e8ac564aa01812cb9ef08c4, type: 3}
   characters: []
   options: []
-  miniGameName: 
+  miniGameName: TurtleSoup
+  onLoseNodeId: 4_end2
   nextNodeId: 4_10
   autoAdvance: 0
   autoAdvanceDelay: 1

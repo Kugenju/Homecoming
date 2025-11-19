@@ -10,17 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14539ffbad31942429168485c00c2d00, type: 3}
-  m_Name: 4_end
+  m_Name: 2_game2
   m_EditorClassIdentifier: 
-  nodeId: 4_end
-  nodeType: 4
+  nodeId: 2_game2
+  nodeType: 1
   lines: []
-  backgroundSprite: {fileID: 21300000, guid: 3364f8ec72237a645ad1278b068d6a80, type: 3}
+  backgroundSprite: {fileID: 21300000, guid: 7c6830fc06c5d1e4c8f784ab262cb0b7, type: 3}
   characters: []
-  options: []
+  options:
+  - text: "\u9009\u62E9\u7279\u5236\u9EC4\u6CB9\uFF08\u4F46\u4F60\u771F\u7684\u8981\u52A0\u5417\uFF1F\uFF09"
+    targetNodeId: 2_game3
+    consequence: 
+  - text: "\u9009\u62E9\u666E\u901A\u9EC4\u6CB9"
+    targetNodeId: 2_game3
+    consequence: 
   miniGameName: 
-  onLoseNodeId: 
-  nextNodeId: 4_11
+  nextNodeId: 
   autoAdvance: 0
   autoAdvanceDelay: 1
   zoomBackgroundOnEnter: 0

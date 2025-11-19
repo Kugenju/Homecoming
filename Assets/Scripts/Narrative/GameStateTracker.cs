@@ -36,7 +36,7 @@ public class GameStateTracker : MonoBehaviour
     private void InitializeStudents()
     {
         // 根据你的剧情，预设学生名单
-        string[] studentNames = { "WangChun", "LiuLe", "LiHaotian", "ZhangWei", "ChenMing", "ZhaoYan", "SunRui" };
+        string[] studentNames = { "WangChun", "LiuLe", "LiHaotian", "ZhaoYan", "SunRui" };
         foreach (var name in studentNames)
         {
             if (!students.Exists(s => s.name == name))

@@ -871,11 +871,11 @@ MonoBehaviour:
   - {fileID: 1989100662}
   minInterval: 4
   maxInterval: 8
-  activeDuration: 0.5
+  activeDuration: 2
   triggerShowDuration: 1
   buttonLogic: {fileID: 791714725}
   horrorRenderer: {fileID: 791714722}
-  winCondition: 6
+  winCondition: 0
   badEndingRenderer: {fileID: 412126393}
   badEndingDelay: 1
   fadeInDuration: 3

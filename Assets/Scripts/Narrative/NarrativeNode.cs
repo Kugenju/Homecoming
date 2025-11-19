@@ -30,6 +30,7 @@ public class NarrativeNode : ScriptableObject
 
     [Header("小游戏节点专用")]
     public string miniGameName;           
+    public string onLoseNodeId;        // 失败后跳转节点ID
 
     [Header("默认下一节点（线性推进用）")]
     public string nextNodeId;           // 自动跳转的下一个节点（选项节点可为空）

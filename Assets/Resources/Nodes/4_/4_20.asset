@@ -18,7 +18,7 @@ MonoBehaviour:
   - "\u4F60\u51B2\u4E0A\u53BB\uFF0C\u7529\u5F00\u4E86\u674E\u660A\u5929\u7684\u624B\u3002"
   - "\u7A81\u7136\uFF0C\u4F60\u611F\u5230\u624B\u81C2\u4E0A\u4E00\u9635\u523A\u75DB\u3002"
   - "\u82CF\u8DF3\u8DF3\u4E0D\u77E5\u9053\u4EC0\u4E48\u65F6\u5019\u7AD9\u4E86\u8D77\u6765\uFF0C\u72E0\u72E0\u5730\u54AC\u4F4F\u4E86\u4F60\uFF0C\u4F60\u7684\u8840\u4ECE\u4ED6\u7684\u9F7F\u4E0B\u6EA2\u51FA\uFF0C\u88AB\u4ED6\u7684\u820C\u5934\u5377\u56DE\u3002"
-  backgroundSprite: {fileID: 0}
+  backgroundSprite: {fileID: 21300000, guid: dce3f95c8ab47ef4583b45431d6f867c, type: 3}
   characters:
   - characterName: "\u65C1\u767D"
     position: 1
@@ -28,6 +28,7 @@ MonoBehaviour:
     characterSprite: {fileID: 21300000, guid: af31c13978f38d04cba8adf98a92537a, type: 3}
   options: []
   miniGameName: 
+  onLoseNodeId: 
   nextNodeId: 4_21
   autoAdvance: 0
   autoAdvanceDelay: 1

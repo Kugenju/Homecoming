@@ -153,8 +153,8 @@ public class CookieMiniGameController : MonoBehaviour
     {
         return type switch
         {
-            ButterType.Normal => "普通的黄油，便宜但毫无特色。使用后，所有孩子的危险程度会上升。",
-            ButterType.Special => "特制黄油，由神秘配方制成。使用后，所有孩子的危险程度会降低。",
+            ButterType.Normal => "普通黄油，入口即化，甜而不腻。",
+            ButterType.Special => "青山小学特制黄油，听说有独特的醇香，校长指定黄油，但你真的要加吗？",
             _ => "未知黄油"
         };
     }

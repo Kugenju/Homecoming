@@ -10,24 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14539ffbad31942429168485c00c2d00, type: 3}
-  m_Name: 2_8
+  m_Name: 2_game3
   m_EditorClassIdentifier: 
-  nodeId: 2_8
+  nodeId: 2_game3
   nodeType: 0
   lines:
-  - "\u4ECA\u5929\u5E26\u4F60\u6765\u7684\u5C0F\u59D1\u5A18\u53EB\u738B\u6625\uFF0C\u4F60\u4E5F\u770B\u5230\u5979\u2026\u2026"
-  - "\u603B\u4E4B\uFF0C\u522B\u8BA9\u4ED6\u4EEC\u997F\u4E86\u3002"
-  backgroundSprite: {fileID: 21300000, guid: e88b6ef390e0659419fcc33b0edb87f3, type: 3}
+  - "\u80FD\u505A\u7684\u997C\u5E72\u79CD\u7C7B\u6709\u5F88\u591A\uFF0C\u4F46\u8FD9\u6B21\u5C31\u5148\u5236\u4F5C\u9EC4\u6CB9\u997C\u5E72\u5427\u3002"
+  - "\u7B49\u4E0B\u4F60\u53EF\u4EE5\u53BB\u95EE\u95EE\u5B69\u5B50\u4EEC\u4ED6\u4EEC\u90FD\u559C\u6B22\u4EC0\u4E48\u3002"
+  backgroundSprite: {fileID: 21300000, guid: fe7a0876db387b84c96200530ce17d0d, type: 3}
   characters:
-  - characterName: 
-    position: 0
-    characterSprite: {fileID: 21300000, guid: bfe9c68b1728e8e4ba353c9e8ae983d6, type: 3}
   - characterName: "\u6821\u957F"
     position: 1
     characterSprite: {fileID: 21300000, guid: bfe9c68b1728e8e4ba353c9e8ae983d6, type: 3}
   options: []
   miniGameName: 
-  nextNodeId: 2_game1
+  nextNodeId: 2_game4
   autoAdvance: 0
   autoAdvanceDelay: 1
   zoomBackgroundOnEnter: 0

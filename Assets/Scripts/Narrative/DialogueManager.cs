@@ -191,7 +191,7 @@ public class DialogueManager : MonoBehaviour
         GameStateTracker.Instance.SetTempFlag("mini_game_chapter", _currentGraph.chapterNumber.ToString());
         GameStateTracker.Instance.SetTempFlag("mini_game_return_graph", _currentGraph.graphId);
         GameStateTracker.Instance.SetTempFlag("mini_game_success_next", _currentNode.nextNodeId);
-        GameStateTracker.Instance.SetTempFlag("mini_game_failure_restart", _currentGraph.GetRestartCheckpoint());
+        GameStateTracker.Instance.SetTempFlag("mini_game_failure_restart", _currentNode.onLoseNodeId);
 
         MiniGameEvents.OnMiniGameFinished += OnMiniGameFinishedExternally;
         // 跳转到对应小游戏场景（通过 GameFlowController）
@@ -264,5 +264,12 @@ public class DialogueManager : MonoBehaviour
         _isProcessingNode = false;
         Debug.Log($"[DialogueManager] Mini-game finished. Success: {success}. Returning to chapter {chapter}, node {targetNodeId}");
         GameFlowController.Instance.EnterStoryChapter(chapter, targetNodeId);
+    }
+
+    public void SafetyReset()
+    {
+        //_currentGraph = null;
+        //_currentNode = null;
+        _isProcessingNode = false;
     }
 }

@@ -10,6 +10,9 @@ public class TurtleSoupGameManager : MonoBehaviour
     public delegate void OnMessage(string message);
     public static event OnMessage OnNewMessage;
 
+    public void OnPlayerWin() => MiniGameEvents.OnMiniGameFinished?.Invoke(true);
+    public void OnPlayerLose() => MiniGameEvents.OnMiniGameFinished?.Invoke(false);
+
     private void Start()
     {
         if (allPuzzles.Length == 0)
@@ -87,7 +90,7 @@ public class TurtleSoupGameManager : MonoBehaviour
         var ui = FindObjectOfType<TurtleSoupUI>();
         ui?.UpdateSoupSurface(session.currentPuzzle.soupSurface);
 
-        string intro = @"谜题已生成，请开始提问。记住：只能问是非问题（答案是“是”或“否”）。";
+        string intro = @"选好题目了吗，那我要开始喽。记住：只能问是非问题，否则你就要浪费一次机会了，嘿嘿。";
         SendGameMessage(intro);
     }
 
@@ -143,10 +146,12 @@ public class TurtleSoupGameManager : MonoBehaviour
         if (win)
         {
             SendGameMessage("你赢了。\n\n汤底：" + session.currentPuzzle.soupBottom);
+            OnPlayerWin();
         }
         else
         {
             SendGameMessage("你输了。\n\n汤底：" + session.currentPuzzle.soupBottom);
+            OnPlayerLose();
         }
     }
 

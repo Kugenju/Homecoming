@@ -25,6 +25,7 @@ public class NarrativeNodeEditor : Editor
 
     // MiniGame
     private SerializedProperty miniGameName;
+    private SerializedProperty onLoseNodeId;
 
     // Ending (just uses nodeId)
 
@@ -45,6 +46,7 @@ public class NarrativeNodeEditor : Editor
         lines = serializedObject.FindProperty("lines");
         options = serializedObject.FindProperty("options");
         miniGameName = serializedObject.FindProperty("miniGameName");
+        onLoseNodeId = serializedObject.FindProperty("onLoseNodeId");
     }
 
     public override void OnInspectorGUI()
@@ -97,6 +99,7 @@ public class NarrativeNodeEditor : Editor
             case NarrativeNode.NodeType.MiniGame:
                 EditorGUILayout.LabelField("–°”Œœ∑…Ë÷√", EditorStyles.boldLabel);
                 EditorGUILayout.PropertyField(miniGameName);
+                EditorGUILayout.PropertyField(onLoseNodeId);
                 break;
 
             case NarrativeNode.NodeType.Ending:

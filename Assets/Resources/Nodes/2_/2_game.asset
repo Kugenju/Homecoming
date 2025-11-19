@@ -12,17 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14539ffbad31942429168485c00c2d00, type: 3}
   m_Name: 2_game
   m_EditorClassIdentifier: 
-  nodeId: 2_game
-  nodeType: 2
-  lines: []
-  backgroundSprite: {fileID: 0}
+  nodeId: 2_game1
+  nodeType: 0
+  lines:
+  - "\u505A\u997C\u5E72\u9996\u5148\u8981\u9009\u62E9\u5236\u4F5C\u4F7F\u7528\u7684\u9EC4\u6CB9\u3002"
+  - "\u5DE6\u8FB9\u7684\u662F\u6211\u4EEC\u9752\u5C71\u5C0F\u5B66\u81EA\u5236\u7684\u9EC4\u6CB9\uFF0C\u5B69\u5B50\u4EEC\u90FD\u5F88\u559C\u6B22\u3002"
+  - "\uFF08\u538B\u4F4E\u58F0\u97F3\uFF09\u4E5F\u662F\u80FD\u8BA9\u4ED6\u4EEC\u5B89\u9759\u4E9B\u7684\u552F\u4E00\u529E\u6CD5\u4E86...."
+  - "\u800C\u53F3\u8FB9\u5219\u662F\u666E\u901A\u9EC4\u6CB9\uFF0C\u4F60\u53EF\u6309\u9700\u9009\u7528\u3002"
+  backgroundSprite: {fileID: 21300000, guid: 7c6830fc06c5d1e4c8f784ab262cb0b7, type: 3}
   characters:
-  - characterName: 
-    position: 0
-    characterSprite: {fileID: 0}
+  - characterName: "\u6821\u957F"
+    position: 1
+    characterSprite: {fileID: 21300000, guid: bfe9c68b1728e8e4ba353c9e8ae983d6, type: 3}
   options: []
   miniGameName: Cookie
-  nextNodeId: 2_9
+  nextNodeId: 2_game2
   autoAdvance: 0
   autoAdvanceDelay: 1
   zoomBackgroundOnEnter: 0

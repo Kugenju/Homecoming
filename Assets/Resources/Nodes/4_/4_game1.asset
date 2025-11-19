@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: 4_game1
   m_EditorClassIdentifier: 
   nodeId: 4_game1
-  nodeType: 4
+  nodeType: 2
   lines: []
-  backgroundSprite: {fileID: 0}
+  backgroundSprite: {fileID: 21300000, guid: cbc91fedabfa3eb4d8ed551cd8d10af0, type: 3}
   characters: []
   options: []
-  miniGameName: 
-  nextNodeId: 4_5
+  miniGameName: "\u5C0F\u6E38\u620F1"
+  onLoseNodeId: 4_end3
+  nextNodeId: 4_2_1
   autoAdvance: 0
   autoAdvanceDelay: 1
   zoomBackgroundOnEnter: 0
