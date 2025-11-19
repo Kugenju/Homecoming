@@ -153,11 +153,7 @@ public class GameFlowController : Singleton<GameFlowController>
     public void ExitGame()
     {
         Debug.Log("[GameFlowController] ÍË³öÓÎÏ·");
-        #if UNITY_EDITOR
-                            UnityEditor.EditorApplication.isPlaying = false;
-        #else
-                Application.Quit();
-        #endif
+        Application.Quit();
     }
 
     public void ReturnToSubMenu()

@@ -350,7 +350,7 @@ public class CoreLogic : MonoBehaviour
         info += $"核心对象显示列表索引{index}的Sprite\n";
         info += $"触发对象状态: 共{triggerObjects?.Count ?? 0}个";
 
-        UnityEditor.Handles.Label(transform.position + Vector3.up * 2f, info, style);
+        //UnityEditor.Handles.Label(transform.position + Vector3.up * 2f, info, style);
     }
 
     public void OnPlayerWin() => MiniGameEvents.OnMiniGameFinished?.Invoke(true);

@@ -149,8 +149,8 @@ public class ButtonLogic : MonoBehaviour
         GUIStyle style = new GUIStyle();
         style.normal.textColor = Color.yellow;
         style.fontSize = 14;
-        UnityEditor.Handles.Label(transform.position + Vector3.up * 3f, 
-            $"当前选中索引：{selectedButtonIndex}", style);
+        //UnityEditor.Handles.Label(transform.position + Vector3.up * 3f, 
+        //    $"当前选中索引：{selectedButtonIndex}", style);
     }
 
     /// <summary>
