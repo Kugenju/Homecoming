@@ -38,6 +38,12 @@ public class DialogueManager : MonoBehaviour
         Debug.Log($"Loaded narrative graph '{graph.graphId}' starting from node '{graph.startNodeId}'");
     }
 
+    public void LoadAndPlayGraphFromNode(NarrativeGraph graph, string nodeId)
+    {
+        _currentGraph = graph;
+        PlayFromNode(nodeId);
+        Debug.Log($"Loaded narrative graph '{graph.graphId}' starting from node '{nodeId}'");
+    }
     /// <summary>
     /// 从指定节点开始播放
     /// </summary>
@@ -74,46 +80,6 @@ public class DialogueManager : MonoBehaviour
         {
             ShowNodeContent(node);
         }
-
-        //switch (node.nodeType)
-        //{
-        //    case NarrativeNode.NodeType.Dialogue:
-        //        ShowDialogue(node.lines, () =>
-        //        {
-        //            _isProcessingNode = false;
-        //            if (!string.IsNullOrEmpty(node.nextNodeId))
-        //                PlayFromNode(node.nextNodeId);
-        //            else
-        //                OnNarrativeCompleted(); // 剧情自然结束
-        //        });
-        //        break;
-
-        //    case NarrativeNode.NodeType.Choice:
-        //        ShowChoices(node.options, selectedOption =>
-        //        {
-        //            _isProcessingNode = false;
-        //            PlayFromNode(selectedOption.targetNodeId);
-        //        });
-        //        break;
-
-        //    case NarrativeNode.NodeType.MiniGame:
-        //        StartMiniGame(node.miniGameName);
-        //        break;
-
-        //    case NarrativeNode.NodeType.Ending:
-        //        TriggerEnding(node.nodeId);
-        //        break;
-        //    case NarrativeNode.NodeType.VisualBeat:
-        //        ShowVisualBeat(() =>
-        //        {
-        //            _isProcessingNode = false;
-        //            if (!string.IsNullOrEmpty(node.nextNodeId))
-        //                PlayFromNode(node.nextNodeId);
-        //            else
-        //                OnNarrativeCompleted();
-        //        });
-        //        break;
-        //}
     }
 
     private IEnumerator ZoomBackgroundThen(Action onComplete)
@@ -222,6 +188,7 @@ public class DialogueManager : MonoBehaviour
     private void StartMiniGame(string gameId)
     {
         // 记录当前段落检查点（用于失败后返回）
+        GameStateTracker.Instance.SetTempFlag("mini_game_chapter", _currentGraph.chapterNumber.ToString());
         GameStateTracker.Instance.SetTempFlag("mini_game_return_graph", _currentGraph.graphId);
         GameStateTracker.Instance.SetTempFlag("mini_game_success_next", _currentNode.nextNodeId);
         GameStateTracker.Instance.SetTempFlag("mini_game_failure_restart", _currentGraph.GetRestartCheckpoint());
@@ -287,16 +254,15 @@ public class DialogueManager : MonoBehaviour
 
         string targetNodeId = success ? successNext : failureRestart;
 
-        var graph = Resources.Load<NarrativeGraph>($"NarrativeGraphs/{graphId}");
-        if (graph != null)
-        {
-            LoadAndPlayGraph(graph);
-            PlayFromNode(targetNodeId);
-        }
-        else
-        {
-            Debug.LogError($"Failed to reload narrative graph: {graphId}");
-            GameFlowController.Instance.EnterMainMenu(); // fallback
-        }
+        // 把这些信息存起来，等回到主场景后再用
+        GameStateTracker.Instance.SetTempFlag("resume_narrative_graph_id", graphId);
+        GameStateTracker.Instance.SetTempFlag("resume_narrative_node_id", targetNodeId);
+
+        int chapter = GameStateTracker.Instance.GetTempFlag("mini_game_chapter") != null
+        ? int.Parse(GameStateTracker.Instance.GetTempFlag("mini_game_chapter"))
+        : 1;
+        _isProcessingNode = false;
+        Debug.Log($"[DialogueManager] Mini-game finished. Success: {success}. Returning to chapter {chapter}, node {targetNodeId}");
+        GameFlowController.Instance.EnterStoryChapter(chapter, targetNodeId);
     }
 }

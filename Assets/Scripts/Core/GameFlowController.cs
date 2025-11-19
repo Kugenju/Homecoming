@@ -9,7 +9,7 @@ public class GameFlowController : Singleton<GameFlowController>
 
     [Header("当前状态")]
     public GameMode currentMode = GameMode.MainMenu;
-    public int currentStoryChapter = 0; // 0 表示未开始剧情
+    public int currentStoryChapter = 1; // 0 表示未开始剧情
 
     // ------------------------------
     // 外部调用接口
@@ -63,21 +63,28 @@ public class GameFlowController : Singleton<GameFlowController>
     /// <summary>
     /// 进入剧情模式（指定章节）
     /// </summary>
-    public void EnterStoryChapter(int chapter)
+    public void EnterStoryChapter(int chapter, string resumeFromNodeId = null)
     {
-        if(currentMode != GameMode.StoryLine)
+        var config = GetSceneConfig(GameMode.StoryLine, 1); 
+        if (config != null)
         {
-            var config = GetSceneConfig(GameMode.StoryLine, 1);
-            if (config != null)
+            currentMode = GameMode.StoryLine;
+            currentStoryChapter = chapter;
+
+            if (!string.IsNullOrEmpty(resumeFromNodeId))
             {
-                currentMode = GameMode.StoryLine;
-                currentStoryChapter = chapter;
-                SceneLoader.Instance.LoadScene(config.sceneName, GameMode.StoryLine);
+                GameStateTracker.Instance.SetTempFlag("story_resume_node", resumeFromNodeId);
             }
             else
             {
-                Debug.LogError($"未找到剧情场景配置！");
+                GameStateTracker.Instance.SetTempFlag("story_resume_node", null);
             }
+
+            SceneLoader.Instance.LoadScene(config.sceneName, GameMode.StoryLine);
+        }
+        else
+        {
+            Debug.LogError("未找到故事线场景配置");
         }
     }
 
@@ -117,7 +124,7 @@ public class GameFlowController : Singleton<GameFlowController>
     public void ReturnToMainMenu()
     {
         currentMode = GameMode.MainMenu;
-        currentStoryChapter = 0;
+        currentStoryChapter = 1;
         GlobalManager.Instance.LoadMainMenu();
     }
 
@@ -170,9 +177,27 @@ public class GameFlowController : Singleton<GameFlowController>
         Debug.Log($"[GameFlowController] 当前模式: {mode}");
         if (mode == GameMode.StoryLine)
         {
-            // 判断是否是主线剧情（而非小游戏）
-            if (currentStoryChapter < 100) // 假设 100+ 是小游戏
+            string resumeNode = GameStateTracker.Instance.GetTempFlag("story_resume_node");
+            Debug.Log($"[GameFlowController] 检测到恢复节点: {resumeNode}");
+            if (!string.IsNullOrEmpty(resumeNode))
             {
+                // 恢复模式：加载图后从指定节点开始
+                string graphPath = $"NarrativeGraphs/Chapter_{currentStoryChapter}";
+                var graph = Resources.Load<NarrativeGraph>(graphPath);
+                if (graph != null)
+                {
+                    DialogueManager.Instance.LoadAndPlayGraphFromNode(graph, resumeNode);
+                    GameStateTracker.Instance.ClearTempFlags(); // 清理
+                }
+                else
+                {
+                    Debug.LogError($"恢复叙事失败：未找到 {graphPath}");
+                    EnterMainMenu();
+                }
+            }
+            else
+            {
+                // 正常模式：从头开始
                 LoadAndPlayNarrativeForChapter(currentStoryChapter);
             }
         }

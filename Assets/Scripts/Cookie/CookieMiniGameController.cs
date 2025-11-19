@@ -23,6 +23,8 @@ public class CookieMiniGameController : MonoBehaviour
     private ButterType? pendingButterSelection = null;
     private CookieRecipe pendingRecipeSelection = null;
 
+    public void OnPlayerWin() => MiniGameEvents.OnMiniGameFinished?.Invoke(true);
+    public void OnPlayerLose() => MiniGameEvents.OnMiniGameFinished?.Invoke(false);
     // 学生与原料关联表
     private static readonly Dictionary<string, Ingredient> StudentToIngredient = new()
     {
@@ -161,7 +163,6 @@ public class CookieMiniGameController : MonoBehaviour
 
     void FinishGame()
     {
-        // 成功与否可后续扩展，目前默认成功
-        DialogueManager.Instance.OnMiniGameFinished(true);
+        OnPlayerWin();
     }
 }

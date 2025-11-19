@@ -24,15 +24,6 @@ public class TurtleSoupUI : MonoBehaviour
     public ScrollRect scrollRect;
     public Scrollbar scrollbar;
 
-    [SerializeField]
-    private float stepVertical; //上下两个气泡的垂直间隔
-    [SerializeField]
-    private float stepHorizontal; //左右两个气泡的水平间隔
-    [SerializeField]
-    private float maxTextWidth;//文本内容的最大宽度
-
-    private float lastPos; //上一个气泡最下方的位置
-    private float halfHeadLength;//头像高度的一半
 
 
     private TurtleSoupGameManager gameManager;
@@ -40,8 +31,6 @@ public class TurtleSoupUI : MonoBehaviour
     private void Awake()
     {
         gameManager = FindObjectOfType<TurtleSoupGameManager>();
-        lastPos = 0;
-        //halfHeadLength = leftBubblePrefab.transform.Find("Avator").GetComponent<RectTransform>().rect.height / 2;
     }
 
     private void OnEnable()

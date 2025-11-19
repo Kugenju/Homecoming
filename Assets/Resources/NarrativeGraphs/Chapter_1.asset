@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Chapter_1
   m_EditorClassIdentifier: 
   graphId: 1
-  chapterNumber: 0
+  chapterNumber: 1
   startNodeId: 1_1
   nodes:
   - {fileID: 11400000, guid: ff5dcc354efae0146b298ee350ad02db, type: 2}

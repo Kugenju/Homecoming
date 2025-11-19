@@ -74,7 +74,7 @@ public class SubMenu : MonoBehaviour
     private void OnStoryButtonClicked()
     {
         Debug.Log("点击了剧情模式按钮");
-        GameFlowController.Instance.EnterStoryChapter(1); // 进入第一章剧情
+        GameFlowController.Instance.EnterStoryChapter(GameFlowController.Instance.currentStoryChapter); // 进入第一章剧情
     }
 
     private void ShowSubMenu()
