@@ -1765,7 +1765,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1906201179632427799, guid: 59918f1b9ebf5974a9454604e6e2214d, type: 3}
       propertyPath: isTest
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1906201179632427799, guid: 59918f1b9ebf5974a9454604e6e2214d, type: 3}
       propertyPath: testMoney
