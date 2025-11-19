@@ -133,17 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87fce53282d4f7e4499fdcc8dfff2c4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  students:
-  - name: 
-    dangerLevel: 0
-  - name: 
-    dangerLevel: 0
-  - name: 
-    dangerLevel: 0
-  - name: 
-    dangerLevel: 0
-  - name: 
-    dangerLevel: 0
+  students: []
 --- !u!1 &3951202111674997827
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,6 +202,50 @@ MonoBehaviour:
   OnItemDropped:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &6451585687492375100
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6521210030409576379}
+  - component: {fileID: 6073883722955126391}
+  m_Layer: 0
+  m_Name: OutcomeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6521210030409576379
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6451585687492375100}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1538999886627546171}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6073883722955126391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6451585687492375100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36485f868ade8bd429d6d34d3dc61894, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6536850754533981720
 GameObject:
   m_ObjectHideFlags: 0
@@ -265,7 +299,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1d6422d4f3afc824695ecb9e711637a5, type: 2}
   dialogueManager: {fileID: 0}
   currentMode: 4
-  currentStoryChapter: 0
+  currentStoryChapter: 1
 --- !u!1 &8491258238802108430
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,6 +335,7 @@ Transform:
   - {fileID: 286825962073495040}
   - {fileID: 8404816004179281870}
   - {fileID: 3474701441762418373}
+  - {fileID: 6521210030409576379}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8138959353562538745
