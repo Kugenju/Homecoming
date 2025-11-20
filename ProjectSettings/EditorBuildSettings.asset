@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/SubMenu.unity
     guid: 5fbdd4cf69b13fb4291bb01c3cbf0cfe
   - enabled: 1
+    path: Assets/Scenes/StoryLine.unity
+    guid: e360bbe69093df146806642aa934af7d
+  - enabled: 1
     path: Assets/Scenes/GameScene_1.unity
     guid: 093ad6cd0278b9642bee72bac78bba90
   - enabled: 1
@@ -20,9 +23,6 @@ EditorBuildSettings:
   - enabled: 1
     path: "Assets/Scenes/\u5C0F\u6E38\u620F1.unity"
     guid: ebbb10a16666c3b4984480d95e277282
-  - enabled: 1
-    path: Assets/Scenes/StoryLine.unity
-    guid: e360bbe69093df146806642aa934af7d
   - enabled: 1
     path: Assets/Scenes/Cookie.unity
     guid: 85621e297999a624d9b019ac031b984c
