@@ -122,6 +122,7 @@ public class MusicManager : MonoBehaviour
     {
         if (index >= 0 && index < musicClips.Count)
         {
+            Debug.Log($"切换音乐：{musicClips[index].name}");
             ChangeMusic(musicClips[index]);
         }
         else
