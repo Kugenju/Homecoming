@@ -89,10 +89,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 200
-  m_MinHeight: 200
-  m_PreferredWidth: 200
-  m_PreferredHeight: 200
+  m_MinWidth: 120
+  m_MinHeight: 120
+  m_PreferredWidth: 120
+  m_PreferredHeight: 120
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -265,7 +265,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u4F60\u597D"
+  m_text: "\u4F60\u597D\u53D1\u52A8\u53CD\u51FB\u54E6\u554A\u54E6\u653E\u5047\u54E6\u6309\u53F8j\uFF0C\u8BA5\u8BBD\u5730\u626B\u91D1\u4F5B\u5C71\u7B2C\u653E\u5047\u54E6\u65F6\u4EE3\u53CD\u51FB\uFF1B\u7B2C\u56DB\u8282\u53D1\u54E6\uFF1B\u5BF9\u5B9E\u9645\u54E6\u554A\u662F\uFF1B\u54E6\u90FD\u5E02\u98CE\u666F\u54E6\u54E6i\u54E6\u8985\u54E6\u65F6\u4EE3\u53CD\u51FB\u54E6\u54E6\u54E6\u54E6\u7B2C\u56DB\u54E6\u54E6i\u997F\u554A\u4E3A\u89E3\u653E\u87BA\u4E1D\u9489\u51CF\u80A5\u9644\u4EF6\u91CC\u662F\u5927\u5BB6\u53D1\uFF1B\u54E6\u6B38\u9644\u4EF6\u554A"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3f1ff3abfb5c084459c9f75833995525, type: 2}
   m_sharedMaterial: {fileID: -2059142843583440789, guid: 3f1ff3abfb5c084459c9f75833995525, type: 2}
@@ -292,8 +292,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
-  m_fontSizeBase: 60
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -347,8 +347,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
-  m_MinWidth: 100
-  m_MinHeight: 100
+  m_MinWidth: 50
+  m_MinHeight: 50
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
@@ -415,7 +415,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding:
     m_Left: 0
-    m_Right: 50
+    m_Right: 10
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 2
@@ -487,8 +487,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 800
-    m_Right: 100
+    m_Left: 190
+    m_Right: 50
     m_Top: 10
     m_Bottom: 10
   m_ChildAlignment: 2
@@ -592,8 +592,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

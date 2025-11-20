@@ -20,7 +20,10 @@ MonoBehaviour:
   - "\u7A97\u5916\u7684\u7C89\u6842\u82B1\u5F00\u4E86\uFF0C\u8BA9\u5927\u5BB6\u90FD\u84B8\u817E\u5728\u4E00\u7247\u7C89\u8272\u7684\u96FE\u6C14\u91CC\u3002"
   - "\u5E78\u798F\uFF0C\u7965\u548C\u3002"
   backgroundSprite: {fileID: 21300000, guid: 9f5bbce9d5f323744b204d3c6df25fab, type: 3}
-  characters: []
+  characters:
+  - characterName: "\u65C1\u767D"
+    position: 1
+    characterSprite: {fileID: 21300000, guid: 78aa7aa2dd3e5754bb1910b92a7b26d3, type: 3}
   options: []
   miniGameName: 
   onLoseNodeId: 
