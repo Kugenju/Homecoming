@@ -4,8 +4,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class RecipeButtonBinder : MonoBehaviour
 {
-    [Header("ÅäÖÃ")]
-    public CookieRecipe recipe; // ÍÏÈë¶ÔÓ¦µÄÅä·½×Ê²ú
+    [Header("ï¿½ï¿½ï¿½ï¿½")]
+    public CookieRecipe recipe; // ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ä·½ï¿½Ê²ï¿½
     public CookieMiniGameController controller;
 
     private Button _button;

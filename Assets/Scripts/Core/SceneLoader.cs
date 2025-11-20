@@ -8,15 +8,18 @@ public class SceneLoader : Singleton<SceneLoader>
     public delegate void SceneLoadCallback();
     public static event SceneLoadCallback OnSceneLoaded;
 
+    public int visitCount = -1;
+
     private AsyncOperation currentOperation;
 
     public void LoadScene(string sceneName, GameMode mode)
     {
         if (currentOperation != null && !currentOperation.isDone)
         {
-            Debug.LogWarning("³¡¾°ÕıÔÚ¼ÓÔØÖĞ£¬ºöÂÔĞÂÇëÇó");
+            Debug.LogWarning("åœºæ™¯æ­£åœ¨åŠ è½½ä¸­ï¼Œå¿½ç•¥æ–°è¯·æ±‚");
             return;
         }
+        if (sceneName == "Cookie") visitCount++;
 
         StopAllCoroutines();
         StartCoroutine(LoadSceneAsync(sceneName, mode));
@@ -24,19 +27,19 @@ public class SceneLoader : Singleton<SceneLoader>
 
     private IEnumerator LoadSceneAsync(string sceneName, GameMode mode)
     {
-        Debug.Log($"[SceneLoader] ¿ªÊ¼¼ÓÔØ³¡¾°: {sceneName}");
+        Debug.Log($"[SceneLoader] å¼€å§‹åŠ è½½åœºæ™¯: {sceneName}");
         currentOperation = SceneManager.LoadSceneAsync(sceneName);
 
-        // ÔÊĞíÔÚ¼ÓÔØÍê³ÉÇ°·µ»Ø¿ØÖÆÈ¨£¨ÓÃÓÚÏÔÊ¾¼ÓÔØUI£©
+        // å…è®¸åœ¨åŠ è½½å®Œæˆå‰è¿”å›æ§åˆ¶æƒï¼ˆç”¨äºæ˜¾ç¤ºåŠ è½½UIï¼‰
         while (!currentOperation.isDone)
         {
             yield return null;
         }
 
-        // Í¨ÖªÁ÷³Ì¿ØÖÆÆ÷£º³¡¾°ÒÑÇĞ»»
+        // é€šçŸ¥æµç¨‹æ§åˆ¶å™¨ï¼šåœºæ™¯å·²åˆ‡æ¢
         GameFlowController.Instance.OnSceneLoaded(mode);
         OnSceneLoaded?.Invoke();
 
-        Debug.Log($"[SceneLoader] ³¡¾° {sceneName} ¼ÓÔØÍê³É");
+        Debug.Log($"[SceneLoader] åœºæ™¯ {sceneName} åŠ è½½å®Œæˆ");
     }
 }
