@@ -20,7 +20,7 @@ public class MainMenuUI : MonoBehaviour
     //private Button backButton;
     private Button quitButton;
 
-    private void Awake()
+    private void Start()
     {
         // 获取 GameManager（确保存在）
         if (GameFlowController.Instance == null)

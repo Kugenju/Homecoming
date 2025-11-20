@@ -2964,6 +2964,7 @@ MonoBehaviour:
   content: {fileID: 2143701433}
   scrollRect: {fileID: 488005078}
   scrollbar: {fileID: 1928503599}
+  horrorSound: {fileID: 8300000, guid: 3db8f04dd2dea3b43bcdbab4c78f1ff2, type: 3}
 --- !u!4 &1672166357
 Transform:
   m_ObjectHideFlags: 0
