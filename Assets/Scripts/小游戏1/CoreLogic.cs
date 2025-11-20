@@ -237,7 +237,6 @@ public class CoreLogic : MonoBehaviour
             
             // 延迟后开始坏结局渲染器淡入
             StartCoroutine(StartBadEndingFade());
-            OnPlayerLose();
         }
         return false;
     }
@@ -335,6 +334,7 @@ public class CoreLogic : MonoBehaviour
         badEndingRenderer.color = color;
 
         // 或许这里有跳转逻辑
+        OnPlayerLose();
     }
 
     // 编辑器调试信息
