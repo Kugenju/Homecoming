@@ -10,10 +10,10 @@ public enum ButterType
 
 public class CookieMiniGameController : MonoBehaviour
 {
-    [Header("ÅäÖÃ")]
-    public List<CookieRecipe> allRecipes; // 6¸ö±ı¸ÉÅä·½
+    [Header("é…ç½®")]
+    public List<CookieRecipe> allRecipes; // 6ä¸ªé¥¼å¹²é…æ–¹
 
-    [Header("UI ÒıÓÃ")]
+    [Header("UI å¼•ç”¨")]
     public GameObject butterSelectionPanel;
     public GameObject recipeSelectionPanel;
     public GameObject detailPopupPanel;
@@ -25,7 +25,7 @@ public class CookieMiniGameController : MonoBehaviour
 
     public void OnPlayerWin() => MiniGameEvents.OnMiniGameFinished?.Invoke(true);
     public void OnPlayerLose() => MiniGameEvents.OnMiniGameFinished?.Invoke(false);
-    // Ñ§ÉúÓëÔ­ÁÏ¹ØÁª±í
+    // å­¦ç”Ÿä¸åŸæ–™å…³è”è¡¨
     private static readonly Dictionary<string, Ingredient> StudentToIngredient = new()
     {
         { "WangChun", Ingredient.Sugar },
@@ -54,7 +54,7 @@ public class CookieMiniGameController : MonoBehaviour
         if (detailPopupPanel) detailPopupPanel.SetActive(false);
     }
 
-    // ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª »ÆÓÍÑ¡Ôñ£º´¥·¢µ¯´° ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª
+    // â€”â€”â€”â€”â€”â€”â€”â€” é»„æ²¹é€‰æ‹©ï¼šè§¦å‘å¼¹çª— â€”â€”â€”â€”â€”â€”â€”â€”
 
     public void OnClickNormalButter()
     {
@@ -69,28 +69,28 @@ public class CookieMiniGameController : MonoBehaviour
     void ShowButterDetail(ButterType type)
     {
         pendingButterSelection = type;
-        //detailTitleText.text = type == ButterType.Normal ? "ÆÕÍ¨»ÆÓÍ" : "ÌØÖÆ»ÆÓÍ";
+        //detailTitleText.text = type == ButterType.Normal ? "æ™®é€šé»„æ²¹" : "ç‰¹åˆ¶é»„æ²¹";
         detailDescText.text = GetButterDescription(type);
         detailPopupPanel.SetActive(true);
     }
 
-    // ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª ±ı¸ÉÑ¡Ôñ£º´¥·¢µ¯´° ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª
+    // â€”â€”â€”â€”â€”â€”â€”â€” é¥¼å¹²é€‰æ‹©ï¼šè§¦å‘å¼¹çª— â€”â€”â€”â€”â€”â€”â€”â€”
 
     public void OnClickRecipe(CookieRecipe recipe)
     {
         pendingRecipeSelection = recipe;
         //detailTitleText.text = recipe.recipeName;
-        detailDescText.text = recipe.description;
+        detailDescText.text = recipe.description + "\nä»·æ ¼ä»…éœ€ " + (recipe.price + 10 * SceneLoader.Instance.visitCount) + " å…ƒå“¦ã€‚";
         detailPopupPanel.SetActive(true);
     }
 
-    // ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª µ¯´°È·ÈÏ / È¡Ïû ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª
+    // â€”â€”â€”â€”â€”â€”â€”â€” å¼¹çª—ç¡®è®¤ / å–æ¶ˆ â€”â€”â€”â€”â€”â€”â€”â€”
 
     public void OnConfirmSelection()
     {
         if (pendingButterSelection.HasValue)
         {
-            // È·ÈÏµÄÊÇ»ÆÓÍ
+            // ç¡®è®¤çš„æ˜¯é»„æ²¹
             ApplyButterSelection(pendingButterSelection.Value);
             pendingButterSelection = null;
             detailPopupPanel.SetActive(false);
@@ -98,11 +98,23 @@ public class CookieMiniGameController : MonoBehaviour
         }
         else if (pendingRecipeSelection != null)
         {
-            // È·ÈÏµÄÊÇ±ı¸É
+            // ç¡®è®¤çš„æ˜¯é¥¼å¹²
+            if (detailDescText.text == "æ‚¨çš„é‡‘å¸ä¸è¶³ï¼Œè¯·ç‚¹å³ä¸Šè§’è¿”å›æ‘†æ‘Šèµšé’±å“¦ã€‚") 
+            {
+                detailPopupPanel.SetActive(false);
+                return ;
+            }
+            if (pendingRecipeSelection.price + 10 * SceneLoader.Instance.visitCount > PlayerData.Instance.GetMoney()) 
+            {
+                detailDescText.text = "æ‚¨çš„é‡‘å¸ä¸è¶³ï¼Œè¯·ç‚¹å³ä¸Šè§’è¿”å›æ‘†æ‘Šèµšé’±å“¦ã€‚";
+                detailPopupPanel.SetActive(true);
+                return ;
+            }
+            PlayerData.Instance.SpendMoney(pendingRecipeSelection.price + 10 * SceneLoader.Instance.visitCount);
             ApplyRecipeSelection(pendingRecipeSelection);
             pendingRecipeSelection = null;
             detailPopupPanel.SetActive(false);
-            FinishGame(); // ±¾ÂÖ½áÊø
+            FinishGame(); // æœ¬è½®ç»“æŸ
         }
     }
 
@@ -113,7 +125,7 @@ public class CookieMiniGameController : MonoBehaviour
         detailPopupPanel.SetActive(false);
     }
 
-    // ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª Ó¦ÓÃÑ¡Ôñ ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª
+    // â€”â€”â€”â€”â€”â€”â€”â€” åº”ç”¨é€‰æ‹© â€”â€”â€”â€”â€”â€”â€”â€”
 
     void ApplyButterSelection(ButterType type)
     {
@@ -147,19 +159,19 @@ public class CookieMiniGameController : MonoBehaviour
         Debug.Log($"[Cookie Game] Applied recipe: {recipe.recipeName}");
     }
 
-    // ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª ¹¤¾ß·½·¨ ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª
+    // â€”â€”â€”â€”â€”â€”â€”â€” å·¥å…·æ–¹æ³• â€”â€”â€”â€”â€”â€”â€”â€”
 
     string GetButterDescription(ButterType type)
     {
         return type switch
         {
-            ButterType.Normal => "ÆÕÍ¨»ÆÓÍ£¬Èë¿Ú¼´»¯£¬Ìğ¶ø²»Äå¡£",
-            ButterType.Special => "ÇàÉ½Ğ¡Ñ§ÌØÖÆ»ÆÓÍ£¬ÌıËµÓĞ¶ÀÌØµÄ´¼Ïã£¬Ğ£³¤Ö¸¶¨»ÆÓÍ£¬µ«ÄãÕæµÄÒª¼ÓÂğ£¿",
-            _ => "Î´Öª»ÆÓÍ"
+            ButterType.Normal => "æ™®é€šé»„æ²¹ï¼Œå…¥å£å³åŒ–ï¼Œç”œè€Œä¸è…»ã€‚",
+            ButterType.Special => "é’å±±å°å­¦ç‰¹åˆ¶é»„æ²¹ï¼Œå¬è¯´æœ‰ç‹¬ç‰¹çš„é†‡é¦™ï¼Œæ ¡é•¿æŒ‡å®šé»„æ²¹ï¼Œä½†ä½ çœŸçš„è¦åŠ å—ï¼Ÿ",
+            _ => "æœªçŸ¥é»„æ²¹"
         };
     }
 
-    // ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª ½áÊø±¾ÂÖ ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª
+    // â€”â€”â€”â€”â€”â€”â€”â€” ç»“æŸæœ¬è½® â€”â€”â€”â€”â€”â€”â€”â€”
 
     void FinishGame()
     {

@@ -13,11 +13,11 @@ public class GameStateTracker : MonoBehaviour
         public int dangerLevel = 0; // 0 ~ 4+
     }
 
-    [Header("³Ö¾Ã×´Ì¬")]
+    [Header("æŒä¹…çŠ¶æ€")]
     public List<StudentState> students = new();
     public HashSet<string> unlockedEndings = new();
 
-    [Header("ÁÙÊ±±ê¼Ç£¨ÓÃÓÚ¿ç³¡¾°´«µİ£©")]
+    [Header("ä¸´æ—¶æ ‡è®°ï¼ˆç”¨äºè·¨åœºæ™¯ä¼ é€’ï¼‰")]
     private Dictionary<string, string> _tempFlags = new();
 
     void Awake()
@@ -35,7 +35,7 @@ public class GameStateTracker : MonoBehaviour
 
     private void InitializeStudents()
     {
-        // ¸ù¾İÄãµÄ¾çÇé£¬Ô¤ÉèÑ§ÉúÃûµ¥
+        // æ ¹æ®ä½ çš„å‰§æƒ…ï¼Œé¢„è®¾å­¦ç”Ÿåå•
         string[] studentNames = { "WangChun", "LiuLe", "LiHaotian", "ZhaoYan", "SunRui" };
         foreach (var name in studentNames)
         {
@@ -44,14 +44,14 @@ public class GameStateTracker : MonoBehaviour
         }
     }
 
-    // ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª Î£ÏÕÖµ¹ÜÀí ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª
+    // â€”â€”â€”â€”â€”â€”â€”â€” å±é™©å€¼ç®¡ç† â€”â€”â€”â€”â€”â€”â€”â€”
     public void IncreaseDanger(string studentName, int amount = 1)
     {
         var student = students.Find(s => s.name == studentName);
         if (student != null)
         {
             student.dangerLevel += amount;
-            Debug.Log($"[Danger] {studentName} ¡ú {student.dangerLevel}");
+            Debug.Log($"[Danger] {studentName} â†’ {student.dangerLevel}");
         }
     }
 
@@ -65,7 +65,7 @@ public class GameStateTracker : MonoBehaviour
         return students.FindAll(s => s.dangerLevel >= threshold).Count;
     }
 
-    // ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª ½á¾Ö¹ÜÀí ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª
+    // â€”â€”â€”â€”â€”â€”â€”â€” ç»“å±€ç®¡ç† â€”â€”â€”â€”â€”â€”â€”â€”
     public void UnlockEnding(string endingId)
     {
         unlockedEndings.Add(endingId);
@@ -77,7 +77,7 @@ public class GameStateTracker : MonoBehaviour
         return unlockedEndings.Contains(endingId);
     }
 
-    // ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª ÁÙÊ±±ê¼Ç£¨ÓÃÓÚĞ¡ÓÎÏ·½á¹û¡¢¶ÎÂä»ØËİµÈ£©¡ª¡ª¡ª¡ª¡ª¡ª
+    // â€”â€”â€”â€”â€”â€”â€”â€” ä¸´æ—¶æ ‡è®°ï¼ˆç”¨äºå°æ¸¸æˆç»“æœã€æ®µè½å›æº¯ç­‰ï¼‰â€”â€”â€”â€”â€”â€”
     public void SetTempFlag(string key, string value)
     {
         _tempFlags[key] = value;
@@ -94,7 +94,7 @@ public class GameStateTracker : MonoBehaviour
         _tempFlags.Clear();
     }
 
-    // ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª £¨¿ÉÑ¡£©´æµµ/¶Áµµ½Ó¿Ú ¡ª¡ª¡ª¡ª¡ª¡ª¡ª¡ª
+    // â€”â€”â€”â€”â€”â€”â€”â€” ï¼ˆå¯é€‰ï¼‰å­˜æ¡£/è¯»æ¡£æ¥å£ â€”â€”â€”â€”â€”â€”â€”â€”
     // public void Save() { ... }
     // public void Load() { ... }
 }

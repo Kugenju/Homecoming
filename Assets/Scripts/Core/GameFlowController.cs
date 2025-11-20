@@ -3,16 +3,16 @@ using UnityEngine;
 
 public class GameFlowController : Singleton<GameFlowController>
 {
-    [Header("³¡¾°ÅäÖÃ")]
+    [Header("åœºæ™¯é…ç½®")]
     public SceneConfig[] allSceneConfigs;
     public DialogueManager dialogueManager;
 
-    [Header("µ±Ç°×´Ì¬")]
+    [Header("å½“å‰çŠ¶æ€")]
     public GameMode currentMode = GameMode.MainMenu;
-    public int currentStoryChapter = 1; // 0 ±íÊ¾Î´¿ªÊ¼¾çÇé
+    public int currentStoryChapter = 1; // 0 è¡¨ç¤ºæœªå¼€å§‹å‰§æƒ…
 
     // ------------------------------
-    // Íâ²¿µ÷ÓÃ½Ó¿Ú
+    // å¤–éƒ¨è°ƒç”¨æ¥å£
     // ------------------------------
 
     public void EnterSubMenu()
@@ -25,7 +25,7 @@ public class GameFlowController : Singleton<GameFlowController>
         }
         else
         {
-            Debug.LogError("Î´ÕÒµ½×Ó²Ëµ¥³¡¾°ÅäÖÃ£¡");
+            Debug.LogError("æœªæ‰¾åˆ°å­èœå•åœºæ™¯é…ç½®ï¼");
         }
     }
 
@@ -39,12 +39,12 @@ public class GameFlowController : Singleton<GameFlowController>
         }
         else
         {
-            Debug.LogError("Î´ÕÒµ½Ö÷²Ëµ¥³¡¾°ÅäÖÃ£¡");
+            Debug.LogError("æœªæ‰¾åˆ°ä¸»èœå•åœºæ™¯é…ç½®ï¼");
         }
     }
 
     /// <summary>
-    /// ½øÈëÈÕ³£Ä£Ê½
+    /// è¿›å…¥æ—¥å¸¸æ¨¡å¼
     /// </summary>
     public void EnterDailyLife()
     {
@@ -56,12 +56,12 @@ public class GameFlowController : Singleton<GameFlowController>
         }
         else
         {
-            Debug.LogError("Î´ÕÒµ½ÈÕ³£³¡¾°ÅäÖÃ£¡");
+            Debug.LogError("æœªæ‰¾åˆ°æ—¥å¸¸åœºæ™¯é…ç½®ï¼");
         }
     }
 
     /// <summary>
-    /// ½øÈë¾çÇéÄ£Ê½£¨Ö¸¶¨ÕÂ½Ú£©
+    /// è¿›å…¥å‰§æƒ…æ¨¡å¼ï¼ˆæŒ‡å®šç« èŠ‚ï¼‰
     /// </summary>
     public void EnterStoryChapter(int chapter, string resumeFromNodeId = null)
     {
@@ -84,7 +84,7 @@ public class GameFlowController : Singleton<GameFlowController>
         }
         else
         {
-            Debug.LogError("Î´ÕÒµ½¹ÊÊÂÏß³¡¾°ÅäÖÃ");
+            Debug.LogError("æœªæ‰¾åˆ°æ•…äº‹çº¿åœºæ™¯é…ç½®");
         }
     }
 
@@ -96,13 +96,13 @@ public class GameFlowController : Singleton<GameFlowController>
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"¼ÓÔØĞ¡ÓÎÏ· {GameID} Ê§°Ü: {e.Message}");
+            Debug.LogError($"åŠ è½½å°æ¸¸æˆ {GameID} å¤±è´¥: {e.Message}");
         }
 
     }
 
     /// <summary>
-    /// ¾çÇéÍÆ½øµ½ÏÂÒ»ÕÂ
+    /// å‰§æƒ…æ¨è¿›åˆ°ä¸‹ä¸€ç« 
     /// </summary>
     public void AdvanceToNextChapter()
     {
@@ -111,7 +111,7 @@ public class GameFlowController : Singleton<GameFlowController>
     }
 
     /// <summary>
-    /// ´Ó¾çÇé·µ»ØÈÕ³£
+    /// ä»å‰§æƒ…è¿”å›æ—¥å¸¸
     /// </summary>
     public void ReturnToDailyLife()
     {
@@ -119,7 +119,7 @@ public class GameFlowController : Singleton<GameFlowController>
     }
 
     /// <summary>
-    /// ·µ»ØÖ÷²Ëµ¥
+    /// è¿”å›ä¸»èœå•
     /// </summary>
     public void ReturnToMainMenu()
     {
@@ -145,14 +145,14 @@ public class GameFlowController : Singleton<GameFlowController>
                 EnterSubMenu();
                 break;
             default:
-                Debug.LogError("Î´ÖªÓÎÏ·Ä£Ê½£¬ÎŞ·¨ÖØÆô£¡");
+                Debug.LogError("æœªçŸ¥æ¸¸æˆæ¨¡å¼ï¼Œæ— æ³•é‡å¯ï¼");
                 break;
         }
     }
 
     public void ExitGame()
     {
-        Debug.Log("[GameFlowController] ÍË³öÓÎÏ·");
+        Debug.Log("[GameFlowController] é€€å‡ºæ¸¸æˆ");
         Application.Quit();
     }
 
@@ -162,38 +162,38 @@ public class GameFlowController : Singleton<GameFlowController>
         EnterSubMenu();
     }
     // ------------------------------
-    // ÄÚ²¿Âß¼­
+    // å†…éƒ¨é€»è¾‘
     // ------------------------------
 
     /// <summary>
-    /// ³¡¾°¼ÓÔØÍê³ÉºóÓÉ SceneLoader µ÷ÓÃ
+    /// åœºæ™¯åŠ è½½å®Œæˆåç”± SceneLoader è°ƒç”¨
     /// </summary>
     public void OnSceneLoaded(GameMode mode)
     {
-        Debug.Log($"[GameFlowController] µ±Ç°Ä£Ê½: {mode}");
+        Debug.Log($"[GameFlowController] å½“å‰æ¨¡å¼: {mode}");
         if (mode == GameMode.StoryLine)
         {
             string resumeNode = GameStateTracker.Instance.GetTempFlag("story_resume_node");
-            Debug.Log($"[GameFlowController] ¼ì²âµ½»Ö¸´½Úµã: {resumeNode}");
+            Debug.Log($"[GameFlowController] æ£€æµ‹åˆ°æ¢å¤èŠ‚ç‚¹: {resumeNode}");
             if (!string.IsNullOrEmpty(resumeNode))
             {
-                // »Ö¸´Ä£Ê½£º¼ÓÔØÍ¼ºó´ÓÖ¸¶¨½Úµã¿ªÊ¼
+                // æ¢å¤æ¨¡å¼ï¼šåŠ è½½å›¾åä»æŒ‡å®šèŠ‚ç‚¹å¼€å§‹
                 string graphPath = $"NarrativeGraphs/Chapter_{currentStoryChapter}";
                 var graph = Resources.Load<NarrativeGraph>(graphPath);
                 if (graph != null)
                 {
                     DialogueManager.Instance.LoadAndPlayGraphFromNode(graph, resumeNode);
-                    GameStateTracker.Instance.ClearTempFlags(); // ÇåÀí
+                    GameStateTracker.Instance.ClearTempFlags(); // æ¸…ç†
                 }
                 else
                 {
-                    Debug.LogError($"»Ö¸´ĞğÊÂÊ§°Ü£ºÎ´ÕÒµ½ {graphPath}");
+                    Debug.LogError($"æ¢å¤å™äº‹å¤±è´¥ï¼šæœªæ‰¾åˆ° {graphPath}");
                     EnterMainMenu();
                 }
             }
             else
             {
-                // Õı³£Ä£Ê½£º´ÓÍ·¿ªÊ¼
+                // æ­£å¸¸æ¨¡å¼ï¼šä»å¤´å¼€å§‹
                 LoadAndPlayNarrativeForChapter(currentStoryChapter);
             }
         }
@@ -210,13 +210,13 @@ public class GameFlowController : Singleton<GameFlowController>
         }
         else
         {
-            Debug.LogError($"Î´ÕÒµ½¾çÇé¶ÎÂä: {graphPath}");
-            // ¿ÉÑ¡£º»ØÍËµ½Ö÷²Ëµ¥
+            Debug.LogError($"æœªæ‰¾åˆ°å‰§æƒ…æ®µè½: {graphPath}");
+            // å¯é€‰ï¼šå›é€€åˆ°ä¸»èœå•
             EnterMainMenu();
         }
     }
     /// <summary>
-    /// ¸ù¾İÄ£Ê½ºÍÕÂ½Ú²éÕÒÅäÖÃ
+    /// æ ¹æ®æ¨¡å¼å’Œç« èŠ‚æŸ¥æ‰¾é…ç½®
     /// </summary>
     private SceneConfig GetSceneConfig(GameMode mode, int chapter)
     {
@@ -231,7 +231,7 @@ public class GameFlowController : Singleton<GameFlowController>
                 }
                 else
                 {
-                    return config; // Daily »ò MainMenu ²»¿´ÕÂ½Ú
+                    return config; // Daily æˆ– MainMenu ä¸çœ‹ç« èŠ‚
                 }
             }
         }

@@ -3,23 +3,26 @@ using System.Collections.Generic;
 
 public enum Ingredient
 {
-    Butter,      // »ÆÓÍ£¨½öµÚÒ»½×¶ÎÊ¹ÓÃ£©
-    Sugar,       // ÌÇ
-    Raisin,      // ÆÏÌÑ¸É
-    Cream,       // ÄÌÓÍ
-    Chocolate,   // ÇÉ¿ËÁ¦
-    Matcha       // Ä¨²è
+    Butter,      // é»„æ²¹ï¼ˆä»…ç¬¬ä¸€é˜¶æ®µä½¿ç”¨ï¼‰
+    Sugar,       // ç³–
+    Raisin,      // è‘¡è„å¹²
+    Cream,       // å¥¶æ²¹
+    Chocolate,   // å·§å…‹åŠ›
+    Matcha       // æŠ¹èŒ¶
 }
 
 [CreateAssetMenu(menuName = "MiniGame/Cookie Recipe", fileName = "New Cookie Recipe")]
 public class CookieRecipe : ScriptableObject
 {
-    [Header("»ù±¾ĞÅÏ¢")]
-    public string recipeName = "ĞÂ±ı¸É";
+    [Header("åŸºæœ¬ä¿¡æ¯")]
+    public string recipeName = "æ–°é¥¼å¹²";
 
-    [Header("Ô­ÁÏÁĞ±í")]
+    [Header("ä»·æ ¼")]
+    public int price = 0;
+
+    [Header("åŸæ–™åˆ—è¡¨")]
     public List<Ingredient> ingredients = new List<Ingredient>();
 
     [TextArea(3, 6)]
-    public string description = "µã»÷²é¿´ÏêÇé...";
+    public string description = "ç‚¹å‡»æŸ¥çœ‹è¯¦æƒ…...";
 }

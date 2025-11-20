@@ -17,12 +17,12 @@ public class OutcomeManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸ù¾ÝÑ§ÉúÎ£ÏÕµÈ¼¶ÆÀ¹À²¢´¥·¢¶ÔÓ¦½á¾ÖÐðÊÂÍ¼
+    /// ï¿½ï¿½ï¿½ï¿½Ñ§ï¿½ï¿½Î£ï¿½ÕµÈ¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼
     /// </summary>
     public void EvaluateAndTriggerFinalEnding()
     {
         int highDangerCount = GameStateTracker.Instance.CountStudentsWithDangerAtLeast(4);
-        string graphId = "Ending_Happiness"; // Ä¬ÈÏ½á¾Ö
+        string graphId = "Ending_Happiness"; // Ä¬ï¿½Ï½ï¿½ï¿½
         targetMusicIndex = 2;
         if (highDangerCount >= 5)
         {
@@ -41,23 +41,23 @@ public class OutcomeManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ¼ÓÔØÖ¸¶¨IDµÄ½á¾ÖÐðÊÂÍ¼²¢²¥·Å£¨´Ó startNodeId ¿ªÊ¼£©
+    /// ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½IDï¿½Ä½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½Å£ï¿½ï¿½ï¿½ startNodeId ï¿½ï¿½Ê¼ï¿½ï¿½
     /// </summary>
     public void TriggerEndingByNarrativeGraph(string graphId)
     {
-        // 1. ½âËø½á¾Ö£¨ÓÃÓÚ³É¾Í/¼ÇÂ¼£©
+        // 1. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö£ï¿½ï¿½ï¿½ï¿½Ú³É¾ï¿½/ï¿½ï¿½Â¼ï¿½ï¿½
         GameStateTracker.Instance.UnlockEnding(graphId);
 
-        // 2. ¼ÓÔØÐðÊÂÍ¼
+        // 2. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼
         var graph = Resources.Load<NarrativeGraph>($"NarrativeGraphs/{graphId}");
         if (graph == null)
         {
-            Debug.LogError($"[OutcomeManager] Î´ÕÒµ½½á¾ÖÐðÊÂÍ¼: NarrativeGraphs/{graphId}");
-            // »ØÍËµ½Ä¬ÈÏ½á¾Ö
+            Debug.LogError($"[OutcomeManager] Î´ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼: NarrativeGraphs/{graphId}");
+            // ï¿½ï¿½ï¿½Ëµï¿½Ä¬ï¿½Ï½ï¿½ï¿½
             graph = Resources.Load<NarrativeGraph>("NarrativeGraphs/Ending_Happiness");
             if (graph == null)
             {
-                Debug.LogError("Ä¬ÈÏ½á¾ÖÒ²È±Ê§£¬·µ»ØÖ÷²Ëµ¥");
+                Debug.LogError("Ä¬ï¿½Ï½ï¿½ï¿½Ò²È±Ê§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½");
                 GameFlowController.Instance.EnterMainMenu();
                 return;
             }
@@ -65,8 +65,9 @@ public class OutcomeManager : MonoBehaviour
         if (MusicManager.Instance != null)
         {
             MusicManager.Instance.ChangeMusicByIndex(targetMusicIndex);
+            Debug.Log($"{targetMusicIndex}");
         }
-        // 3. ½»ÓÉ DialogueManager ²¥·Å£¨¸´ÓÃÏÖÓÐÁ÷³Ì£©
+        // 3. ï¿½ï¿½ï¿½ï¿½ DialogueManager ï¿½ï¿½ï¿½Å£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì£ï¿½
         DialogueManager.Instance.LoadAndPlayGraph(graph);
     }
 }

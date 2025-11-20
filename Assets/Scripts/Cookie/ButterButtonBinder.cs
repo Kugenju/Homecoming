@@ -6,9 +6,9 @@ public class ButterButtonBinder : MonoBehaviour
 {
     public enum ButterType { Normal, Special }
 
-    [Header("ÅäÖÃ")]
+    [Header("é…ç½®")]
     public ButterType butterType;
-    public CookieMiniGameController controller; // ÍÏÈëÄãµÄ¿ØÖÆÆ÷
+    public CookieMiniGameController controller; // æ‹–å…¥ä½ çš„æ§åˆ¶å™¨
 
     private Button _button;
 
@@ -39,7 +39,7 @@ public class ButterButtonBinder : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    // ¿ÉÑ¡£ºÔÚ±à¼­Æ÷ÖĞ×Ô¶¯²éÕÒÍ¬¼¶»ò¸¸¼¶µÄ¿ØÖÆÆ÷£¨ÌáÉıÌåÑé£©
+    // å¯é€‰ï¼šåœ¨ç¼–è¾‘å™¨ä¸­è‡ªåŠ¨æŸ¥æ‰¾åŒçº§æˆ–çˆ¶çº§çš„æ§åˆ¶å™¨ï¼ˆæå‡ä½“éªŒï¼‰
     void Reset()
     {
         if (controller == null)
