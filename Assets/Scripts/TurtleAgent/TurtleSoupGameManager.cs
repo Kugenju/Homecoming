@@ -18,7 +18,7 @@ public class TurtleSoupGameManager : MonoBehaviour
     {
         if (allPuzzles.Length == 0)
         {
-            Debug.LogError("Î´ÅäÖÃº£¹êÌÀÌâ¿â£¡");
+            Debug.LogError("æœªé…ç½®æµ·é¾Ÿæ±¤é¢˜åº“ï¼");
         }
     }
 
@@ -28,7 +28,7 @@ public class TurtleSoupGameManager : MonoBehaviour
 
         input = input.Trim();
 
-        if (input == "¿ªÊ¼ÓÎÏ·")
+        if (input == "å¼€å§‹æ¸¸æˆ")
         {
             StartNewGame();
             return;
@@ -42,28 +42,28 @@ public class TurtleSoupGameManager : MonoBehaviour
 
         session.questionCount++;
 
-        // µÚ10ÎÊ¸øÌáÊ¾
+        // ç¬¬10é—®ç»™æç¤º
         if (session.questionCount == 10)
         {
             string hint = Random.value > 0.5f ? session.currentPuzzle.hint1 : session.currentPuzzle.hint2;
-            SendGameMessage($"ÌáÊ¾£º{hint}");
+            SendGameMessage($"æç¤ºï¼š{hint}");
         }
 
-        // ³¬¹ı15ÎÊÊ§°Ü
+        // è¶…è¿‡15é—®å¤±è´¥
         if (session.questionCount > 15)
         {
             EndGame(false);
             return;
         }
 
-        if (input.Contains("ÎÒÖªµÀÁË"))
+        if (input.Contains("æˆ‘çŸ¥é“äº†"))
         {
             session.hasDeclared = true;
             AskFinalQuestion(1);
             return;
         }
 
-        // µ÷ÓÃ Qwen ÅĞ¶Ï
+        // è°ƒç”¨ Qwen åˆ¤æ–­
         StartCoroutine(QwenAPI.Instance.JudgeYesNo(input, session.currentPuzzle.soupBottom, (answer) =>
         {
             SendGameMessage(answer);
@@ -75,10 +75,10 @@ public class TurtleSoupGameManager : MonoBehaviour
     //        session.Reset();
     //        session.currentPuzzle = allPuzzles[Random.Range(0, allPuzzles.Length)];
 
-    //        string intro = $@"ÌÀÃæ£º
+    //        string intro = $@"æ±¤é¢ï¼š
     //{session.currentPuzzle.soupSurface}
 
-    //ÏÖÔÚÇëÄãÍ¨¹ıÌáÎÊ£¬»¹Ô­³ö¹ÊÊÂµÄÈ«Ã²¡£×¢Òâ£¬ÎÊÌâµÄ´ğ°¸Ö»ÄÜÎª'ÊÇ¡¯»ò¡®·ñ¡¯£¬·ñÔò£¬ÎÒ»á¾Ü¾ø»Ø´ğ¡£ÔÚÄã¾õµÃÒÑ¾­»¹Ô­È«Ã²ºó£¬Çë¶ÔÎÒËµ¡°ÎÒÖªµÀÁË¡£¡±ÎÒ»áÎÊÄãÁ½¸öÎÊÌâ£¬Èç¹ûÄãÈ«²¿´ğ¶Ô£¬ÔòÍ¨¹Ø£»Ö»Òª´ğ´íÒ»¸ö£¬Äã¾ÍÊäÁË¡£Èç¹ûÄãÎÊÁËÊ®Îå¸öÎÊÌâ»¹Ã»ÄÜ¶ÔÎÒËµ¡°ÎÒÖªµÀÁË¡£¡±ÄÇÄãÒ²ÊäÀ²£¡";
+    //ç°åœ¨è¯·ä½ é€šè¿‡æé—®ï¼Œè¿˜åŸå‡ºæ•…äº‹çš„å…¨è²Œã€‚æ³¨æ„ï¼Œé—®é¢˜çš„ç­”æ¡ˆåªèƒ½ä¸º'æ˜¯â€™æˆ–â€˜å¦â€™ï¼Œå¦åˆ™ï¼Œæˆ‘ä¼šæ‹’ç»å›ç­”ã€‚åœ¨ä½ è§‰å¾—å·²ç»è¿˜åŸå…¨è²Œåï¼Œè¯·å¯¹æˆ‘è¯´â€œæˆ‘çŸ¥é“äº†ã€‚â€æˆ‘ä¼šé—®ä½ ä¸¤ä¸ªé—®é¢˜ï¼Œå¦‚æœä½ å…¨éƒ¨ç­”å¯¹ï¼Œåˆ™é€šå…³ï¼›åªè¦ç­”é”™ä¸€ä¸ªï¼Œä½ å°±è¾“äº†ã€‚å¦‚æœä½ é—®äº†åäº”ä¸ªé—®é¢˜è¿˜æ²¡èƒ½å¯¹æˆ‘è¯´â€œæˆ‘çŸ¥é“äº†ã€‚â€é‚£ä½ ä¹Ÿè¾“å•¦ï¼";
 
     //        SendGameMessage(intro);
     //    }
@@ -87,11 +87,11 @@ public class TurtleSoupGameManager : MonoBehaviour
         session.Reset();
         session.currentPuzzle = allPuzzles[Random.Range(0, allPuzzles.Length)];
 
-        // ¸üĞÂ×ó²àÃæ°åµÄÌÀÃæ
+        // æ›´æ–°å·¦ä¾§é¢æ¿çš„æ±¤é¢
         var ui = FindObjectOfType<TurtleSoupUI>();
         ui?.UpdateSoupSurface(session.currentPuzzle.soupSurface);
 
-        string intro = @"Ñ¡ºÃÌâÄ¿ÁËÂğ£¬ÄÇÎÒÒª¿ªÊ¼à¶¡£¼Ç×¡£ºÖ»ÄÜÎÊÊÇ·ÇÎÊÌâ£¬·ñÔòÄã¾ÍÒªÀË·ÑÒ»´Î»ú»áÁË£¬ºÙºÙ¡£";
+        string intro = @"é€‰å¥½é¢˜ç›®äº†å—ï¼Œé‚£æˆ‘è¦å¼€å§‹å–½ã€‚è®°ä½ï¼šåªèƒ½é—®æ˜¯éé—®é¢˜ï¼Œå¦åˆ™ä½ å°±è¦æµªè´¹ä¸€æ¬¡æœºä¼šäº†ï¼Œå˜¿å˜¿ã€‚";
         SendGameMessage(intro);
     }
 
@@ -146,13 +146,13 @@ public class TurtleSoupGameManager : MonoBehaviour
         session.isGameOver = true;
         if (win)
         {
-            SendGameMessage("ÄãÓ®ÁË¡£\n\nÌÀµ×£º" + session.currentPuzzle.soupBottom);
-            //µÈ´ıÎåÃëºó´¥·¢Ê¤ÀûÊÂ¼ş
+            SendGameMessage("ä½ èµ¢äº†ã€‚\n\næ±¤åº•ï¼š" + session.currentPuzzle.soupBottom);
+            //ç­‰å¾…äº”ç§’åè§¦å‘èƒœåˆ©äº‹ä»¶
             StartCoroutine(DelayedWin(5f));
         }
         else
         {
-            SendGameMessage("ÄãÊäÁË¡£\n\nÌÀµ×£º" + session.currentPuzzle.soupBottom);
+            SendGameMessage("ä½ è¾“äº†ã€‚\n\næ±¤åº•ï¼š" + session.currentPuzzle.soupBottom);
             OnPlayerLose();
         }
     }
@@ -166,6 +166,6 @@ public class TurtleSoupGameManager : MonoBehaviour
     private void SendGameMessage(string msg)
     {
         OnNewMessage?.Invoke(msg);
-        Debug.Log("[º£¹êÌÀ] " + msg);
+        Debug.Log("[æµ·é¾Ÿæ±¤] " + msg);
     }
 }
