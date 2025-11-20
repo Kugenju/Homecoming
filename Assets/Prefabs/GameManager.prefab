@@ -299,7 +299,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1d6422d4f3afc824695ecb9e711637a5, type: 2}
   dialogueManager: {fileID: 0}
   currentMode: 4
-  currentStoryChapter: 1
+  currentStoryChapter: 2
 --- !u!1 &8491258238802108430
 GameObject:
   m_ObjectHideFlags: 0
