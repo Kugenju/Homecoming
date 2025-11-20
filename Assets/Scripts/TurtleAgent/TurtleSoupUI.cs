@@ -24,6 +24,9 @@ public class TurtleSoupUI : MonoBehaviour
     public ScrollRect scrollRect;
     public Scrollbar scrollbar;
 
+    [Tooltip("恐怖音效")]
+    public AudioClip horrorSound;
+
 
 
     private TurtleSoupGameManager gameManager;
@@ -120,6 +123,15 @@ public class TurtleSoupUI : MonoBehaviour
         else
             Debug.LogWarning("[TurtleSoupUI] 未找到 TMP_Text 组件用于显示 AI 消息。");
 
+        // 检查音效和管理器是否有效
+        if (horrorSound != null && MusicManager.Instance != null)
+        {
+            MusicManager.Instance.PlaySound(horrorSound);
+        }
+        else if (horrorSound == null)
+        {
+            Debug.LogWarning("未分配点击音效，请在Inspector中设置horrorSound");
+        }
 
         StartCoroutine(ScrollToBottom());
     }
