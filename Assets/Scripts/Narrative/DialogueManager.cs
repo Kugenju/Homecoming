@@ -301,6 +301,10 @@ public class DialogueManager : MonoBehaviour
         
         _isEndingNarrative = false;
         // ·µ»ØÖ÷²Ëµ¥
+        if (MusicManager.Instance != null)
+        {
+            MusicManager.Instance.ChangeMusicByIndex(0);
+        }
         GameFlowController.Instance.EnterMainMenu();
     }
 }
