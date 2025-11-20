@@ -62,7 +62,7 @@ public class ClickableItem : MonoBehaviour,
 
         if (_renderer != null)
         {
-            originalMaterial = _renderer.material; // 保存原始材质
+            //originalMaterial = _renderer.material; // 保存原始材质
             originalColor = _renderer.material.color;
         }
 
@@ -203,9 +203,9 @@ public class ClickableItem : MonoBehaviour,
         if (showHighlightOnHover && _renderer != null)
         {
             // 创建材质实例以避免影响其他物体
-            _renderer.material = new Material(_renderer.material);
+            //_renderer.material = new Material(_renderer.material);
             Color targetColor = originalColor + hoverColor;
-            targetColor.a = Mathf.Min(1f, targetColor.a);
+            targetColor.a = Mathf.Min(1f, originalColor.a + hoverColor.a);
             _renderer.material.color = targetColor;
         }
 
@@ -217,12 +217,10 @@ public class ClickableItem : MonoBehaviour,
 
     private void RemoveHoverVisuals()
     {
-        if (showHighlightOnHover && _renderer != null && originalMaterial != null)
-        {
-            _renderer.material.color = originalColor;
-            // 恢复原始材质
-            _renderer.material = originalMaterial;
-        }
+        if (!showHighlightOnHover || _renderer == null) return;
+
+        // 恢复原始颜色
+        _renderer.material.color = originalColor;
 
         if (_canvasGroup != null)
         {
