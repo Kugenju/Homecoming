@@ -42,8 +42,18 @@ public class BunSteamer : SteamerBase
         isInteractable = false;
     }
 
+    public override bool CanAcceptItem(ClickableItem item)
+    {
+        // 只有 Idle 或 Ready（空蒸笼）状态才接受
+        if (currentState != State.Idle && currentState != State.Ready)
+            return false;
+
+        return base.CanAcceptItem(item);
+    }
+
     public override void OnFoodAdded(ClickableItem item)
     {
+
         if (currentState != State.Idle && currentState != State.Ready) return;
 
         if (item.CompareTag(rawBunTag))

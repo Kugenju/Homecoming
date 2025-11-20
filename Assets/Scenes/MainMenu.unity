@@ -1320,7 +1320,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3948104914701621204, guid: f57321785c4a8c5489a0507dd975648d, type: 3}
       propertyPath: currentStoryChapter
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7585313491468346981, guid: f57321785c4a8c5489a0507dd975648d, type: 3}
       propertyPath: eventCamera
